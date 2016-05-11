@@ -18,24 +18,10 @@ import java.util.List;
 
 public class SonarAggregatedTestReportWebService implements org.sonar.api.server.ws.WebService {
 
-    private Settings settings;
-    private SqlSessionFactory sessionFactory;
-
     private MyDbClient myDbClient;
 
 
     public SonarAggregatedTestReportWebService(Settings settings) {
-      /*  Persistence.createEntityManagerFactory("com.thoughtworks.lean.sonar.aggreagtedreport");
-        this.settings = settings;
-
-        Configuration configuration=new Configuration();
-        TransactionFactory transactionFactory=new JdbcTransactionFactory();
-        DataSource dataSource=new PooledDataSource("","","","");
-
-        configuration.setEnvironment(new Environment("production",transactionFactory,dataSource));
-
-        SqlSessionFactory sessionFactory=new SqlSessionFactoryBuilder().build(configuration);
-*/
         DefaultDatabase defaultDatabase = new DefaultDatabase(settings);
         defaultDatabase.start();
         Mybatis mybatis = new Mybatis(defaultDatabase);
