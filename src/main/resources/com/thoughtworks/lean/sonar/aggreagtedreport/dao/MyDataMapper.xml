@@ -11,9 +11,9 @@
 
   <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDto">
     select
-    name,age
+    md.`name` as name, md.`age` as age
     from
-    my_data
+    `my_data` as md;
   </select>
 
 </mapper>

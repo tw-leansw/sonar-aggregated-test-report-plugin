@@ -38,7 +38,7 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
 */
         DefaultDatabase defaultDatabase = new DefaultDatabase(settings);
         defaultDatabase.start();
-        Mybatis mybatis=new Mybatis(defaultDatabase);
+        Mybatis mybatis = new Mybatis(defaultDatabase);
         myDbClient = new MyDbClient(mybatis);
         mybatis.start();
         System.out.println(defaultDatabase.getDataSource());
@@ -64,7 +64,7 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
                 JsonWriter jsonWriter = response.newJsonWriter().beginArray();
                 List<MyDataDto> list = dbSession.getMapper(MyDataMapper.class).selectAll();
                 for (MyDataDto myDataDto : list) {
-                    jsonWriter.value(myDataDto.toString());
+                    myDataDto.writeJson(jsonWriter);
                 }
                 jsonWriter.endArray().close();
                 dbSession.close();

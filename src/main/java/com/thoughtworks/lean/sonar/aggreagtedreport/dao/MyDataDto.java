@@ -7,6 +7,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.sonar.api.utils.text.JsonWriter;
 
 public class MyDataDto {
     private String name;
@@ -33,6 +34,16 @@ public class MyDataDto {
     public String getName() {
         return name;
     }
+
+    public MyDataDto writeJson(JsonWriter json) {
+        json.beginObject()
+                .prop("name", name)
+                .prop("age", age)
+                .endObject();
+        return  this;
+
+    }
+
 
     public String getKey() {
         return this.name;
