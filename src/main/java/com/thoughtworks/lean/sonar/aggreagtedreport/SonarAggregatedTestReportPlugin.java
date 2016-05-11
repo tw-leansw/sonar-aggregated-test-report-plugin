@@ -1,10 +1,10 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
-import com.google.common.collect.ImmutableList;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -27,10 +27,9 @@ import java.util.List;
 public class SonarAggregatedTestReportPlugin extends SonarPlugin {
 
     public List getExtensions() {
-        return ImmutableList.of(
+        return Arrays.asList(
                 SonarAggregatedTestReportSensor.class,
                 SonarAggregatedTestPyramidMetrics.class,
-                SonarAggregatedTestReportWebService.class
-        );
+                SonarAggregatedTestReportWebService.class);
     }
 }
