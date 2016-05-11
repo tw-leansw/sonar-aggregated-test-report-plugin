@@ -27,7 +27,6 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
         Mybatis mybatis = new Mybatis(defaultDatabase);
         myDbClient = new MyDbClient(mybatis);
         mybatis.start();
-        System.out.println(defaultDatabase.getDataSource());
 
     }
 
