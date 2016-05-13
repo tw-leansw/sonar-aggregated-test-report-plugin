@@ -13,4 +13,6 @@ public interface MyDataMapper {
     void insert(MyDataDto var1);
 
     List<MyDataDto> selectAll();
+
+    void deleteAll();
 }

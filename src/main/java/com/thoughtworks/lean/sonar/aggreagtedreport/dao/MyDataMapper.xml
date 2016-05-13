@@ -15,12 +15,15 @@
      from my_data as md
   </sql>
 
-
   <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDto">
     select
     <include refid="columns"/>
 
   </select>
+
+    <delete id="deleteAll">
+        truncate my_data
+    </delete>
 
 </mapper>
 

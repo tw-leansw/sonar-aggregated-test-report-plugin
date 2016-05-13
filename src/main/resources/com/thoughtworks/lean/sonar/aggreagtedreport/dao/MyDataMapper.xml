@@ -16,5 +16,9 @@
     `my_data` as md;
   </select>
 
+  <delete id="deleteAll">
+    truncate my_data
+  </delete>
+
 </mapper>
 

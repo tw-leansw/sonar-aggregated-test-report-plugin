@@ -1,10 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDbClient;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.Mybatis;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.*;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
@@ -14,6 +11,8 @@ import org.sonar.api.utils.text.JsonWriter;
 import org.sonar.db.DbSession;
 import org.sonar.db.DefaultDatabase;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SonarAggregatedTestReportWebService implements org.sonar.api.server.ws.WebService {
@@ -37,21 +36,20 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
         controller.createAction("hello")
                 .setHandler(new RequestHandler() {
                     public void handle(Request request, Response response) throws Exception {
-                        JsonWriter json = response.newJsonWriter().beginArray();
-                        json.value("hello world!");
-                        json.endArray().close();
+                        BaseJsonWriter json = new BaseJsonWriter(response.newJsonWriter());
+                        json.writeCollection(Arrays.asList("hello world!"));
+                        json.close();
                     }
                 });
         controller.createAction("mydata").setHandler(new RequestHandler() {
             @Override
             public void handle(Request request, Response response) throws Exception {
                 DbSession dbSession = myDbClient.openSession(true);
-                JsonWriter jsonWriter = response.newJsonWriter().beginArray();
+                BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
                 List<MyDataDto> list = dbSession.getMapper(MyDataMapper.class).selectAll();
-                for (MyDataDto myDataDto : list) {
-                    myDataDto.writeJson(jsonWriter);
-                }
-                jsonWriter.endArray().close();
+
+                jsonWriter.writeCollection(list);
+                jsonWriter.close();
                 dbSession.close();
             }
         });
