@@ -1,5 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.model;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
+
 import java.util.List;
 
 /**
