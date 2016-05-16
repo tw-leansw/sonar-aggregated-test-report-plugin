@@ -1,16 +1,12 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 
-import ch.lambdaj.function.matcher.Predicate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestScenarioDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +75,6 @@ public class CucumberScanner {
             testType = TestType.COMPONENT_TEST;
         }
         String featureName = feature.getString("name");
-        testReport.addTag(testType);
         logger.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
 
         List<Map> scenarios = feature.get("elements");
@@ -101,14 +96,16 @@ public class CucumberScanner {
         boolean allPassed = true;
         long scenrioDuration = 0l;
         for (JXPathMap step : wrapedSteps) {
+            // FIXME: 5/16/16 not including skipped status
             TestStepDto stepDto = new TestStepDto()
                     .setName(step.getString("name"))
                     .setDuration(((Map) step.get("result")).get("duration").toString());
             String status = ((Map) step.get("result")).get("status").toString();
+
             stepDto.setResultType(status.equals("passed") ? Passed : Failed);
 
             scenrioDuration += stepDto.getDuration();
-            if (stepDto.getResultType() == Failed){
+            if (stepDto.getResultType() != Passed){
                 allPassed = false;
             }
             stepDtos.add(stepDto);

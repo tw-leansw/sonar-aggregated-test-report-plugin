@@ -1,8 +1,13 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.model;
 
+import com.google.common.collect.Lists;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
+import org.hamcrest.Matchers;
 
+import java.util.Collections;
 import java.util.List;
+
+import static ch.lambdaj.collection.LambdaCollections.with;
 
 /**
  * Created by qmxie on 5/13/16.
@@ -12,7 +17,7 @@ public class TestScenarioDto {
     private String name;
     private ResultType resultType;
     private double duration;
-    List<TestStepDto> testStepDtoList;
+    private List<TestStepDto> testStepDtoList;
 
     public TestScenarioDto() {
     }
@@ -30,31 +35,50 @@ public class TestScenarioDto {
         return name;
     }
 
-    public void setName(String name) {
+    public TestScenarioDto setName(String name) {
         this.name = name;
+        return this;
     }
 
     public ResultType getResultType() {
         return resultType;
     }
 
-    public void setResultType(ResultType resultType) {
+    public TestScenarioDto setResultType(ResultType resultType) {
         this.resultType = resultType;
+        return this;
     }
 
     public double getDuration() {
         return duration;
     }
 
-    public void setDuration(double duration) {
+    public TestScenarioDto setDuration(double duration) {
         this.duration = duration;
+        return this;
     }
 
     public List<TestStepDto> getTestStepDtoList() {
+        if (this.testStepDtoList == null){
+            return Collections.emptyList();
+        }
         return testStepDtoList;
     }
 
-    public void setTestStepDtoList(List<TestStepDto> testStepDtoList) {
+    public TestScenarioDto setTestStepDtoList(List<TestStepDto> testStepDtoList) {
         this.testStepDtoList = testStepDtoList;
+        return this;
+    }
+
+    public List<TestStepDto> getStepsByResultType(ResultType type) {
+        return with(this.getTestStepDtoList()).clone()
+                .retain(Matchers.hasProperty("resultType", Matchers.equalTo(type)));
+    }
+
+    public void addStep(TestStepDto step) {
+        if (this.testStepDtoList == null) {
+            this.testStepDtoList = Lists.newArrayList();
+        }
+        this.testStepDtoList.add(step);
     }
 }

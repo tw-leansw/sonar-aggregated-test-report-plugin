@@ -1,0 +1,285 @@
+[
+  {
+    "line": 2,
+    "elements": [
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 856711017,
+              "status": "passed"
+            },
+            "match": {
+              "location": "SharedDriver.deleteAllCookies()"
+            }
+          }
+        ],
+        "line": 4,
+        "name": "user login",
+        "description": "",
+        "id": "test-deliflow-login;user-login",
+        "after": [
+          {
+            "result": {
+              "duration": 252447311,
+              "status": "passed"
+            },
+            "match": {
+              "location": "SharedDriver.embedScreenshot(Scenario)"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 313944852,
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "I enter deliflow url",
+            "match": {
+              "location": "UserLoginDeliflow.enter_deliflow_url()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 1138334614,
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "I login as admin",
+            "match": {
+              "location": "UserLoginDeliflow.login_as_admin()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 114293090,
+              "status": "passed"
+            },
+            "embeddings": [
+              {
+                "data": "+/nASiQkuQmCC",
+                "mime_type": "image/png"
+              }
+            ],
+            "line": 7,
+            "name": "I should in the Team view",
+            "match": {
+              "location": "UserLoginDeliflow.enter_deliflow_team_view()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      }
+    ],
+    "name": "test deliflow login",
+    "description": "",
+    "id": "test-deliflow-login",
+    "keyword": "Feature",
+    "uri": "user_login.feature",
+    "tags": [
+      {
+        "line": 1,
+        "name": "@ui_test"
+      }
+    ]
+  },
+  {
+    "line": 2,
+    "elements": [
+      {
+        "line": 4,
+        "name": "",
+        "description": "",
+        "type": "background",
+        "keyword": "Background",
+        "steps": [
+          {
+            "result": {
+              "duration": 1673560268,
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "我以admin登陆",
+            "match": {
+              "location": "UserTeamViewTest.login_as_admin()"
+            },
+            "keyword": "Given "
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 112816347,
+              "status": "passed"
+            },
+            "match": {
+              "location": "SharedDriver.deleteAllCookies()"
+            }
+          }
+        ],
+        "line": 7,
+        "name": "用户团队选择",
+        "description": "",
+        "id": "用户团队管理;用户团队选择",
+        "after": [
+          {
+            "result": {
+              "duration": 243450510,
+              "status": "passed"
+            },
+            "match": {
+              "location": "SharedDriver.embedScreenshot(Scenario)"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 372183118,
+              "error_message": "java.lang.AssertionError\n\tat org.junit.Assert.fail(Assert.java:86)\n\tat org.junit.Assert.assertTrue(Assert.java:41)\n\tat org.junit.Assert.assertTrue(Assert.java:52)\n\tat com.thoughtworks.lean.impls.UserTeamViewTest.there_should_be_more_than_one_team(UserTeamViewTest.java:57)\n\tat ✽.Given 如果我在某团队里面(user_team.feature:8)\n",
+              "status": "failed"
+            },
+            "line": 8,
+            "name": "如果我在某团队里面",
+            "match": {
+              "location": "UserTeamViewTest.there_should_be_more_than_one_team()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "line": 9,
+            "name": "我点击某团队时",
+            "match": {
+              "location": "UserTeamViewTest.click_the_first_team()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "status": "skipped"
+            },
+            "embeddings": [
+              {
+                "data": "iVBORwAAAAAAADAAAgAAAAAAAAzg32+ptZWbyA9wAAAAAElFTkSuQmCC",
+                "mime_type": "image/png"
+              }
+            ],
+            "line": 10,
+            "name": "我会进到该团队的页面",
+            "match": {
+              "location": "UserTeamViewTest.enter_team_view()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      },
+      {
+        "line": 4,
+        "name": "",
+        "description": "",
+        "type": "background",
+        "keyword": "Background",
+        "steps": [
+          {
+            "result": {
+              "duration": 1417467592,
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "我以admin登陆",
+            "match": {
+              "location": "UserTeamViewTest.login_as_admin()"
+            },
+            "keyword": "Given "
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 112468430,
+              "status": "passed"
+            },
+            "match": {
+              "location": "SharedDriver.deleteAllCookies()"
+            }
+          }
+        ],
+        "line": 12,
+        "name": "新建团队",
+        "description": "",
+        "id": "用户团队管理;新建团队",
+        "after": [
+          {
+            "result": {
+              "duration": 245264042,
+              "status": "passed"
+            },
+            "match": {
+              "location": "SharedDriver.embedScreenshot(Scenario)"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 266852642,
+              "status": "passed"
+            },
+            "line": 13,
+            "name": "我点击了 新的团队 按钮",
+            "match": {
+              "location": "UserTeamViewTest.creat_new_team()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 118147949,
+              "status": "passed"
+            },
+            "embeddings": [
+              {
+                "data": "iVBORSuQmCC",
+                "mime_type": "image/png"
+              }
+            ],
+            "line": 14,
+            "name": "我能看到新建团队的页面",
+            "match": {
+              "location": "UserTeamViewTest.see_create_team_view()"
+            },
+            "keyword": "Then "
+          }
+        ]
+      }
+    ],
+    "name": "用户团队管理",
+    "description": "",
+    "id": "用户团队管理",
+    "keyword": "Feature",
+    "uri": "user_team.feature",
+    "tags": [
+      {
+        "line": 1,
+        "name": "@ui_test"
+      }
+    ]
+  }
+]

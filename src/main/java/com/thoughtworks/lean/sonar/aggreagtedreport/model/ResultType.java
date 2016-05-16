@@ -5,5 +5,6 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.model;
  */
 public enum ResultType {
     Passed,
-    Failed
+    Failed,
+    Skipped
 }
