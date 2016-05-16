@@ -11,6 +11,7 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
@@ -82,8 +83,10 @@ public class CucumberScanner {
         logger.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
 
         List<Map> scenarios = feature.get("elements");
-        List<JXPathMap> wrapedSenarios = with(scenarios).convert(JXPathMap.toJxPathFunction);
-        for (JXPathMap senario : wrapedSenarios) {
+        List<JXPathMap> wrappedScenarios =
+                with(scenarios).retain(Matchers.hasEntry("type","scenario"))
+                        .convert(JXPathMap.toJxPathFunction);
+        for (JXPathMap senario : wrappedScenarios) {
             this.analyseScenario(senario, testType, testReport);
         }
     }

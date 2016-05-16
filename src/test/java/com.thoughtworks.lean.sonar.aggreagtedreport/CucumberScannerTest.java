@@ -27,8 +27,23 @@ public class CucumberScannerTest {
 
         cucumberAnalyzer.analyse(ctx, testReport);
 
-        assertEquals(13,testReport.getDetails().get(TestType.UNIT_TEST).size());
-        assertEquals(7,testReport.getDetails().get(TestType.COMPONENT_TEST).size());
-        assertEquals(3,testReport.getDetails().get(TestType.FUNCTIONAL_TEST).size());
+        assertEquals(13,testReport.getScenariosNumber(TestType.UNIT_TEST));
+        assertEquals(7,testReport.getScenariosNumber(TestType.COMPONENT_TEST));
+        assertEquals(3,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
+    }
+
+    @Test
+    public void should_return_correct_cucumber_test_report_2() throws IOException {
+        // given
+        JXPathMap ctx = new JXPathMap(new ObjectMapper().readValue(getClass().getResourceAsStream("/cucumber_report_2.json"), Object.class));
+        TestReport testReport=new TestReport("test-pipeline-1","202");
+        CucumberScanner cucumberAnalyzer=new CucumberScanner(Sets.newHashSet("@api_test"),Sets.newHashSet("@ui_test"));
+
+        cucumberAnalyzer.analyse(ctx, testReport);
+
+        System.out.println("");
+        assertEquals(0,testReport.getScenariosNumber(TestType.UNIT_TEST));
+        assertEquals(0,testReport.getScenariosNumber(TestType.COMPONENT_TEST));
+        assertEquals(3,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
     }
 }

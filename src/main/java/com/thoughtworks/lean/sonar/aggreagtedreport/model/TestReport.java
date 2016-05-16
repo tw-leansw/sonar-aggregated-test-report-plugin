@@ -19,6 +19,7 @@ public class TestReport {
     }
 
     public TestReport(String pipelineName, String buildTag) {
+        // Todo: how to pass pipeline information to report
         this.pipelineName = pipelineName;
         this.buildTag = buildTag;
         this.details = Maps.newHashMap();
@@ -47,10 +48,17 @@ public class TestReport {
     }
 
     public void addTag(TestType testType) {
-        this.details.put(testType, Lists.<TestScenarioDto>newArrayList());
+        if (this.details.get(testType) == null){
+            this.details.put(testType, Lists.<TestScenarioDto>newArrayList());
+        }
     }
 
     public void addScenario(TestType testType, TestScenarioDto scenarioDto) {
         this.details.get(testType).add(scenarioDto);
+    }
+
+    public int getScenariosNumber(TestType type){
+        List<TestScenarioDto> scenarioDtos = this.details.getOrDefault(type, Lists.<TestScenarioDto>newArrayList());
+        return scenarioDtos.size();
     }
 }
