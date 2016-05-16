@@ -45,6 +45,7 @@ public class DaoTest {
         // delete all data before each test
         dbSession = dbClient.openSession(true);
         dbSession.getMapper(MyDataMapper.class).deleteAll();
+        dbSession.commit();
         System.out.println(" open db client: " + dbSession.toString());
 
     }
@@ -53,6 +54,7 @@ public class DaoTest {
     public void tearDown() {
         // delete all data after each test
         dbSession.getMapper(MyDataMapper.class).deleteAll();
+        dbSession.commit();
         dbSession.close();
         System.out.println(" close db session: " + dbSession.toString());
 
@@ -69,6 +71,7 @@ public class DaoTest {
         assertEquals(1, getRecordSize());
         dbSession.getMapper(MyDataMapper.class).insert(new MyDataDto("bar",233));
         assertEquals(2, getRecordSize());
+        dbSession.commit();
     }
 
 

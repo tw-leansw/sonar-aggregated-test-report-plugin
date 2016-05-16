@@ -1,14 +1,21 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 
+import ch.lambdaj.function.matcher.Predicate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestScenarioDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
-import org.hamcrest.Matchers;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
+import org.sonar.api.internal.google.common.collect.Lists;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -18,6 +25,8 @@ import java.util.Set;
 
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.Failed;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.Passed;
 
 /**
  * Created by qmxie on 5/13/16.
@@ -25,53 +34,86 @@ import static ch.lambdaj.collection.LambdaCollections.with;
 public class CucumberScanner {
     Logger logger = LoggerFactory.getLogger(getClass());
     String reportPath;
-    private Set<String> integrationTestTags;
+    private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
     FileSystem fileSystem;
 
 
-    public CucumberScanner(Set<String> integrationTestTags, Set<String> functionalTestTags) {
-        this.integrationTestTags = integrationTestTags;
+    public CucumberScanner(Set<String> componentTestTags, Set<String> functionalTestTags) {
+        this.componentTestTags = componentTestTags;
         this.functionalTestTags = functionalTestTags;
     }
 
     public CucumberScanner(Settings settings, FileSystem fs) {
         this.fileSystem = fs;
         this.reportPath = settings.getString("lean.testpyramid.cucumber.report.path");
-        this.integrationTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.integration.test.tags"));
+        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.integration.test.tags"));
         this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.functional.test.tags"));
 
     }
 
-    public void analyse() {
-//        try {
-//            analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testsCounter);
-//        } catch (IOException e) {
-//            logger.warn("cant read cucumber report! reportPath:" + reportPath);
-//        }
+    public void analyse(TestReport testReport) {
+        try {
+            analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
+        } catch (IOException e) {
+            logger.warn("cant read cucumber report! reportPath:" + reportPath);
+        }
     }
 
-    public void analyse(JXPathMap jxPathMap) {
+    public void analyse(JXPathMap jxPathMap, TestReport testReport) {
         List<Map> features = jxPathMap.get("/");
         List<JXPathMap> wrapedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
         for (JXPathMap feature : wrapedFeatures) {
-            List<Map> tags = feature.get("tags");
-            Set<String> tagNames = toTagnames(tags);
-            List<Map> scenarios = feature.get("elements");
-            List<String> wrappedScenarios = with(scenarios).convert(JXPathMap.toJxPathFunction).extract(on(JXPathMap.class).getString("type")).retain(Matchers.equalTo("scenario"));
-
-            double scenarioCount = wrappedScenarios.size();
-            TestType testType = TestType.UNIT_TEST;
-            if (Sets.intersection(tagNames, functionalTestTags).size() > 0) {
-                testType = TestType.FUNCTIONAL_TEST;
-            } else if (Sets.intersection(tagNames, integrationTestTags).size() > 0) {
-                //testType = TestType.INTEGRATION_TEST;
-            }
-            String featureName = feature.getString("name");
-            //testsCounter.incrementTestsFor(testType, scenarioCount);
-            logger.debug(String.format("find cucumber test feature:%s scenarioCount:%.0f type:%s", featureName, scenarioCount, testType.name()));
+            this.analyseFeature(feature, testReport);
         }
+    }
 
+    private void analyseFeature(JXPathMap feature, TestReport testReport) {
+        List<Map> tags = feature.get("tags");
+        Set<String> tagNames = toTagnames(tags);
+        TestType testType = TestType.UNIT_TEST;
+        if (Sets.intersection(tagNames, functionalTestTags).size() > 0) {
+            testType = TestType.FUNCTIONAL_TEST;
+        } else if (Sets.intersection(tagNames, componentTestTags).size() > 0) {
+            testType = TestType.COMPONENT_TEST;
+        }
+        String featureName = feature.getString("name");
+        testReport.addTag(testType);
+        logger.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
+
+        List<Map> scenarios = feature.get("elements");
+        List<JXPathMap> wrapedSenarios = with(scenarios).convert(JXPathMap.toJxPathFunction);
+        for (JXPathMap senario : wrapedSenarios) {
+            this.analyseScenario(senario, testType, testReport);
+        }
+    }
+
+    private void analyseScenario(JXPathMap senario, TestType testType, TestReport testReport) {
+        TestScenarioDto scenarioDto = new TestScenarioDto();
+        scenarioDto.setName(senario.getString("name"));
+
+        List<Map> steps = senario.get("steps");
+        List<JXPathMap> wrapedSteps = with(steps).convert(JXPathMap.toJxPathFunction);
+        List<TestStepDto> stepDtos = Lists.newArrayList();
+        boolean allPassed = true;
+        long scenrioDuration = 0l;
+        for (JXPathMap step : wrapedSteps) {
+            TestStepDto stepDto = new TestStepDto()
+                    .setName(step.getString("name"))
+                    .setDuration(((Map) step.get("result")).get("duration").toString());
+            String status = ((Map) step.get("result")).get("status").toString();
+            stepDto.setResultType(status.equals("passed") ? Passed : Failed);
+
+            scenrioDuration += stepDto.getDuration();
+            if (stepDto.getResultType() == Failed){
+                allPassed = false;
+            }
+            stepDtos.add(stepDto);
+        }
+        scenarioDto.setDuration(scenrioDuration);
+        scenarioDto.setResultType(allPassed ? Passed : Failed);
+        scenarioDto.setTestStepDtoList(stepDtos);
+        testReport.addScenario(testType, scenarioDto);
     }
 
     public Set<String> toTagnames(List<Map> tags) {

@@ -7,11 +7,21 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
  */
 public class TestStepDto extends BaseDto{
 
+    private int id;
     private String name;
     private ResultType resultType;
-    private double duration;
+    private long duration;
 
     public TestStepDto() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public TestStepDto setId(int id) {
+        this.id = id;
+        return this;
     }
 
     public String getName() {
@@ -32,12 +42,17 @@ public class TestStepDto extends BaseDto{
         return this;
     }
 
-    public double getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public TestStepDto setDuration(double duration) {
+    public TestStepDto setDuration(long duration) {
         this.duration = duration;
+        return this;
+    }
+
+    public TestStepDto setDuration(String duration) {
+        this.setDuration(Long.parseLong(duration));
         return this;
     }
 }
