@@ -1,9 +1,11 @@
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata;
+
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseDto;
 
 /**
  * Created by qmxie on 5/12/16.
  */
-public class SubMyDataDto extends BaseDto{
+public class SubMyDataDto extends BaseDto {
     private String name;
     private int height;
 

@@ -1,11 +1,12 @@
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 
 /**
  * Created by qmxie on 5/13/16.
  */
-public class TestStepDto extends BaseDto{
+public class TestStepDto extends BaseDto {
 
     private int id;
     private String name;
@@ -51,8 +52,8 @@ public class TestStepDto extends BaseDto{
         return this;
     }
 
-    public TestStepDto setDuration(String duration) {
-        this.setDuration(Long.parseLong(duration));
+    public TestStepDto setDuration(Object duration) {
+        this.setDuration(Long.parseLong(duration.toString()));
         return this;
     }
 }

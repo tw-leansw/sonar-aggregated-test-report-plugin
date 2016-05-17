@@ -1,8 +1,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseJsonWriter;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.SubMyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.SubMyDataDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

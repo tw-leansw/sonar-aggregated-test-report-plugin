@@ -2,16 +2,15 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.*;
-import org.apache.ibatis.session.SqlSessionFactory;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataMapper;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
 import org.sonar.api.server.ws.Response;
-import org.sonar.api.utils.text.JsonWriter;
 import org.sonar.db.DbSession;
 import org.sonar.db.DefaultDatabase;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -2,10 +2,11 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestScenarioDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
@@ -22,8 +23,8 @@ import java.util.Set;
 
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.Failed;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.Passed;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
 
 /**
  * Created by qmxie on 5/13/16.
@@ -79,7 +80,7 @@ public class CucumberScanner {
 
         List<Map> scenarios = feature.get("elements");
         List<JXPathMap> wrappedScenarios =
-                with(scenarios).retain(Matchers.hasEntry("type","scenario"))
+                with(scenarios).retain(Matchers.hasEntry("type", "scenario"))
                         .convert(JXPathMap.toJxPathFunction);
         for (JXPathMap senario : wrappedScenarios) {
             this.analyseScenario(senario, testType, testReport);
@@ -96,22 +97,18 @@ public class CucumberScanner {
         boolean allPassed = true;
         long scenrioDuration = 0l;
         for (JXPathMap step : wrapedSteps) {
-            // FIXME: 5/16/16 not including skipped status
             TestStepDto stepDto = new TestStepDto()
                     .setName(step.getString("name"))
-                    .setDuration(((Map) step.get("result")).get("duration").toString());
-            String status = ((Map) step.get("result")).get("status").toString();
-
-            stepDto.setResultType(status.equals("passed") ? Passed : Failed);
-
+                    .setDuration(step.get("/result/duration", 0L))
+                    .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
             scenrioDuration += stepDto.getDuration();
-            if (stepDto.getResultType() != Passed){
+            if (stepDto.getResultType() != PASSED) {
                 allPassed = false;
             }
             stepDtos.add(stepDto);
         }
         scenarioDto.setDuration(scenrioDuration);
-        scenarioDto.setResultType(allPassed ? Passed : Failed);
+        scenarioDto.setResultType(allPassed ? PASSED : FAILED);
         scenarioDto.setTestStepDtoList(stepDtos);
         testReport.addScenario(testType, scenarioDto);
     }

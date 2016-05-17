@@ -3,7 +3,9 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.model;
 import ch.lambdaj.Lambda;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +64,7 @@ public class TestReport {
 
     public List<TestScenarioDto> getOrDefault(TestType testType, List<TestScenarioDto> defaultValue) {
         List<TestScenarioDto> retValue = this.details.get(testType);
-        return retValue == null ? defaultValue : defaultValue;
+        return retValue == null ? defaultValue : retValue;
 
     }
 

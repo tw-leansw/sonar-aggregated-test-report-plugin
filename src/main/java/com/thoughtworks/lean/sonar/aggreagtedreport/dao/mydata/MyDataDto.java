@@ -3,14 +3,15 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseDto;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.util.List;
 
-public class MyDataDto extends BaseDto{
+public class MyDataDto extends BaseDto {
     private String name;
     private int age;
     private SubMyDataDto subMyDataDto;

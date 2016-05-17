@@ -6,8 +6,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDao;
 import org.sonar.db.Dao;
-import org.sonar.db.Database;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
 

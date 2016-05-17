@@ -3,7 +3,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.CucumberScanner;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.junit.Test;
@@ -56,8 +56,8 @@ public class CucumberScannerTest {
 
         cucumberAnalyzer.analyse(ctx, testReport);
 
-        assertEquals(7, testReport.getStepsByResultType(Passed).size());
-        assertEquals(1, testReport.getStepsByResultType(Failed).size());
-        assertEquals(2, testReport.getStepsByResultType(Skipped).size());
+        assertEquals(5, testReport.getStepsByResultType(PASSED).size());
+        assertEquals(1, testReport.getStepsByResultType(FAILED).size());
+        assertEquals(2, testReport.getStepsByResultType(SKIPPED).size());
     }
 }

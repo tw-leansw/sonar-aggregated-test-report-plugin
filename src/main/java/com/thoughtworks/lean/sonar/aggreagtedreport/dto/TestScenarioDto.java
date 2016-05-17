@@ -1,7 +1,7 @@
-package com.thoughtworks.lean.sonar.aggreagtedreport.model;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.collect.Lists;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import org.hamcrest.Matchers;
 
 import java.util.Collections;
@@ -14,6 +14,10 @@ import static ch.lambdaj.collection.LambdaCollections.with;
  */
 public class TestScenarioDto {
     private long id;
+
+    private long featureHashCode;
+    private String featureName;
+
     private String name;
     private ResultType resultType;
     private double duration;

@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata;
 
 import org.sonar.api.utils.System2;
 import org.sonar.db.AbstractDao;

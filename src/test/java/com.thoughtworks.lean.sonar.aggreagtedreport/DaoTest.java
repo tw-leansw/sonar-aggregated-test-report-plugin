@@ -1,8 +1,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.Mybatis;
 import org.junit.After;

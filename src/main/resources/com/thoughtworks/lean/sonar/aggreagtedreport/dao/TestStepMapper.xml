@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper">
+<mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.step.TestStepMapper">
 
     <sql id="stepColumns">
         step.id,
@@ -10,7 +10,7 @@
         step.result
     </sql>
 
-    <select id="selectById" parameterType="String" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto">
+    <select id="selectById" parameterType="String" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
         SELECT
         <include refid="stepColumns"/>
         FROM lean_test_step step
@@ -19,14 +19,14 @@
         </where>
     </select>
 
-    <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto">
+    <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
         select
         step.`name` as name , step.`result` as resultType, step.`duration` as duration
         from
         `lean_test_step` as step;
     </select>
 
-    <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDto" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO lean_test_step (name, result, duration)
         VALUES (#{name,jdbcType=VARCHAR}, #{resultType,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER})
     </insert>

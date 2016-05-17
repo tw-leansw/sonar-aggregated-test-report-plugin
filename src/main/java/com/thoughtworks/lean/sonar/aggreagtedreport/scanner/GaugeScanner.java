@@ -2,7 +2,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.ScriptUtil;
 import org.apache.commons.io.IOUtils;
