@@ -1,5 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 
+import ch.lambdaj.collection.LambdaList;
+import ch.lambdaj.function.convert.Converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
@@ -13,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
-import org.sonar.api.internal.google.common.collect.Lists;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
@@ -92,23 +94,24 @@ public class CucumberScanner {
         scenarioDto.setName(senario.getString("name"));
 
         List<Map> steps = senario.get("steps");
-        List<JXPathMap> wrapedSteps = with(steps).convert(JXPathMap.toJxPathFunction);
-        List<TestStepDto> stepDtos = Lists.newArrayList();
-        boolean allPassed = true;
-        long scenrioDuration = 0l;
-        for (JXPathMap step : wrapedSteps) {
-            TestStepDto stepDto = new TestStepDto()
-                    .setName(step.getString("name"))
-                    .setDuration(step.get("/result/duration", 0L))
-                    .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
-            scenrioDuration += stepDto.getDuration();
-            if (stepDto.getResultType() != PASSED) {
-                allPassed = false;
-            }
-            stepDtos.add(stepDto);
-        }
-        scenarioDto.setDuration(scenrioDuration);
-        scenarioDto.setResultType(allPassed ? PASSED : FAILED);
+
+        LambdaList<TestStepDto> stepDtos = with(steps)
+                .convert(JXPathMap.toJxPathFunction)
+                .convert(new Converter<JXPathMap, TestStepDto>() {
+                    @Override
+                    public TestStepDto convert(JXPathMap step) {
+                        return new TestStepDto()
+                                .setName(step.getString("name"))
+                                .setDuration(step.get("/result/duration", 0L))
+                                .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
+                    }
+                });
+
+
+        scenarioDto.setDuration(sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
+
+        int stepNotPassed = stepDtos.extract(on(TestStepDto.class).getResultType()).remove(Matchers.equalTo(PASSED)).size();
+        scenarioDto.setResultType(stepNotPassed > 0 ? PASSED : FAILED);
         scenarioDto.setTestStepDtoList(stepDtos);
         testReport.addScenario(testType, scenarioDto);
     }
