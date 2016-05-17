@@ -17,7 +17,6 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,31 +61,36 @@ public class CucumberScanner {
 
     public void analyse(JXPathMap jxPathMap, TestReport testReport) {
         List<Map> features = jxPathMap.get("/");
-        List<JXPathMap> wrapedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
-        for (JXPathMap feature : wrapedFeatures) {
+        LambdaList<JXPathMap> wrappedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
+        for (JXPathMap feature : wrappedFeatures) {
             this.analyseFeature(feature, testReport);
         }
     }
 
     private void analyseFeature(JXPathMap feature, TestReport testReport) {
         List<Map> tags = feature.get("tags");
-        Set<String> tagNames = toTagnames(tags);
+        Set<String> tagNames = toTagNames(tags);
+        TestType testType = getTestType(tagNames);
+        String featureName = feature.getString("name");
+        logger.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
+
+        List<Map> scenarios = feature.get("elements");
+        List<JXPathMap> wrappedScenarios = with(scenarios)
+                .retain(Matchers.hasEntry("type", "scenario"))
+                .convert(JXPathMap.toJxPathFunction);
+        for (JXPathMap scenario : wrappedScenarios) {
+            this.analyseScenario(scenario, testType, testReport);
+        }
+    }
+
+    private TestType getTestType(Set<String> tagNames) {
         TestType testType = TestType.UNIT_TEST;
         if (Sets.intersection(tagNames, functionalTestTags).size() > 0) {
             testType = TestType.FUNCTIONAL_TEST;
         } else if (Sets.intersection(tagNames, componentTestTags).size() > 0) {
             testType = TestType.COMPONENT_TEST;
         }
-        String featureName = feature.getString("name");
-        logger.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
-
-        List<Map> scenarios = feature.get("elements");
-        List<JXPathMap> wrappedScenarios =
-                with(scenarios).retain(Matchers.hasEntry("type", "scenario"))
-                        .convert(JXPathMap.toJxPathFunction);
-        for (JXPathMap senario : wrappedScenarios) {
-            this.analyseScenario(senario, testType, testReport);
-        }
+        return testType;
     }
 
     private void analyseScenario(JXPathMap senario, TestType testType, TestReport testReport) {
@@ -114,10 +118,13 @@ public class CucumberScanner {
         scenarioDto.setResultType(stepNotPassed > 0 ? PASSED : FAILED);
         scenarioDto.setTestStepDtoList(stepDtos);
         testReport.addScenario(testType, scenarioDto);
+
     }
 
-    public Set<String> toTagnames(List<Map> tags) {
-        List<JXPathMap> wrapedTags = with(tags).convert(JXPathMap.toJxPathFunction);
-        return new HashSet<>(with(wrapedTags).extract(on(JXPathMap.class).getString("name")));
+    public Set<String> toTagNames(List<Map> tags) {
+        return with(tags)
+                .convert(JXPathMap.toJxPathFunction)
+                .extract(on(JXPathMap.class).getString("name"))
+                .distinct();
     }
 }
