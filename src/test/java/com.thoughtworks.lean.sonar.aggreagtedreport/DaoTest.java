@@ -42,7 +42,6 @@ public class DaoTest {
         Flyway flyway = new Flyway();
         flyway.setDataSource(defaultDatabase.getDataSource());
         flyway.migrate();
-
     }
 
     @Before
