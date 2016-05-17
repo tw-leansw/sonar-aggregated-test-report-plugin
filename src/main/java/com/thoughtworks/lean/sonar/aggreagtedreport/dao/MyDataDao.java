@@ -19,7 +19,6 @@ public class MyDataDao extends AbstractDao {
 
     public void insert(MyDataDto dto) {
         DbSession session = this.myBatis().openSession(false);
-
         try {
             this.insert(session, dto);
             session.commit();

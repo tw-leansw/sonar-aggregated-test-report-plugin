@@ -60,8 +60,14 @@ public class TestReport {
         this.details.get(testType).add(scenarioDto);
     }
 
+    public List<TestScenarioDto> getOrDefault(TestType testType, List<TestScenarioDto> defaultValue) {
+        List<TestScenarioDto> retValue = this.details.get(testType);
+        return retValue == null ? defaultValue : defaultValue;
+
+    }
+
     public List<TestScenarioDto> getScenarios(TestType type) {
-        return this.details.getOrDefault(type, Collections.<TestScenarioDto>emptyList());
+        return getOrDefault(type, Collections.<TestScenarioDto>emptyList());
     }
 
     public int getScenariosNumber(TestType type) {

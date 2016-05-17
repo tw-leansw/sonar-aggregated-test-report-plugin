@@ -1,6 +1,6 @@
 # sonar-lean-aggregated-test-report-plugin
 
-Mininum Sonar Version: 5.1
+Mininum Sonar Version: 5.5
 
 Lean Aggregated Test Report
 

@@ -18,7 +18,6 @@
   <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDto">
     select
     <include refid="columns"/>
-
   </select>
 
     <delete id="deleteAll">
