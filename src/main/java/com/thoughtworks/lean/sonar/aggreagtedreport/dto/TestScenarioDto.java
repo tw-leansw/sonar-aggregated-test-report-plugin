@@ -14,9 +14,7 @@ import static ch.lambdaj.collection.LambdaCollections.with;
  */
 public class TestScenarioDto {
     private long id;
-
-    private long featureHashCode;
-    private String featureName;
+    private long featureId;
 
     private String name;
     private ResultType resultType;
@@ -79,10 +77,21 @@ public class TestScenarioDto {
                 .retain(Matchers.hasProperty("resultType", Matchers.equalTo(type)));
     }
 
-    public void addStep(TestStepDto step) {
+    public TestScenarioDto addStep(TestStepDto step) {
         if (this.testStepDtoList == null) {
             this.testStepDtoList = Lists.newArrayList();
         }
         this.testStepDtoList.add(step);
+        return this;
     }
+
+    public long getFeatureId() {
+        return featureId;
+    }
+
+    public TestScenarioDto setFeatureId(long featureId) {
+        this.featureId = featureId;
+        return this;
+    }
+
 }

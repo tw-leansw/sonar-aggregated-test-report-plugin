@@ -3,7 +3,10 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 import ch.lambdaj.collection.LambdaList;
 import ch.lambdaj.function.convert.Converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
@@ -24,18 +27,17 @@ import java.util.Set;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 
 /**
  * Created by qmxie on 5/13/16.
  */
 public class CucumberScanner {
-    Logger logger = LoggerFactory.getLogger(getClass());
-    String reportPath;
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private String reportPath;
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
-    FileSystem fileSystem;
+    private FileSystem fileSystem;
 
 
     public CucumberScanner(Set<String> componentTestTags, Set<String> functionalTestTags) {
@@ -55,7 +57,7 @@ public class CucumberScanner {
         try {
             analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
         } catch (IOException e) {
-            logger.warn("cant read cucumber report! reportPath:" + reportPath);
+            LOGGER.warn("cant read cucumber report! reportPath:" + reportPath);
         }
     }
 
@@ -63,24 +65,29 @@ public class CucumberScanner {
         List<Map> features = jxPathMap.get("/");
         LambdaList<JXPathMap> wrappedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
         for (JXPathMap feature : wrappedFeatures) {
-            this.analyseFeature(feature, testReport);
+            testReport.addTestFeature(this.analyseFeature(feature));
         }
     }
 
-    private void analyseFeature(JXPathMap feature, TestReport testReport) {
+    private TestFeatureDto analyseFeature(JXPathMap feature) {
         List<Map> tags = feature.get("tags");
         Set<String> tagNames = toTagNames(tags);
         TestType testType = getTestType(tagNames);
         String featureName = feature.getString("name");
-        logger.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
+        LOGGER.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
 
         List<Map> scenarios = feature.get("elements");
         List<JXPathMap> wrappedScenarios = with(scenarios)
                 .retain(Matchers.hasEntry("type", "scenario"))
                 .convert(JXPathMap.toJxPathFunction);
+        TestFeatureDto testFeatureDto = new TestFeatureDto();
+        testFeatureDto.setTestType(testType);
+
         for (JXPathMap scenario : wrappedScenarios) {
-            this.analyseScenario(scenario, testType, testReport);
+            testFeatureDto.getTestScenarios().add(this.analyseScenario(scenario));
         }
+
+        return testFeatureDto;
     }
 
     private TestType getTestType(Set<String> tagNames) {
@@ -93,10 +100,9 @@ public class CucumberScanner {
         return testType;
     }
 
-    private void analyseScenario(JXPathMap scenario, TestType testType, TestReport testReport) {
+    private TestScenarioDto analyseScenario(JXPathMap scenario) {
         TestScenarioDto scenarioDto = new TestScenarioDto();
         scenarioDto.setName(scenario.getString("name"));
-
         List<Map> steps = scenario.get("steps");
 
         LambdaList<TestStepDto> stepDtos = with(steps)
@@ -114,14 +120,19 @@ public class CucumberScanner {
 
         scenarioDto.setDuration(
                 sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
+        Multiset<ResultType> multiset = ConcurrentHashMultiset.create(stepDtos
+                .extract(on(TestStepDto.class).getResultType()));
 
-        int stepNotPassed = stepDtos
-        .extract(on(TestStepDto.class).getResultType())
-                .remove(Matchers.equalTo(PASSED))
-                .size();
-        scenarioDto.setResultType(stepNotPassed > 0 ? PASSED : FAILED);
+        int stepPassed = multiset.count(PASSED);
+        int stepFailed = multiset.count(FAILED);
+        if (stepFailed + stepPassed == 0) {
+            scenarioDto.setResultType(SKIPPED);
+        } else {
+            scenarioDto.setResultType(stepPassed == 0 ? FAILED : PASSED);
+        }
         scenarioDto.setTestStepDtoList(stepDtos);
-        testReport.addScenario(testType, scenarioDto);
+        //testReport.addScenario(testType, scenarioDto);
+        return scenarioDto;
 
     }
 

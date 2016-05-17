@@ -3,11 +3,10 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.model;
 import ch.lambdaj.Lambda;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,38 +17,41 @@ import static ch.lambdaj.collection.LambdaCollections.with;
  * Created by qmxie on 5/16/16.
  */
 public class TestReport {
-    private String pipelineName;
-    private String buildTag;
+
+    private TestReportDto testReportDto;
+    private String projectId;
+    private String buildLabel;
     private Map<TestType, List<TestScenarioDto>> details;
 
     public TestReport() {
         this.details = Maps.newHashMap();
+        this.testReportDto = new TestReportDto()
+                .setProjectId(this.projectId)
+                .setBuildLabel(this.buildLabel)
+                .setCreateTime(new Date());
     }
 
-    public TestReport(String pipelineName, String buildTag) {
-        // Todo: how to pass pipeline information to report
-        this.pipelineName = pipelineName;
-        this.buildTag = buildTag;
+    public TestReport(String projectId, String buildLabel) {
+
+
+        this.projectId = projectId;
         this.details = Maps.newHashMap();
+        this.buildLabel = buildLabel;
+        this.testReportDto = new TestReportDto()
+                .setProjectId(this.projectId)
+                .setBuildLabel(this.buildLabel)
+                .setCreateTime(new Date());
     }
 
-    public String getPipelineName() {
-        return pipelineName;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public TestReport setPipelineName(String pipelineName) {
-        this.pipelineName = pipelineName;
+    public TestReport setProjectId(String projectId) {
+        this.projectId = projectId;
         return this;
     }
 
-    public String getBuildTag() {
-        return buildTag;
-    }
-
-    public TestReport setBuildTag(String buildTag) {
-        this.buildTag = buildTag;
-        return this;
-    }
 
     public Map<TestType, List<TestScenarioDto>> getDetails() {
         return details;
@@ -62,7 +64,14 @@ public class TestReport {
         this.details.get(testType).add(scenarioDto);
     }
 
-    public List<TestScenarioDto> getOrDefault(TestType testType, List<TestScenarioDto> defaultValue) {
+    public void addTestFeature(TestFeatureDto testFeatureDto) {
+        testReportDto.getTestFeatures().add(testFeatureDto);
+        for (TestScenarioDto testScenarioDto : testFeatureDto.getTestScenarios()) {
+            addScenario(testFeatureDto.getTestType(), testScenarioDto);
+        }
+    }
+
+    private List<TestScenarioDto> getOrDefault(TestType testType, List<TestScenarioDto> defaultValue) {
         List<TestScenarioDto> retValue = this.details.get(testType);
         return retValue == null ? defaultValue : retValue;
 

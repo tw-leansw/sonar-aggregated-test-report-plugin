@@ -3,6 +3,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 import ch.lambdaj.collection.LambdaList;
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.collect.Sets;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
@@ -60,7 +61,8 @@ public class GaugeScanner {
     }
 
 
-    public void analyseSpec(JXPathMap spec, TestReport report) {
+    private TestFeatureDto analyseSpec(JXPathMap spec) {
+        TestFeatureDto testFeatureDto = new TestFeatureDto();
         List<Map> specItems = spec.selectNodes("/protoSpec/items[@itemType='4']/scenario");
 
         List<JXPathMap> scenarios = with(specItems).convert(JXPathMap.toJxPathFunction);
@@ -70,19 +72,18 @@ public class GaugeScanner {
         String specName = spec.get("/protoSpec/specHeading");
         //testCounter.incrementTestsFor(testType, scenarioCount);
         logger.debug(String.format("find gauge test spec:%s scenarioCount:%.0f type:%s", specName, scenarioCount, testType.name()));
-
-
         for (JXPathMap scenario : scenarios) {
-            analyseScenario(scenario, testType, report);
+
+            testFeatureDto.getTestScenarios().add(analyseScenario(scenario));
         }
-        //
+        testFeatureDto.setTestType(testType);
+        return testFeatureDto;
     }
 
-    public void analyseScenario(JXPathMap scenario, TestType testType, TestReport report) {
+    private TestScenarioDto analyseScenario(JXPathMap scenario) {
         TestScenarioDto scenarioDto = new TestScenarioDto();
         scenarioDto.setName(scenario.getString("/scenarioHeading"));
         List<Map> steps = scenario.selectNodes("/scenarioItems[@itemType='1']/step");
-
 
         LambdaList<TestStepDto> stepDtos = with(steps)
                 .convert(JXPathMap.toJxPathFunction)
@@ -118,7 +119,8 @@ public class GaugeScanner {
 
         scenarioDto.setTestStepDtoList(stepDtos);
 
-        report.addScenario(testType, scenarioDto);
+
+        return scenarioDto;
 
     }
 
@@ -127,7 +129,7 @@ public class GaugeScanner {
         List<Map> specResults = jxPathMap.get("/gaugeExecutionResult/suiteResult/specResults");
         LambdaList<JXPathMap> wrapedSpecResults = with(specResults).convert(JXPathMap.toJxPathFunction);
         for (JXPathMap spec : wrapedSpecResults) {
-            analyseSpec(spec, testReport);
+            testReport.addTestFeature(analyseSpec(spec));
         }
     }
 
