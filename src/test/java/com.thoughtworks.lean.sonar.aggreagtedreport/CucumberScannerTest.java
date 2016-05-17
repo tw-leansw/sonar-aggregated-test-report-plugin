@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by qmxie on 5/16/16.
@@ -31,6 +32,8 @@ public class CucumberScannerTest {
         assertEquals(13, testReport.getScenariosNumber(TestType.UNIT_TEST));
         assertEquals(7, testReport.getScenariosNumber(TestType.COMPONENT_TEST));
         assertEquals(3, testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
+        //
+        assertTrue(testReport.getTestReportDto().getDuration() > 0);
     }
 
     @Test
@@ -45,6 +48,9 @@ public class CucumberScannerTest {
         assertEquals(0, testReport.getScenariosNumber(TestType.UNIT_TEST));
         assertEquals(0, testReport.getScenariosNumber(TestType.COMPONENT_TEST));
         assertEquals(3, testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
+
+        //
+        assertTrue(testReport.getTestReportDto().getDuration() > 0);
     }
 
     @Test
@@ -59,5 +65,7 @@ public class CucumberScannerTest {
         assertEquals(5, testReport.getStepsByResultType(PASSED).size());
         assertEquals(1, testReport.getStepsByResultType(FAILED).size());
         assertEquals(2, testReport.getStepsByResultType(SKIPPED).size());
+        //
+        assertTrue(testReport.getTestReportDto().getDuration() > 0);
     }
 }

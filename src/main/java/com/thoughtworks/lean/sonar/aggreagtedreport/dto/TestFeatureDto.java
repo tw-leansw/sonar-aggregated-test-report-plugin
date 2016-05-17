@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.collection.LambdaCollections.with;
+
 public class TestFeatureDto {
     private long id;
     private long reportId;
@@ -14,7 +17,7 @@ public class TestFeatureDto {
     private String name;
     private String description;
     private long duration;
-    private List<TestScenarioDto> testScenarios=new ArrayList<>();
+    private List<TestScenarioDto> testScenarios = new ArrayList<>();
     private int passedScenarios;
     private int failedScenarios;
     private int skippedScenarios;
@@ -147,6 +150,13 @@ public class TestFeatureDto {
 
     public TestFeatureDto setTestScenarios(List<TestScenarioDto> testScenarios) {
         this.testScenarios = testScenarios;
+        calculateDuration();
         return this;
+    }
+
+    private void calculateDuration() {
+        setDuration(
+                with(getTestScenarios())
+                        .sum(on(TestScenarioDto.class).getDuration()));
     }
 }

@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by qmxie on 5/16/16.
@@ -35,6 +36,9 @@ public class GaugeScannerTest {
         assertEquals(0,testReport.getScenariosNumber(TestType.COMPONENT_TEST));
         assertEquals(0,testReport.getScenariosNumber(TestType.UNIT_TEST));
 
+        //
+        assertTrue(testReport.getTestReportDto().getDuration() > 0);
+
     }
 
     @Test
@@ -53,6 +57,9 @@ public class GaugeScannerTest {
         assertEquals(0,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
         assertEquals(0,testReport.getScenariosNumber(TestType.COMPONENT_TEST));
         assertEquals(1,testReport.getScenariosNumber(TestType.UNIT_TEST));
+
+        //
+        assertTrue(testReport.getTestReportDto().getDuration() > 0);
 
     }
 

@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 
@@ -61,76 +59,73 @@ public class GaugeScanner {
     }
 
 
-    private TestFeatureDto analyseSpec(JXPathMap spec) {
-        TestFeatureDto testFeatureDto = new TestFeatureDto();
-        List<Map> specItems = spec.selectNodes("/protoSpec/items[@itemType='4']/scenario");
+    private Converter<JXPathMap, TestFeatureDto> analyseSpec = new Converter<JXPathMap, TestFeatureDto>() {
+        @Override
+        public TestFeatureDto convert(JXPathMap spec) {
+            TestFeatureDto testFeatureDto = new TestFeatureDto();
 
-        List<JXPathMap> scenarios = with(specItems).convert(JXPathMap.toJxPathFunction);
-        Set<String> tags = spec.getStringSet("/protoSpec/tags");
-        double scenarioCount = Double.parseDouble(spec.get("/scenarioCount").toString());
-        TestType testType = getTestType(tags);
-        String specName = spec.get("/protoSpec/specHeading");
-        //testCounter.incrementTestsFor(testType, scenarioCount);
-        logger.debug(String.format("find gauge test spec:%s scenarioCount:%.0f type:%s", specName, scenarioCount, testType.name()));
-        for (JXPathMap scenario : scenarios) {
 
-            testFeatureDto.getTestScenarios().add(analyseScenario(scenario));
+            Set<String> tags = spec.getStringSet("/protoSpec/tags");
+            double scenarioCount = Double.parseDouble(spec.get("/scenarioCount").toString());
+            TestType testType = getTestType(tags);
+            String specName = spec.get("/protoSpec/specHeading");
+            //testCounter.incrementTestsFor(testType, scenarioCount);
+            logger.debug(String.format("find gauge test spec:%s scenarioCount:%.0f type:%s", specName, scenarioCount, testType.name()));
+
+            List<Map> specItems = spec.selectNodes("/protoSpec/items[@itemType='4']/scenario");
+            LambdaList<JXPathMap> scenarios = with(specItems).convert(JXPathMap.toJxPathFunction);
+            testFeatureDto.setTestScenarios(scenarios.convert(analyseScenario));
+            testFeatureDto.setTestType(testType);
+            return testFeatureDto;
         }
-        testFeatureDto.setTestType(testType);
-        return testFeatureDto;
-    }
+    };
 
-    private TestScenarioDto analyseScenario(JXPathMap scenario) {
-        TestScenarioDto scenarioDto = new TestScenarioDto();
-        scenarioDto.setName(scenario.getString("/scenarioHeading"));
-        List<Map> steps = scenario.selectNodes("/scenarioItems[@itemType='1']/step");
+    private Converter<JXPathMap, TestScenarioDto> analyseScenario = new Converter<JXPathMap, TestScenarioDto>() {
+        @Override
+        public TestScenarioDto convert(JXPathMap scenario) {
+            TestScenarioDto scenarioDto = new TestScenarioDto();
+            scenarioDto.setName(scenario.getString("/scenarioHeading"));
+            List<Map> steps = scenario.selectNodes("/scenarioItems[@itemType='1']/step");
 
-        LambdaList<TestStepDto> stepDtos = with(steps)
-                .convert(JXPathMap.toJxPathFunction)
-                .convert(new Converter<JXPathMap, TestStepDto>() {
-                    @Override
-                    public TestStepDto convert(JXPathMap step) {
-                        TestStepDto testStepDto = new TestStepDto()
-                                .setName(step.getString("/parsedText"))
-                                .setDuration(step.get("/stepExecutionResult/executionResult/executionTime", 0L));
-                        Boolean isSkipped = step.get("/stepExecutionResult/skipped");
+            LambdaList<TestStepDto> stepDtos = with(steps)
+                    .convert(JXPathMap.toJxPathFunction)
+                    .convert(new Converter<JXPathMap, TestStepDto>() {
+                        @Override
+                        public TestStepDto convert(JXPathMap step) {
+                            TestStepDto testStepDto = new TestStepDto()
+                                    .setName(step.getString("/parsedText"))
+                                    .setDuration(step.get("/stepExecutionResult/executionResult/executionTime", 0L));
+                            Boolean isSkipped = step.get("/stepExecutionResult/skipped");
 
-                        if (isSkipped) {
-                            testStepDto.setResultType(SKIPPED);
-                        } else {
-                            Boolean isFailed = step.get("/stepExecutionResult/executionResult/failed");
-                            testStepDto.setResultType(isFailed ? FAILED : PASSED);
+                            if (isSkipped) {
+                                testStepDto.setResultType(SKIPPED);
+                            } else {
+                                Boolean isFailed = step.get("/stepExecutionResult/executionResult/failed");
+                                testStepDto.setResultType(isFailed ? FAILED : PASSED);
+                            }
+                            return testStepDto;
                         }
-                        return testStepDto;
-                    }
-                });
+                    });
 
 
-        scenarioDto.setDuration(
-                sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
+            Boolean scenarioSkipped = scenario.get("skipped");
+            Boolean scenarioFailed = scenario.get("failed");
+            if (scenarioSkipped) {
+                scenarioDto.setResultType(SKIPPED);
+            } else {
+                scenarioDto.setResultType(scenarioFailed ? FAILED : PASSED);
+            }
 
-        Boolean scenarioSkiped = scenario.get("skipped");
-        Boolean scenarioFailed = scenario.get("failed");
-        if (scenarioSkiped) {
-            scenarioDto.setResultType(SKIPPED);
-        } else {
-            scenarioDto.setResultType(scenarioFailed ? FAILED : PASSED);
+            scenarioDto.setTestStepDtoList(stepDtos);
+            return scenarioDto;
         }
-
-        scenarioDto.setTestStepDtoList(stepDtos);
-
-
-        return scenarioDto;
-
-    }
+    };
 
 
     public void analyse(JXPathMap jxPathMap, TestReport testReport) {
         List<Map> specResults = jxPathMap.get("/gaugeExecutionResult/suiteResult/specResults");
-        LambdaList<JXPathMap> wrapedSpecResults = with(specResults).convert(JXPathMap.toJxPathFunction);
-        for (JXPathMap spec : wrapedSpecResults) {
-            testReport.addTestFeature(analyseSpec(spec));
-        }
+        LambdaList<JXPathMap> wrappedSpecResults = with(specResults).convert(JXPathMap.toJxPathFunction);
+        testReport.setTestFeatures(wrappedSpecResults.convert(analyseSpec));
     }
 
     private TestType getTestType(Set<String> tags) {

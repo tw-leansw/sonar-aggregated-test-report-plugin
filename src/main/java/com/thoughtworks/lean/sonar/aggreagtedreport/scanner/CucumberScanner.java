@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 
@@ -64,31 +63,31 @@ public class CucumberScanner {
     public void analyse(JXPathMap jxPathMap, TestReport testReport) {
         List<Map> features = jxPathMap.get("/");
         LambdaList<JXPathMap> wrappedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
-        for (JXPathMap feature : wrappedFeatures) {
-            testReport.addTestFeature(this.analyseFeature(feature));
-        }
+        testReport.setTestFeatures(wrappedFeatures.convert(analyseFeature));
     }
 
-    private TestFeatureDto analyseFeature(JXPathMap feature) {
-        List<Map> tags = feature.get("tags");
-        Set<String> tagNames = toTagNames(tags);
-        TestType testType = getTestType(tagNames);
-        String featureName = feature.getString("name");
-        LOGGER.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
+    private Converter<JXPathMap, TestFeatureDto> analyseFeature = new Converter<JXPathMap, TestFeatureDto>() {
+        @Override
+        public TestFeatureDto convert(JXPathMap feature) {
+            List<Map> tags = feature.get("tags");
+            Set<String> tagNames = toTagNames(tags);
+            TestType testType = getTestType(tagNames);
+            String featureName = feature.getString("name");
+            LOGGER.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
 
-        List<Map> scenarios = feature.get("elements");
-        List<JXPathMap> wrappedScenarios = with(scenarios)
-                .retain(Matchers.hasEntry("type", "scenario"))
-                .convert(JXPathMap.toJxPathFunction);
-        TestFeatureDto testFeatureDto = new TestFeatureDto();
-        testFeatureDto.setTestType(testType);
+            List<Map> scenarios = feature.get("elements");
+            LambdaList<JXPathMap> wrappedScenarios = with(scenarios)
+                    .retain(Matchers.hasEntry("type", "scenario"))
+                    .convert(JXPathMap.toJxPathFunction);
+            TestFeatureDto testFeatureDto = new TestFeatureDto();
+            testFeatureDto.setTestType(testType);
+            testFeatureDto.setTestScenarios(wrappedScenarios.convert(analyseScenario));
 
-        for (JXPathMap scenario : wrappedScenarios) {
-            testFeatureDto.getTestScenarios().add(this.analyseScenario(scenario));
+
+            return testFeatureDto;
         }
+    };
 
-        return testFeatureDto;
-    }
 
     private TestType getTestType(Set<String> tagNames) {
         TestType testType = TestType.UNIT_TEST;
@@ -100,41 +99,42 @@ public class CucumberScanner {
         return testType;
     }
 
-    private TestScenarioDto analyseScenario(JXPathMap scenario) {
-        TestScenarioDto scenarioDto = new TestScenarioDto();
-        scenarioDto.setName(scenario.getString("name"));
-        List<Map> steps = scenario.get("steps");
+    Converter<JXPathMap, TestScenarioDto> analyseScenario = new Converter<JXPathMap, TestScenarioDto>() {
+        @Override
+        public TestScenarioDto convert(JXPathMap scenario) {
+            TestScenarioDto scenarioDto = new TestScenarioDto();
+            scenarioDto.setName(scenario.getString("name"));
+            List<Map> steps = scenario.get("steps");
 
-        LambdaList<TestStepDto> stepDtos = with(steps)
-                .convert(JXPathMap.toJxPathFunction)
-                .convert(new Converter<JXPathMap, TestStepDto>() {
-                    @Override
-                    public TestStepDto convert(JXPathMap step) {
-                        return new TestStepDto()
-                                .setName(step.getString("name"))
-                                .setDuration(step.get("/result/duration", 0L))
-                                .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
-                    }
-                });
+            LambdaList<TestStepDto> stepDtos = with(steps)
+                    .convert(JXPathMap.toJxPathFunction)
+                    .convert(new Converter<JXPathMap, TestStepDto>() {
+                        @Override
+                        public TestStepDto convert(JXPathMap step) {
+                            return new TestStepDto()
+                                    .setName(step.getString("name"))
+                                    .setDuration(step.getLong("/result/duration", 0L) / 1000000L)
+                                    .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
+                        }
+                    });
 
+            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(stepDtos
+                    .extract(on(TestStepDto.class).getResultType()));
 
-        scenarioDto.setDuration(
-                sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
-        Multiset<ResultType> multiset = ConcurrentHashMultiset.create(stepDtos
-                .extract(on(TestStepDto.class).getResultType()));
+            int stepPassed = multiset.count(PASSED);
+            int stepFailed = multiset.count(FAILED);
+            if (stepFailed + stepPassed == 0) {
+                scenarioDto.setResultType(SKIPPED);
+            } else {
+                scenarioDto.setResultType(stepPassed == 0 ? FAILED : PASSED);
+            }
+            scenarioDto.setTestStepDtoList(stepDtos);
+            //testReport.addScenario(testType, scenarioDto);
+            return scenarioDto;
 
-        int stepPassed = multiset.count(PASSED);
-        int stepFailed = multiset.count(FAILED);
-        if (stepFailed + stepPassed == 0) {
-            scenarioDto.setResultType(SKIPPED);
-        } else {
-            scenarioDto.setResultType(stepPassed == 0 ? FAILED : PASSED);
         }
-        scenarioDto.setTestStepDtoList(stepDtos);
-        //testReport.addScenario(testType, scenarioDto);
-        return scenarioDto;
+    };
 
-    }
 
     public Set<String> toTagNames(List<Map> tags) {
         return with(tags)

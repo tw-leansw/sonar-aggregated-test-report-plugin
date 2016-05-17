@@ -65,10 +65,16 @@ public class TestReport {
     }
 
     public void addTestFeature(TestFeatureDto testFeatureDto) {
-        testReportDto.getTestFeatures().add(testFeatureDto);
         for (TestScenarioDto testScenarioDto : testFeatureDto.getTestScenarios()) {
             addScenario(testFeatureDto.getTestType(), testScenarioDto);
         }
+    }
+
+    public void setTestFeatures(List<TestFeatureDto> testFeatureDtos) {
+        for (TestFeatureDto testFeatureDto : testFeatureDtos) {
+            addTestFeature(testFeatureDto);
+        }
+        testReportDto.setTestFeatures(testFeatureDtos);
     }
 
     private List<TestScenarioDto> getOrDefault(TestType testType, List<TestScenarioDto> defaultValue) {
@@ -95,4 +101,7 @@ public class TestReport {
         return res;
     }
 
+    public TestReportDto getTestReportDto() {
+        return testReportDto;
+    }
 }

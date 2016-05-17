@@ -28,6 +28,15 @@ public class JXPathMap {
         return retValue == null ? defaultValue : retValue;
     }
 
+    public long getLong(String key) {
+        return Long.parseLong(jxPathContext.getValue(key).toString());
+    }
+
+    public long getLong(String key, long defaultValue) {
+        Object retValue = jxPathContext.getValue(key);
+        return retValue == null ? defaultValue : Long.parseLong(retValue.toString());
+    }
+
 
     public Set<String> getStringSet(String key) {
         List<String> strings = get(key);

@@ -7,6 +7,8 @@ import org.hamcrest.Matchers;
 import java.util.Collections;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
 /**
@@ -18,7 +20,7 @@ public class TestScenarioDto {
 
     private String name;
     private ResultType resultType;
-    private double duration;
+    private long duration;
     private List<TestStepDto> testStepDtoList;
 
     public TestScenarioDto() {
@@ -51,11 +53,11 @@ public class TestScenarioDto {
         return this;
     }
 
-    public double getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public TestScenarioDto setDuration(double duration) {
+    public TestScenarioDto setDuration(long duration) {
         this.duration = duration;
         return this;
     }
@@ -69,7 +71,13 @@ public class TestScenarioDto {
 
     public TestScenarioDto setTestStepDtoList(List<TestStepDto> testStepDtoList) {
         this.testStepDtoList = testStepDtoList;
+        calculateDuration();
         return this;
+    }
+
+    private void calculateDuration() {
+        setDuration(
+                sum(with(getTestStepDtoList()).extract(on(TestStepDto.class).getDuration())).longValue());
     }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
