@@ -17,7 +17,7 @@
   </select>
 
   <delete id="deleteAll">
-    truncate my_data
+    delete from `my_data` where true;
   </delete>
 
 </mapper>

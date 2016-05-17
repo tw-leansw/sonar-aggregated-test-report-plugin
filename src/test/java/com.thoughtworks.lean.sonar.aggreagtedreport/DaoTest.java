@@ -5,6 +5,7 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
+import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -28,16 +29,20 @@ public class DaoTest {
     @BeforeClass
     public static void setUp() {
         Map<String, String> props = Maps.newHashMap();
-        props.put("sonar.jdbc.url", "jdbc:mysql://sonarqube-server:3306/sonarqube?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true");
-        props.put("sonar.jdbc.username", "sonarqube");
-        props.put("sonar.jdbc.password", "sonarqube");
+
+        props.put("sonar.jdbc.url", "jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1");
         Settings settings = new Settings();
         settings.addProperties(props);
         DefaultDatabase defaultDatabase = new DefaultDatabase(settings);
         defaultDatabase.start();
+
         Mybatis mybatis = new Mybatis(defaultDatabase);
         dbClient = new MyDbClient(mybatis);
         mybatis.start();
+        Flyway flyway = new Flyway();
+        flyway.setDataSource(defaultDatabase.getDataSource());
+        flyway.migrate();
+
     }
 
     @Before
