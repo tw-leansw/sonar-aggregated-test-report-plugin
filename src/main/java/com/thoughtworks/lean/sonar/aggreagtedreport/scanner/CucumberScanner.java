@@ -112,9 +112,13 @@ public class CucumberScanner {
                 });
 
 
-        scenarioDto.setDuration(sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
+        scenarioDto.setDuration(
+                sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
 
-        int stepNotPassed = stepDtos.extract(on(TestStepDto.class).getResultType()).remove(Matchers.equalTo(PASSED)).size();
+        int stepNotPassed = stepDtos
+                .extract(on(TestStepDto.class).getResultType())
+                .remove(Matchers.equalTo(PASSED))
+                .size();
         scenarioDto.setResultType(stepNotPassed > 0 ? PASSED : FAILED);
         scenarioDto.setTestStepDtoList(stepDtos);
         testReport.addScenario(testType, scenarioDto);

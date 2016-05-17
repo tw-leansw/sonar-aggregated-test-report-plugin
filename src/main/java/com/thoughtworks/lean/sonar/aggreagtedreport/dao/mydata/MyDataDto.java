@@ -29,7 +29,7 @@ public class MyDataDto extends BaseDto {
         return list;
     }
 
-    public void  setList(List<Object> list) {
+    public void setList(List<Object> list) {
         this.list = list;
     }
 

@@ -38,7 +38,7 @@ public class Mybatis {
     public Mybatis start() {
         LogFactory.useSlf4jLogging();
         MyBatisConfBuilder confBuilder = new MyBatisConfBuilder(this.database);
-        Class[] mappers = new Class[]{MyDataMapper.class,TestStepMapper.class};
+        Class[] mappers = new Class[]{MyDataMapper.class, TestStepMapper.class};
         confBuilder.loadMappers(mappers);
         this.sessionFactory = (new SqlSessionFactoryBuilder()).build(confBuilder.build());
         return this;

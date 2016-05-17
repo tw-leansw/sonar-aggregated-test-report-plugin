@@ -9,7 +9,8 @@
         step.result
     </sql>
 
-    <select id="selectById" parameterType="String" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
+    <select id="selectById" parameterType="String"
+            resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
         SELECT
         <include refid="stepColumns"/>
         FROM lean_test_step step
@@ -18,7 +19,8 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto" keyColumn="id"
+            useGeneratedKeys="true" keyProperty="id">
         INSERT INTO lean_test_step (name, result, duration)
         VALUES (#{name,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR},#{name,jdbcType=INT(11)})
     </insert>

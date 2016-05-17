@@ -20,13 +20,13 @@ public class MyDbClient {
 
     private final MyDataDao myDataDao;
 
-    public MyDbClient( Mybatis myBatis, Dao... daos) {
+    public MyDbClient(Mybatis myBatis, Dao... daos) {
         this.myBatis = myBatis;
         IdentityHashMap map = new IdentityHashMap();
         Dao[] arr$ = daos;
         int len$ = daos.length;
 
-        for(int i$ = 0; i$ < len$; ++i$) {
+        for (int i$ = 0; i$ < len$; ++i$) {
             Dao dao = arr$[i$];
             map.put(dao.getClass(), dao);
         }
@@ -42,7 +42,7 @@ public class MyDbClient {
         return this.myBatis.openSession(batch);
     }
 
-    public void closeSession( DbSession session) {
+    public void closeSession(DbSession session) {
         MyBatis.closeQuietly(session);
     }
 
@@ -52,7 +52,7 @@ public class MyDbClient {
     }
 
     protected <K extends Dao> K getDao(Map<Class, Dao> map, Class<K> clazz) {
-        return (K)map.get(clazz);
+        return (K) map.get(clazz);
     }
 
     public Mybatis getMyBatis() {

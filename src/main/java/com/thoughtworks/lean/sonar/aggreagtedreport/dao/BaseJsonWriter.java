@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by qmxie on 5/12/16.
  */
-public class BaseJsonWriter implements AutoCloseable{
+public class BaseJsonWriter implements AutoCloseable {
     JsonWriter jsonWriter;
 
     public BaseJsonWriter(JsonWriter writer) {
@@ -36,8 +36,8 @@ public class BaseJsonWriter implements AutoCloseable{
             jsonWriter.value((Boolean) fieldValue);
         } else if (fieldValue instanceof BaseDto) {
             ((BaseDto) fieldValue).writeJson(this);
-        } else if (fieldValue instanceof Date){
-            jsonWriter.valueDateTime((Date)fieldValue);
+        } else if (fieldValue instanceof Date) {
+            jsonWriter.valueDateTime((Date) fieldValue);
         } else if (fieldValue instanceof Collection) {
             writeCollection((Collection) fieldValue);
         } else {
@@ -78,7 +78,7 @@ public class BaseJsonWriter implements AutoCloseable{
 
     @Override
     public void close() throws IOException {
-        if (jsonWriter !=null) {
+        if (jsonWriter != null) {
             jsonWriter.close();
         }
     }

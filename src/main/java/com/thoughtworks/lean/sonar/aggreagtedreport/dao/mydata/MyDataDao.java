@@ -36,7 +36,7 @@ public class MyDataDao extends AbstractDao {
         return session.getMapper(MyDataMapper.class).selectAll();
     }
 
-    public void deleteAll(){
+    public void deleteAll() {
         DbSession session = this.myBatis().openSession(false);
         session.getMapper(MyDataMapper.class).deleteAll();
     }

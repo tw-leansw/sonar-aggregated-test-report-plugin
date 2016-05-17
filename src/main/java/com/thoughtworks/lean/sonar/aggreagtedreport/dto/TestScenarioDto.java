@@ -63,7 +63,7 @@ public class TestScenarioDto {
     }
 
     public List<TestStepDto> getTestStepDtoList() {
-        if (this.testStepDtoList == null){
+        if (this.testStepDtoList == null) {
             return Collections.emptyList();
         }
         return testStepDtoList;

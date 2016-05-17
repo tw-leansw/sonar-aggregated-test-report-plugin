@@ -3,22 +3,23 @@
 
 <mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataMapper">
 
-  <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto" useGeneratedKeys="false">
-    insert into my_data
-    (name, age)
-    values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER})
-  </insert>
+    <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto"
+            useGeneratedKeys="false">
+        insert into my_data
+        (name, age)
+        values (#{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER})
+    </insert>
 
-  <sql id="columns">
-     name,
-     age
-     from my_data as md
-  </sql>
+    <sql id="columns">
+        name,
+        age
+        from my_data as md
+    </sql>
 
-  <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto">
-    select
-    <include refid="columns"/>
-  </select>
+    <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto">
+        select
+        <include refid="columns"/>
+    </select>
 
     <delete id="deleteAll">
         truncate my_data

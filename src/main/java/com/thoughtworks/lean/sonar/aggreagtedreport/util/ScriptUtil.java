@@ -9,7 +9,7 @@ public class ScriptUtil {
     private ScriptUtil() {
     }
 
-    public static  JXPathMap eval(String scriptString) {
+    public static JXPathMap eval(String scriptString) {
         Context cx = Context.enter();
         try {
             // given
