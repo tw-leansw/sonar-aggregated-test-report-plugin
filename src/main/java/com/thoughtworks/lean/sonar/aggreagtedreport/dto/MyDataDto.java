@@ -3,9 +3,9 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 

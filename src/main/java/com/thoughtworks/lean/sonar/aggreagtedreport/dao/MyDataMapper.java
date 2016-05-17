@@ -3,8 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
+
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
 
 import java.util.List;
 

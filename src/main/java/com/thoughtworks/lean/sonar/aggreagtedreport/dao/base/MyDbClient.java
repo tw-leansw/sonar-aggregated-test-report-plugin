@@ -3,10 +3,10 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDao;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;

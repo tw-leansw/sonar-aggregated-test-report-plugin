@@ -1,7 +1,7 @@
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataMapper;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.step.TestStepMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;

@@ -1,6 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 
 /**

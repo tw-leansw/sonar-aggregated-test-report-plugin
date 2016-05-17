@@ -35,5 +35,7 @@ public class GaugeScannerTest {
         assertEquals(1.0,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST) );
 
 
+
+
     }
 }

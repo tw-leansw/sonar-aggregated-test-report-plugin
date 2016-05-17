@@ -1,4 +1,4 @@
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao.step;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 

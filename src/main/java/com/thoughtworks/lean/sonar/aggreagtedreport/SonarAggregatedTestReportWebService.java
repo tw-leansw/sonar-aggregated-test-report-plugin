@@ -1,11 +1,11 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.BaseJsonWriter;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDbClient;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.Mybatis;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;

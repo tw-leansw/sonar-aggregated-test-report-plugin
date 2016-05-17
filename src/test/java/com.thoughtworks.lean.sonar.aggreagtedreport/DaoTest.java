@@ -1,10 +1,10 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.mydata.MyDataMapper;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDbClient;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.Mybatis;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

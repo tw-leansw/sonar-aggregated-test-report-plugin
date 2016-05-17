@@ -1,4 +1,4 @@
-package com.thoughtworks.lean.sonar.aggreagtedreport.dao.feature;
+package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 /**
  * Created by qmxie on 5/13/16.
