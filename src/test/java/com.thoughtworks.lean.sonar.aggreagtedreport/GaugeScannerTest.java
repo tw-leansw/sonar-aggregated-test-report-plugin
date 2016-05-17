@@ -18,7 +18,6 @@ import static junit.framework.Assert.assertEquals;
  * Created by qmxie on 5/16/16.
  */
 public class GaugeScannerTest {
-    @Ignore
     @Test
     public void should_return_1_functional_test() throws IOException {
 
@@ -32,10 +31,29 @@ public class GaugeScannerTest {
 
         gaugeScanner.analyse(ctx,testReport);
         // then
-        assertEquals(1.0,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST) );
-
-
-
+        assertEquals(1,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
+        assertEquals(0,testReport.getScenariosNumber(TestType.COMPONENT_TEST));
+        assertEquals(0,testReport.getScenariosNumber(TestType.UNIT_TEST));
 
     }
+
+    @Test
+    public void should_return_correct_functional_test() throws IOException {
+
+        // given
+        String jsString = IOUtils.toString(getClass().getResourceAsStream("/gauge_report_2.js"));
+        JXPathMap ctx = ScriptUtil.eval(jsString);
+        TestReport testReport = new TestReport();
+        GaugeScanner gaugeScanner=new GaugeScanner(Sets.newHashSet("api_test"),Sets.newHashSet("ui_test"));
+
+        // when
+
+        gaugeScanner.analyse(ctx,testReport);
+        // then
+        assertEquals(0,testReport.getScenariosNumber(TestType.FUNCTIONAL_TEST));
+        assertEquals(0,testReport.getScenariosNumber(TestType.COMPONENT_TEST));
+        assertEquals(1,testReport.getScenariosNumber(TestType.UNIT_TEST));
+
+    }
+
 }

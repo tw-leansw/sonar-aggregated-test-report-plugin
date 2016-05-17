@@ -93,11 +93,11 @@ public class CucumberScanner {
         return testType;
     }
 
-    private void analyseScenario(JXPathMap senario, TestType testType, TestReport testReport) {
+    private void analyseScenario(JXPathMap scenario, TestType testType, TestReport testReport) {
         TestScenarioDto scenarioDto = new TestScenarioDto();
-        scenarioDto.setName(senario.getString("name"));
+        scenarioDto.setName(scenario.getString("name"));
 
-        List<Map> steps = senario.get("steps");
+        List<Map> steps = scenario.get("steps");
 
         LambdaList<TestStepDto> stepDtos = with(steps)
                 .convert(JXPathMap.toJxPathFunction)
@@ -116,7 +116,7 @@ public class CucumberScanner {
                 sum(stepDtos.extract(on(TestStepDto.class).getDuration())).longValue());
 
         int stepNotPassed = stepDtos
-                .extract(on(TestStepDto.class).getResultType())
+        .extract(on(TestStepDto.class).getResultType())
                 .remove(Matchers.equalTo(PASSED))
                 .size();
         scenarioDto.setResultType(stepNotPassed > 0 ? PASSED : FAILED);

@@ -19,6 +19,10 @@ public class JXPathMap {
         return (T) jxPathContext.getValue(key);
     }
 
+    public <T> List<T> selectNodes(String key) {
+        return (List<T>) jxPathContext.selectNodes(key);
+    }
+
     public <T> T get(String key, T defaultValue) {
         T retValue = (T) jxPathContext.getValue(key);
         return retValue == null ? defaultValue : retValue;
