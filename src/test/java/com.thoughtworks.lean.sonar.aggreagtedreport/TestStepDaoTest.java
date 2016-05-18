@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -34,9 +35,10 @@ public class TestStepDaoTest extends BaseDaoTest {
 
     @Test
     public void should_insert_work() {
-        TestStepDto dto = new TestStepDto().setName("foo").setId(2).setResultType(ResultType.FAILED);
+        TestStepDto dto = new TestStepDto().setName("foo").setResultType(ResultType.FAILED);
         TestStepDto ret = dbClient.getTestStepDao().insert(dto);
         assertEquals(1, getRecordSize());
+        assertEquals(dto, ret);
     }
 
 
@@ -44,5 +46,15 @@ public class TestStepDaoTest extends BaseDaoTest {
     public void should_delete_all_mydata() {
         List<TestStepDto> list = dbClient.getTestStepDao().selectAll();
         assertEquals(0, list.size());
+    }
+
+    @Test
+    public void should_delete_work(){
+        TestStepDto ret = dbClient.getTestStepDao().insert(new TestStepDto().setName("foobar").setResultType(PASSED));
+        TestStepDto ret2 = dbClient.getTestStepDao().insert(new TestStepDto().setName("foobar2").setResultType(PASSED));
+        System.out.println();
+        assertEquals(2,getRecordSize());
+        dbClient.getTestStepDao().delete(ret.getId());
+        assertEquals(1,getRecordSize());
     }
 }

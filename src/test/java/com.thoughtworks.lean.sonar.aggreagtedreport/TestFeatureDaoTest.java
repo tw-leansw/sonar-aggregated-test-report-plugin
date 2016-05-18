@@ -1,0 +1,65 @@
+package com.thoughtworks.lean.sonar.aggreagtedreport;
+
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+/**
+ * Created by qmxie on 5/18/16.
+ */
+public class TestFeatureDaoTest extends BaseDaoTest{
+
+    @Before
+    public void beforeUnitTest(){
+        dbClient.getTestFeatureDao().deleteAll();
+    }
+
+    @Test
+    public void should_insert_work(){
+        dbClient.getTestFeatureDao().insert(new TestFeatureDto()
+                .setName("foo")
+                .setDuration(112)
+                .setCreateTime(new Date())
+                .setFrameworkType(TestFrameworkType.CUCUMBER)
+                .setTestType(TestType.FUNCTIONAL_TEST));
+
+        dbClient.getTestFeatureDao().insert(new TestFeatureDto()
+                .setName("foo1")
+                .setDuration(123)
+                .setPassedScenarios(3)
+                .setCreateTime(new Date())
+                .setFrameworkType(TestFrameworkType.CUCUMBER)
+                .setTestType(TestType.FUNCTIONAL_TEST));
+
+        List<TestFeatureDto> ret = dbClient.getTestFeatureDao().selectAll();
+        assertEquals(2,ret.size());
+    }
+
+    @Test
+    public void should_get_work(){
+
+        TestFeatureDto dto = dbClient.getTestFeatureDao().insert(new TestFeatureDto()
+                .setName("foo1")
+                .setDuration(123)
+                .setPassedScenarios(3)
+                .setCreateTime(new Date())
+                .setFrameworkType(TestFrameworkType.CUCUMBER)
+                .setTestType(TestType.FUNCTIONAL_TEST));
+
+        TestFeatureDto retnull = dbClient.getTestFeatureDao().get(-1);
+        assertNull(retnull);
+
+        TestFeatureDto ret = dbClient.getTestFeatureDao().get(dto.getId());
+        assertNotNull(ret);
+    }
+
+}

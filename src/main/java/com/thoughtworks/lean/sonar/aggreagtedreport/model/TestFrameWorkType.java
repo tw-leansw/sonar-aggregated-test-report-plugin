@@ -1,6 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.model;
 
-public enum TestFrameWorkType {
+public enum TestFrameworkType {
     JUNIT,
     CUCUMBER,
     GAUGE

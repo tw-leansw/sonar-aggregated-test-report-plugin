@@ -1,6 +1,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameWorkType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
+import org.apache.ibatis.type.Alias;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,10 +11,11 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
-public class TestFeatureDto {
+@Alias("TestFeature")
+public class TestFeatureDto extends BaseDto {
     private long id;
     private long reportId;
-    private TestFrameWorkType frameWorkType;
+    private TestFrameworkType frameworkType;
     private TestType testType;
     private String name;
     private String description;
@@ -45,12 +48,12 @@ public class TestFeatureDto {
         return this;
     }
 
-    public TestFrameWorkType getFrameWorkType() {
-        return frameWorkType;
+    public TestFrameworkType getFrameworkType() {
+        return frameworkType;
     }
 
-    public TestFeatureDto setFrameWorkType(TestFrameWorkType frameWorkType) {
-        this.frameWorkType = frameWorkType;
+    public TestFeatureDto setFrameworkType(TestFrameworkType frameworkType) {
+        this.frameworkType = frameworkType;
         return this;
     }
 

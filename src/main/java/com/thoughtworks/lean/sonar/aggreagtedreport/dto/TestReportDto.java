@@ -1,5 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
-public class TestReportDto {
+public class TestReportDto extends BaseDto {
     private long id;
     private String projectId;
     private String buildLabel;

@@ -6,16 +6,13 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDao;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDao;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.*;
+import org.sonar.api.ce.measure.test.TestSettings;
 import org.sonar.api.utils.System2;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
 
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 public class MyDbClient {
@@ -26,12 +23,17 @@ public class MyDbClient {
 
     private final TestStepDao testStepDao;
 
+    private final TestFeatureDao testFeatureDao;
+
 
     public MyDbClient(Mybatis myBatis) {
-        System2 system2=System2.INSTANCE;
         this.myBatis = myBatis;
-        this.myDataDao = new MyDataDao(myBatis,system2);
-        this.testStepDao = new TestStepDao(myBatis,system2);
+        this.myDataDao = new MyDataDao();
+        this.myDataDao.setMybatis(myBatis);
+        this.testStepDao = new TestStepDao();
+        this.testStepDao.setMybatis(myBatis);
+        this.testFeatureDao = new TestFeatureDao();
+        this.testFeatureDao.setMybatis(myBatis);
     }
 
     protected void doOnLoad(Map<Class, Dao> daoByClass) {
@@ -60,5 +62,9 @@ public class MyDbClient {
 
     public TestStepDao getTestStepDao() {
         return this.testStepDao;
+    }
+
+    public TestFeatureDao getTestFeatureDao() {
+        return testFeatureDao;
     }
 }

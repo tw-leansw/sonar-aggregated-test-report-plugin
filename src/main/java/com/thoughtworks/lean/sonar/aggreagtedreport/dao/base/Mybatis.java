@@ -1,7 +1,11 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestFeatureMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -38,7 +42,13 @@ public class Mybatis {
     public Mybatis start() {
         LogFactory.useSlf4jLogging();
         MyBatisConfBuilder confBuilder = new MyBatisConfBuilder(this.database);
-        Class[] mappers = new Class[]{MyDataMapper.class, TestStepMapper.class};
+        confBuilder.loadAlias("TestFeature", TestFeatureDto.class);
+        confBuilder.loadAlias("MyData", MyDataDto.class);
+        confBuilder.loadAlias("TestStep", TestStepDto.class);
+        Class[] mappers = new Class[]{
+                MyDataMapper.class,
+                TestStepMapper.class,
+                TestFeatureMapper.class};
         confBuilder.loadMappers(mappers);
         this.sessionFactory = (new SqlSessionFactoryBuilder()).build(confBuilder.build());
         return this;

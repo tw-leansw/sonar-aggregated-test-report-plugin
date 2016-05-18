@@ -11,6 +11,5 @@ public interface CRUDMapper<D extends BaseDto> {
     void delete(long id);
     void insert(D dto);
     D get(long id);
-    D getLastInserted();
     void update(D dto);
 }

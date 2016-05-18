@@ -1,6 +1,5 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
-import org.sonar.api.utils.System2;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
@@ -10,28 +9,25 @@ import java.util.List;
 /**
  * Created by qmxie on 5/18/16.
  */
-public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> implements Dao {
-    private final Mybatis mybatis;
-    private final System2 system2;
-    private final Class<T> mapperClass;
+public abstract class AbstractDao<D extends BaseDto> implements Dao {
+    private Mybatis mybatis;
+    private Class mapperClass;
 
-    public AbstractDao(Mybatis mybatis, System2 system2, Class<T> mapperClass) {
-        this.mapperClass = mapperClass;
+    public AbstractDao setMybatis(Mybatis mybatis) {
         this.mybatis = mybatis;
-        this.system2 = system2;
+        return this;
     }
 
+    public <T extends CRUDMapper<D>> AbstractDao(Class<T> mapperClass) {
+        this.mapperClass = mapperClass;
+    }
 
     private CRUDMapper<D> getMapper(DbSession session) {
-        return session.getMapper(mapperClass);
+        return (CRUDMapper<D>) session.getMapper(mapperClass);
     }
 
     protected Mybatis mybatis() {
         return this.mybatis;
-    }
-
-    protected long now() {
-        return this.system2.now();
     }
 
     protected DbSession getDbSession() {
@@ -41,8 +37,6 @@ public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> im
     protected DbSession getDbSession(boolean batch) {
         return this.mybatis().openSession(batch);
     }
-
-    //protected abstract   List<D> selectAllImpl(DbSession session);
 
     public List<D> selectAll() {
         DbSession session = this.getDbSession();
@@ -61,8 +55,8 @@ public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> im
         DbSession session = this.getDbSession();
         try {
             getMapper(session).deleteAll();
-        } finally {
             session.commit();
+        } finally {
             MyBatis.closeQuietly(session);
         }
     }
@@ -85,6 +79,7 @@ public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> im
         DbSession session = this.getDbSession();
         try {
             delete(id, session);
+            session.commit();
         } finally {
             MyBatis.closeQuietly(session);
         }
@@ -98,6 +93,7 @@ public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> im
         DbSession session = this.getDbSession();
         try {
             getMapper(session).update(dto);
+            session.commit();
         } finally {
             MyBatis.closeQuietly(session);
         }
@@ -107,11 +103,12 @@ public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> im
         DbSession session = this.getDbSession();
         try {
             getMapper(session).insert(dto);
-            return getMapper(session).getLastInserted();
-        } finally {
             session.commit();
+            return dto;
+        } finally {
             MyBatis.closeQuietly(session);
         }
     }
+
 
 }

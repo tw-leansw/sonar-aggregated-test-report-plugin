@@ -1,5 +1,94 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.step.TestFeatureMapper">
+<mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestFeatureMapper">
 
+
+    <sql id="columns">
+        feature.id as id,
+        feature.report_id as reportId,
+        feature.framework_type as frameworkType,
+        feature.test_type as testType,
+        feature.name as name,
+        feature.description as description,
+        feature.duration as duration,
+        feature.passed_scenarios as passedScenarios,
+        feature.failed_scenarios as failedScenarios,
+        feature.skipped_scenarios as skippedScenarios,
+        feature.build_label as buildLabel,
+        feature.create_time as createTime,
+        feature.execution_time as executionTime
+    </sql>
+
+    <select id="get" parameterType="java.lang.Long" resultType="TestFeature">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_feature feature
+        <where>
+            AND feature.id=#{id}
+        </where>
+    </select>
+
+    <select id="selectAll" resultType="TestFeature">
+        select
+        <include refid="columns"/>
+        from
+        `lean_test_feature` as feature;
+    </select>
+
+    <insert id="insert" parameterType="TestFeature" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO lean_test_feature (
+            report_id
+            ,framework_type
+            ,test_type
+            ,name
+            ,description
+            ,duration
+            ,passed_scenarios
+            ,failed_scenarios
+            ,skipped_scenarios
+            ,build_label
+            ,create_time
+            ,execution_time)
+        VALUES (
+            #{reportId,jdbcType=INTEGER},
+            #{frameworkType,jdbcType=VARCHAR},
+            #{testType,jdbcType=VARCHAR},
+            #{name,jdbcType=VARCHAR},
+            #{description,jdbcType=VARCHAR},
+            #{duration,jdbcType=INTEGER},
+            #{passedScenarios,jdbcType=INTEGER},
+            #{failedScenarios,jdbcType=INTEGER},
+            #{skippedScenarios,jdbcType=INTEGER},
+            #{buildLabel,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{executionTime,jdbcType=TIMESTAMP});
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM lean_test_feature WHERE id=#{id}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM lean_test_feature WHERE true
+    </delete>
+
+    <update id="update" parameterType="TestFeature">
+        UPDATE `lean_test_feature`
+        SET
+            report_id = #{reportId,jdbcType=INTEGER}
+            framework_type = #{frameworkType,jdbcType=VARCHAR},
+            test_type = #{testType,jdbcType=VARCHAR},
+            name = #{name,jdbcType=VARCHAR},
+            description = #{description,jdbcType=VARCHAR},
+            duration = #{duration,jdbcType=INTEGER},
+            passed_scenarios = #{passedScenarios,jdbcType=INTEGER},
+            failed_scenarios = #{failedScenarios,jdbcType=INTEGER},
+            skipped_scenarios = #{skippedScenarios,jdbcType=INTEGER},
+            build_label = #{buildLabel,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=DATE},
+            execution_time = #{executionTime,jdbcType=DATE}
+        <where>
+            AND id = #{id,jdbcType=INTEGER}
+        </where>
+    </update>
 </mapper>

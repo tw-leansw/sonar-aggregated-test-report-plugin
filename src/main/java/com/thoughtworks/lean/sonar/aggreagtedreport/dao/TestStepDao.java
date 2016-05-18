@@ -8,10 +8,8 @@ import org.sonar.api.utils.System2;
 /**
  * Created by qmxie on 5/18/16.
  */
-public class TestStepDao extends AbstractDao<TestStepMapper, TestStepDto> {
-
-    public TestStepDao(Mybatis mybatis, System2 system2) {
-        super(mybatis, system2, TestStepMapper.class);
+public class TestStepDao extends AbstractDao<TestStepDto> {
+    public TestStepDao() {
+        super(TestStepMapper.class);
     }
-
 }

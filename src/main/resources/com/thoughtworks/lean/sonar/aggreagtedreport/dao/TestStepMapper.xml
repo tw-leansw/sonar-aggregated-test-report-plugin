@@ -4,10 +4,10 @@
 <mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper">
 
     <sql id="stepColumns">
-        step.id,
-        step.name,
-        step.duration,
-        step.result
+        step.id as id,
+        step.name as name,
+        step.duration as duration,
+        step.result as resultType
     </sql>
 
     <select id="selectById" parameterType="String" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
@@ -21,22 +21,21 @@
 
     <select id="selectAll" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
         select
-        step.`name` as name , step.`result` as resultType, step.`duration` as duration
+        <include refid="stepColumns"/>
         from
         `lean_test_step` as step;
     </select>
 
     <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO lean_test_step (name, result, duration)
-        VALUES (#{name,jdbcType=VARCHAR}, #{resultType,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER});
-        SELECT LAST_INSERT_ID();
+        VALUES (#{name,jdbcType=VARCHAR}, #{resultType.name,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER});
     </insert>
 
     <select id="getLastInserted" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
         select <include refid="stepColumns"/> from `lean_test_step` as step where step.id=LAST_INSERT_ID();
     </select>
 
-    <delete id="delete">
+    <delete id="delete" parameterType="java.lang.Long">
         DELETE FROM lean_test_step WHERE id=#{id}
     </delete>
 

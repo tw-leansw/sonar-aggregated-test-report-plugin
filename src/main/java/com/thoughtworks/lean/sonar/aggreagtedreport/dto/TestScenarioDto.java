@@ -1,6 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.collect.Lists;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import org.hamcrest.Matchers;
 
@@ -14,7 +15,7 @@ import static ch.lambdaj.collection.LambdaCollections.with;
 /**
  * Created by qmxie on 5/13/16.
  */
-public class TestScenarioDto {
+public class TestScenarioDto extends BaseDto {
     private long id;
     private long featureId;
 
