@@ -1,6 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.AbstractDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import org.sonar.api.utils.System2;
@@ -13,8 +14,9 @@ import java.util.List;
  * Created by qmxie on 5/18/16.
  */
 public class TestStepDao extends AbstractDao {
+
     public TestStepDao(Mybatis mybatis, System2 system2) {
-        super(mybatis, system2);
+        super(mybatis, system2, TestStepMapper.class);
     }
 
     public void insert(TestStepDto dto) {
@@ -31,19 +33,7 @@ public class TestStepDao extends AbstractDao {
         session.getMapper(TestStepMapper.class).insert(dto);
     }
 
-    public List<TestStepDto> selectAll(DbSession session) {
-        return session.getMapper(TestStepMapper.class).selectAll();
-    }
 
-    public List<TestStepDto> selectAll() {
-
-        DbSession session = getDbSession();
-        try {
-            return session.getMapper(TestStepMapper.class).selectAll();
-        } finally {
-            MyBatis.closeQuietly(session);
-        }
-    }
 
     public void delete(DbSession session, long id) {
         session.getMapper(TestStepMapper.class).delete(id);

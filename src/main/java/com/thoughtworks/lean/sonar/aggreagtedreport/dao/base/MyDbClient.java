@@ -7,7 +7,9 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper;
 import org.sonar.api.utils.System2;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;

@@ -6,11 +6,12 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
 
 import java.util.List;
 
-public interface MyDataMapper {
+public interface MyDataMapper extends Mapper {
 
     void insert(MyDataDto var1);
 
