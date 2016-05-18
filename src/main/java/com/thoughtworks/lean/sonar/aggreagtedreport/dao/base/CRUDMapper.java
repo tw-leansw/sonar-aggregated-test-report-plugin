@@ -7,9 +7,14 @@ import java.util.List;
  */
 public interface CRUDMapper<D extends BaseDto> {
     void deleteAll();
+
     List<D> selectAll();
+
     void delete(long id);
+
     void insert(D dto);
+
     D get(long id);
+
     void update(D dto);
 }

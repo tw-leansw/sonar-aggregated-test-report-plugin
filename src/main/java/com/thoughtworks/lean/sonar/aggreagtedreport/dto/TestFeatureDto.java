@@ -84,7 +84,6 @@ public class TestFeatureDto extends BaseDto {
     }
 
 
-
     public String getName() {
         return name;
     }
@@ -130,7 +129,6 @@ public class TestFeatureDto extends BaseDto {
         this.passedScenarios = passedScenarios;
         return this;
     }
-
 
 
     public int getSkippedScenarios() {

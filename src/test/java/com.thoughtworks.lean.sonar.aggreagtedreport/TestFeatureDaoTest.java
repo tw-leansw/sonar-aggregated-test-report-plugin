@@ -1,37 +1,32 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by qmxie on 5/18/16.
  */
-public class TestFeatureDaoTest extends BaseDaoTest{
+public class TestFeatureDaoTest extends BaseDaoTest {
 
     @Before
-    public void beforeUnitTest(){
+    public void beforeUnitTest() {
         dbClient.getTestFeatureDao().deleteAll();
     }
 
     @Test
-    public void should_insert_work(){
+    public void should_insert_work() {
 
         dbClient.getTestFeatureDao().insert(nextFeature());
 
         dbClient.getTestFeatureDao().insert(nextFeature());
 
         List<TestFeatureDto> ret = dbClient.getTestFeatureDao().selectAll();
-        assertEquals(2,ret.size());
+        assertEquals(2, ret.size());
     }
 
     private TestFeatureDto nextFeature() {
@@ -39,7 +34,7 @@ public class TestFeatureDaoTest extends BaseDaoTest{
     }
 
     @Test
-    public void should_get_work(){
+    public void should_get_work() {
 
         TestFeatureDto dto = nextFeature();
 

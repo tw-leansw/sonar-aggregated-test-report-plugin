@@ -49,12 +49,12 @@ public class TestStepDaoTest extends BaseDaoTest {
     }
 
     @Test
-    public void should_delete_work(){
+    public void should_delete_work() {
         TestStepDto ret = dbClient.getTestStepDao().insert(new TestStepDto().setName("foobar").setResultType(PASSED));
         TestStepDto ret2 = dbClient.getTestStepDao().insert(new TestStepDto().setName("foobar2").setResultType(PASSED));
         System.out.println();
-        assertEquals(2,getRecordSize());
+        assertEquals(2, getRecordSize());
         dbClient.getTestStepDao().delete(ret.getId());
-        assertEquals(1,getRecordSize());
+        assertEquals(1, getRecordSize());
     }
 }

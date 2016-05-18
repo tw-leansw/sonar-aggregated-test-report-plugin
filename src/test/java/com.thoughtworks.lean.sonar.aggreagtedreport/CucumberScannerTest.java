@@ -2,8 +2,8 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.CucumberScanner;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.junit.Test;

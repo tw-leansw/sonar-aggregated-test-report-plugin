@@ -23,7 +23,7 @@ public class BaseDtoTest {
     StringWriter stringWriter;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         stringWriter = new StringWriter();
         jsonWriter = BaseJsonWriter.of(stringWriter);
     }
@@ -40,53 +40,53 @@ public class BaseDtoTest {
         MyDataDto dto = new MyDataDto();
         dto.setAge(10).setName("mmm");
         dto.writeJson(jsonWriter);
-        assertEquals("{\"name\":\"mmm\",\"age\":10}",stringWriter.toString());
+        assertEquals("{\"name\":\"mmm\",\"age\":10}", stringWriter.toString());
     }
 
     @Test
-    public void should_return_nested_json(){
+    public void should_return_nested_json() {
 
-        SubMyDataDto subMyDataDto = new SubMyDataDto(234,"xxxxx");
+        SubMyDataDto subMyDataDto = new SubMyDataDto(234, "xxxxx");
         MyDataDto dto = new MyDataDto();
         dto.setAge(10).setName("mmm");
         dto.setSubMyDataDto(subMyDataDto);
 
         dto.writeJson(jsonWriter);
-        assertEquals("{\"name\":\"mmm\",\"age\":10,\"subMyDataDto\":{\"name\":\"xxxxx\",\"height\":234}}",stringWriter.toString());
+        assertEquals("{\"name\":\"mmm\",\"age\":10,\"subMyDataDto\":{\"name\":\"xxxxx\",\"height\":234}}", stringWriter.toString());
     }
 
     @Test
-    public void should_return_list_in_json(){
+    public void should_return_list_in_json() {
 
-        SubMyDataDto subMyDataDto = new SubMyDataDto(234,"xxxxx");
+        SubMyDataDto subMyDataDto = new SubMyDataDto(234, "xxxxx");
         MyDataDto dto = new MyDataDto();
         dto.setAge(10).setName("mmm");
         dto.setSubMyDataDto(subMyDataDto);
-        List list = Arrays.asList(new Integer[]{2,2,3,4,5});
+        List list = Arrays.asList(new Integer[]{2, 2, 3, 4, 5});
         dto.setList(list);
 
         dto.writeJson(jsonWriter);
-        assertEquals("{\"name\":\"mmm\",\"age\":10,\"subMyDataDto\":{\"name\":\"xxxxx\",\"height\":234},\"list\":[2,2,3,4,5]}",stringWriter.toString());
+        assertEquals("{\"name\":\"mmm\",\"age\":10,\"subMyDataDto\":{\"name\":\"xxxxx\",\"height\":234},\"list\":[2,2,3,4,5]}", stringWriter.toString());
 
     }
 
     @Test
-    public void should_return_list_object_in_json(){
+    public void should_return_list_object_in_json() {
 
-        SubMyDataDto subMyDataDto = new SubMyDataDto(234,"xxxxx");
+        SubMyDataDto subMyDataDto = new SubMyDataDto(234, "xxxxx");
         MyDataDto dto = new MyDataDto();
         dto.setAge(10).setName("mmm");
         dto.setSubMyDataDto(subMyDataDto);
         List list = Arrays.asList(new SubMyDataDto[]{
-                new SubMyDataDto(1,"a"),
-                new SubMyDataDto(2,"b"),
-                new SubMyDataDto(3,"c"),
-                new SubMyDataDto(4,"d")
+                new SubMyDataDto(1, "a"),
+                new SubMyDataDto(2, "b"),
+                new SubMyDataDto(3, "c"),
+                new SubMyDataDto(4, "d")
         });
         dto.setList(list);
 
         dto.writeJson(jsonWriter);
-        assertEquals("{\"name\":\"mmm\",\"age\":10,\"subMyDataDto\":{\"name\":\"xxxxx\",\"height\":234},\"list\":[{\"name\":\"a\",\"height\":1},{\"name\":\"b\",\"height\":2},{\"name\":\"c\",\"height\":3},{\"name\":\"d\",\"height\":4}]}",stringWriter.toString());
+        assertEquals("{\"name\":\"mmm\",\"age\":10,\"subMyDataDto\":{\"name\":\"xxxxx\",\"height\":234},\"list\":[{\"name\":\"a\",\"height\":1},{\"name\":\"b\",\"height\":2},{\"name\":\"c\",\"height\":3},{\"name\":\"d\",\"height\":4}]}", stringWriter.toString());
 
     }
 

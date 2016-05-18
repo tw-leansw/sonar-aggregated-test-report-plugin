@@ -6,8 +6,6 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import io.github.benas.randombeans.EnhancedRandomBuilder;
 import io.github.benas.randombeans.api.EnhancedRandom;
 import org.flywaydb.core.Flyway;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.sonar.api.config.Settings;
 import org.sonar.db.DefaultDatabase;

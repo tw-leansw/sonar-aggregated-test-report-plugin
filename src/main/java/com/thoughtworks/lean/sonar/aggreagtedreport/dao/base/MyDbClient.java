@@ -7,9 +7,9 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.*;
-import org.sonar.api.ce.measure.test.TestSettings;
-import org.sonar.api.utils.System2;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestFeatureDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDao;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
@@ -30,7 +30,7 @@ public class MyDbClient {
         daoMap.put(TestStepDao.class, new TestStepDao());
         daoMap.put(TestFeatureDao.class, new TestFeatureDao());
 
-        for (AbstractDao dao: daoMap.values()){
+        for (AbstractDao dao : daoMap.values()) {
             dao.setMybatis(this.myBatis);
         }
     }

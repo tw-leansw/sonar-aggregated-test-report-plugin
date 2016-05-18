@@ -1,9 +1,9 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import org.junit.Before;
 import org.junit.Test;
 
