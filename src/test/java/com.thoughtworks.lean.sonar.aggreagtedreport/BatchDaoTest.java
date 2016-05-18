@@ -1,7 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestFeatureDao;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.AbstractDao;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
@@ -13,9 +12,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by qmxie on 5/18/16.
