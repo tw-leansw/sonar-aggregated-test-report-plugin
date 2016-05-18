@@ -6,6 +6,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
+import com.google.common.collect.Maps;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.*;
 import org.sonar.api.ce.measure.test.TestSettings;
 import org.sonar.api.utils.System2;
@@ -19,21 +20,19 @@ public class MyDbClient {
 
     private final Mybatis myBatis;
 
-    private final MyDataDao myDataDao;
-
-    private final TestStepDao testStepDao;
-
-    private final TestFeatureDao testFeatureDao;
+    private Map<Class, AbstractDao> daoMap;
 
 
     public MyDbClient(Mybatis myBatis) {
+        daoMap = Maps.newIdentityHashMap();
         this.myBatis = myBatis;
-        this.myDataDao = new MyDataDao();
-        this.myDataDao.setMybatis(myBatis);
-        this.testStepDao = new TestStepDao();
-        this.testStepDao.setMybatis(myBatis);
-        this.testFeatureDao = new TestFeatureDao();
-        this.testFeatureDao.setMybatis(myBatis);
+        daoMap.put(MyDataDao.class, new MyDataDao());
+        daoMap.put(TestStepDao.class, new TestStepDao());
+        daoMap.put(TestFeatureDao.class, new TestFeatureDao());
+
+        for (AbstractDao dao: daoMap.values()){
+            dao.setMybatis(this.myBatis);
+        }
     }
 
     protected void doOnLoad(Map<Class, Dao> daoByClass) {
@@ -47,13 +46,12 @@ public class MyDbClient {
         MyBatis.closeQuietly(session);
     }
 
-
-    public MyDataDao getMyDataDao() {
-        return myDataDao;
-    }
-
     protected <K extends Dao> K getDao(Map<Class, Dao> map, Class<K> clazz) {
         return (K) map.get(clazz);
+    }
+
+    protected <K extends AbstractDao> K getDao(Class<K> clazz) {
+        return (K) this.daoMap.get(clazz);
     }
 
     public Mybatis getMyBatis() {
@@ -61,10 +59,17 @@ public class MyDbClient {
     }
 
     public TestStepDao getTestStepDao() {
-        return this.testStepDao;
+        return this.getDao(TestStepDao.class);
+    }
+
+
+    public MyDataDao getMyDataDao() {
+        return this.getDao(MyDataDao.class);
     }
 
     public TestFeatureDao getTestFeatureDao() {
-        return testFeatureDao;
+        return this.getDao(TestFeatureDao.class);
     }
+
+
 }

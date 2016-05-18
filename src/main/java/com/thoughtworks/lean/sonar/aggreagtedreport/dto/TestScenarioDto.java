@@ -16,22 +16,22 @@ import static ch.lambdaj.collection.LambdaCollections.with;
  * Created by qmxie on 5/13/16.
  */
 public class TestScenarioDto extends BaseDto {
-    private long id;
-    private long featureId;
+    private int id;
+    private int featureId;
 
     private String name;
     private ResultType resultType;
-    private long duration;
+    private int duration;
     private List<TestStepDto> testStepDtoList;
 
     public TestScenarioDto() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public TestScenarioDto setId(long id) {
+    public TestScenarioDto setId(int id) {
         this.id = id;
         return this;
     }
@@ -54,11 +54,11 @@ public class TestScenarioDto extends BaseDto {
         return this;
     }
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public TestScenarioDto setDuration(long duration) {
+    public TestScenarioDto setDuration(int duration) {
         this.duration = duration;
         return this;
     }
@@ -78,7 +78,7 @@ public class TestScenarioDto extends BaseDto {
 
     private void calculateDuration() {
         setDuration(
-                sum(with(getTestStepDtoList()).extract(on(TestStepDto.class).getDuration())).longValue());
+                sum(with(getTestStepDtoList()).extract(on(TestStepDto.class).getDuration())).intValue());
     }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
@@ -94,11 +94,11 @@ public class TestScenarioDto extends BaseDto {
         return this;
     }
 
-    public long getFeatureId() {
+    public int getFeatureId() {
         return featureId;
     }
 
-    public TestScenarioDto setFeatureId(long featureId) {
+    public TestScenarioDto setFeatureId(int featureId) {
         this.featureId = featureId;
         return this;
     }

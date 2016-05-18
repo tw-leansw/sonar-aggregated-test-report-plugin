@@ -13,13 +13,13 @@ import static ch.lambdaj.collection.LambdaCollections.with;
 
 @Alias("TestFeature")
 public class TestFeatureDto extends BaseDto {
-    private long id;
-    private long reportId;
+    private int id;
+    private int reportId;
     private TestFrameworkType frameworkType;
     private TestType testType;
     private String name;
     private String description;
-    private long duration;
+    private int duration;
     private List<TestScenarioDto> testScenarios = new ArrayList<>();
     private int passedScenarios;
     private int failedScenarios;
@@ -29,6 +29,32 @@ public class TestFeatureDto extends BaseDto {
     private Date createTime;
     private Date executionTime;
 
+    public int getId() {
+        return id;
+    }
+
+    public TestFeatureDto setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public int getReportId() {
+        return reportId;
+    }
+
+    public TestFeatureDto setReportId(int reportId) {
+        this.reportId = reportId;
+        return this;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public TestFeatureDto setDuration(int duration) {
+        this.duration = duration;
+        return this;
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -57,14 +83,7 @@ public class TestFeatureDto extends BaseDto {
         return this;
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public TestFeatureDto setId(long id) {
-        this.id = id;
-        return this;
-    }
 
     public String getName() {
         return name;
@@ -84,14 +103,6 @@ public class TestFeatureDto extends BaseDto {
         return this;
     }
 
-    public long getDuration() {
-        return duration;
-    }
-
-    public TestFeatureDto setDuration(long duration) {
-        this.duration = duration;
-        return this;
-    }
 
     public Date getExecutionTime() {
         return executionTime;
@@ -120,14 +131,7 @@ public class TestFeatureDto extends BaseDto {
         return this;
     }
 
-    public long getReportId() {
-        return reportId;
-    }
 
-    public TestFeatureDto setReportId(long reportId) {
-        this.reportId = reportId;
-        return this;
-    }
 
     public int getSkippedScenarios() {
         return skippedScenarios;

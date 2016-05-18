@@ -9,4 +9,6 @@ public abstract class BaseDto {
         writer.writeObject(this);
         return this;
     }
+
+    public abstract int getId();
 }

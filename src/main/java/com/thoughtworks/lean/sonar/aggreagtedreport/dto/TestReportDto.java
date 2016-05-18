@@ -10,10 +10,10 @@ import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
 public class TestReportDto extends BaseDto {
-    private long id;
+    private int id;
     private String projectId;
     private String buildLabel;
-    private long duration;
+    private int duration;
 
     private Date createTime;
     private Date executionTime;
@@ -48,11 +48,11 @@ public class TestReportDto extends BaseDto {
         return this;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public TestReportDto setId(long id) {
+    public TestReportDto setId(int id) {
         this.id = id;
         return this;
     }
@@ -83,11 +83,11 @@ public class TestReportDto extends BaseDto {
                         .sum(on(TestFeatureDto.class).getDuration()));
     }
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public TestReportDto setDuration(long duration) {
+    public TestReportDto setDuration(int duration) {
         this.duration = duration;
         return this;
     }

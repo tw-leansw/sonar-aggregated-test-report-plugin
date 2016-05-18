@@ -3,6 +3,8 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 import com.google.common.collect.Maps;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
+import io.github.benas.randombeans.EnhancedRandomBuilder;
+import io.github.benas.randombeans.api.EnhancedRandom;
 import org.flywaydb.core.Flyway;
 import org.junit.After;
 import org.junit.Before;
@@ -17,10 +19,13 @@ import java.util.Map;
  */
 public abstract class BaseDaoTest {
     protected static MyDbClient dbClient;
+    protected static EnhancedRandom enhancedRandom;
 
     @BeforeClass
     public static void setUp() {
         Map<String, String> props = Maps.newHashMap();
+
+        enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder().build();
 
         props.put("sonar.jdbc.url", "jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1");
         Settings settings = new Settings();

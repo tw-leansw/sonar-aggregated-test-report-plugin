@@ -12,6 +12,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import java.util.List;
 
 public class MyDataDto extends BaseDto {
+    private int id;
     private String name;
     private int age;
     private SubMyDataDto subMyDataDto;
@@ -23,6 +24,16 @@ public class MyDataDto extends BaseDto {
     public MyDataDto(String name, int age) {
         this.name = name;
         this.age = age;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public MyDataDto setId(int id) {
+        this.id = id;
+        return this;
     }
 
     public List<Object> getList() {

@@ -25,35 +25,25 @@ public class TestFeatureDaoTest extends BaseDaoTest{
 
     @Test
     public void should_insert_work(){
-        dbClient.getTestFeatureDao().insert(new TestFeatureDto()
-                .setName("foo")
-                .setDuration(112)
-                .setCreateTime(new Date())
-                .setFrameworkType(TestFrameworkType.CUCUMBER)
-                .setTestType(TestType.FUNCTIONAL_TEST));
 
-        dbClient.getTestFeatureDao().insert(new TestFeatureDto()
-                .setName("foo1")
-                .setDuration(123)
-                .setPassedScenarios(3)
-                .setCreateTime(new Date())
-                .setFrameworkType(TestFrameworkType.CUCUMBER)
-                .setTestType(TestType.FUNCTIONAL_TEST));
+        dbClient.getTestFeatureDao().insert(nextFeature());
+
+        dbClient.getTestFeatureDao().insert(nextFeature());
 
         List<TestFeatureDto> ret = dbClient.getTestFeatureDao().selectAll();
         assertEquals(2,ret.size());
     }
 
+    private TestFeatureDto nextFeature() {
+        return enhancedRandom.nextObject(TestFeatureDto.class);
+    }
+
     @Test
     public void should_get_work(){
 
-        TestFeatureDto dto = dbClient.getTestFeatureDao().insert(new TestFeatureDto()
-                .setName("foo1")
-                .setDuration(123)
-                .setPassedScenarios(3)
-                .setCreateTime(new Date())
-                .setFrameworkType(TestFrameworkType.CUCUMBER)
-                .setTestType(TestType.FUNCTIONAL_TEST));
+        TestFeatureDto dto = nextFeature();
+
+        dto = dbClient.getTestFeatureDao().insert(dto);
 
         TestFeatureDto retnull = dbClient.getTestFeatureDao().get(-1);
         assertNull(retnull);
