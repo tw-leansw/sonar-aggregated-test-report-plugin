@@ -5,11 +5,12 @@ import java.util.List;
 /**
  * Created by qmxie on 5/18/16.
  */
-public interface Mapper<D extends BaseDto> {
+public interface CRUDMapper<D extends BaseDto> {
     void deleteAll();
     List<D> selectAll();
     void delete(long id);
-    D insert(D dto);
+    void insert(D dto);
     D get(long id);
+    D getLastInserted();
     void update(D dto);
 }

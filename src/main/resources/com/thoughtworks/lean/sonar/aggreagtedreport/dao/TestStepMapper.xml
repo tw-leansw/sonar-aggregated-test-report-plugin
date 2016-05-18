@@ -28,8 +28,13 @@
 
     <insert id="insert" parameterType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO lean_test_step (name, result, duration)
-        VALUES (#{name,jdbcType=VARCHAR}, #{resultType,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER})
+        VALUES (#{name,jdbcType=VARCHAR}, #{resultType,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER});
+        SELECT LAST_INSERT_ID();
     </insert>
+
+    <select id="getLastInserted" resultType="com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto">
+        select <include refid="stepColumns"/> from `lean_test_step` as step where step.id=LAST_INSERT_ID();
+    </select>
 
     <delete id="delete">
         DELETE FROM lean_test_step WHERE id=#{id}

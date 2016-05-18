@@ -35,7 +35,7 @@ public class TestStepDaoTest extends BaseDaoTest {
     @Test
     public void should_insert_work() {
         TestStepDto dto = new TestStepDto().setName("foo").setId(2).setResultType(ResultType.FAILED);
-        dbClient.getTestStepDao().insert(dto);
+        TestStepDto ret = dbClient.getTestStepDao().insert(dto);
         assertEquals(1, getRecordSize());
     }
 

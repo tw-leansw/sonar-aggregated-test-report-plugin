@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by qmxie on 5/18/16.
  */
-public abstract class AbstractDao<T extends Mapper<D>, D extends BaseDto> implements Dao {
+public abstract class AbstractDao<T extends CRUDMapper<D>, D extends BaseDto> implements Dao {
     private final Mybatis mybatis;
     private final System2 system2;
     private final Class<T> mapperClass;
@@ -22,8 +22,7 @@ public abstract class AbstractDao<T extends Mapper<D>, D extends BaseDto> implem
     }
 
 
-
-    private Mapper<D> getMapper(DbSession session) {
+    private CRUDMapper<D> getMapper(DbSession session) {
         return session.getMapper(mapperClass);
     }
 
@@ -48,17 +47,22 @@ public abstract class AbstractDao<T extends Mapper<D>, D extends BaseDto> implem
     public List<D> selectAll() {
         DbSession session = this.getDbSession();
         try {
-            return getMapper(session).selectAll();
+            return selectAll(session);
         } finally {
             MyBatis.closeQuietly(session);
         }
     }
 
-    public void deleteAll(){
+    private List<D> selectAll(DbSession session) {
+        return getMapper(session).selectAll();
+    }
+
+    public void deleteAll() {
         DbSession session = this.getDbSession();
         try {
             getMapper(session).deleteAll();
         } finally {
+            session.commit();
             MyBatis.closeQuietly(session);
         }
     }
@@ -66,22 +70,31 @@ public abstract class AbstractDao<T extends Mapper<D>, D extends BaseDto> implem
     public D get(long id) {
         DbSession session = this.getDbSession();
         try {
-            return getMapper(session).get(id);
+            return get(id, session);
         } finally {
             MyBatis.closeQuietly(session);
         }
     }
+
+    private D get(long id, DbSession session) {
+        return getMapper(session).get(id);
+    }
+
 
     public void delete(long id) {
         DbSession session = this.getDbSession();
         try {
-            getMapper(session).delete(id);
+            delete(id, session);
         } finally {
             MyBatis.closeQuietly(session);
         }
     }
 
-    public void update(D dto){
+    private void delete(long id, DbSession session) {
+        getMapper(session).delete(id);
+    }
+
+    public void update(D dto) {
         DbSession session = this.getDbSession();
         try {
             getMapper(session).update(dto);
@@ -90,16 +103,15 @@ public abstract class AbstractDao<T extends Mapper<D>, D extends BaseDto> implem
         }
     }
 
-    public D insert(D dto){
+    public D insert(D dto) {
         DbSession session = this.getDbSession();
         try {
-            return getMapper(session).insert(dto);
+            getMapper(session).insert(dto);
+            return getMapper(session).getLastInserted();
         } finally {
+            session.commit();
             MyBatis.closeQuietly(session);
         }
     }
-
-
-
 
 }
