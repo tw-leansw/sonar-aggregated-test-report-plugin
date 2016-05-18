@@ -7,6 +7,8 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDao;
+import org.sonar.api.utils.System2;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
@@ -20,19 +22,14 @@ public class MyDbClient {
 
     private final MyDataDao myDataDao;
 
-    public MyDbClient(Mybatis myBatis, Dao... daos) {
+    private final TestStepDao testStepDao;
+
+
+    public MyDbClient(Mybatis myBatis) {
+        System2 system2=System2.INSTANCE;
         this.myBatis = myBatis;
-        IdentityHashMap map = new IdentityHashMap();
-        Dao[] arr$ = daos;
-        int len$ = daos.length;
-
-        for (int i$ = 0; i$ < len$; ++i$) {
-            Dao dao = arr$[i$];
-            map.put(dao.getClass(), dao);
-        }
-
-        this.myDataDao = this.getDao(map, MyDataDao.class);
-        this.doOnLoad(map);
+        this.myDataDao = new MyDataDao(myBatis,system2);
+        this.testStepDao = new TestStepDao(myBatis,system2);
     }
 
     protected void doOnLoad(Map<Class, Dao> daoByClass) {
@@ -57,5 +54,9 @@ public class MyDbClient {
 
     public Mybatis getMyBatis() {
         return this.myBatis;
+    }
+
+    public TestStepDao getTestStepDao() {
+        return this.testStepDao;
     }
 }

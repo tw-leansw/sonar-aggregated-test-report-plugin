@@ -36,7 +36,7 @@
     </delete>
 
     <delete id="deleteAll">
-        truncate lean_test_step
+        DELETE FROM lean_test_step WHERE true
     </delete>
 
 </mapper>

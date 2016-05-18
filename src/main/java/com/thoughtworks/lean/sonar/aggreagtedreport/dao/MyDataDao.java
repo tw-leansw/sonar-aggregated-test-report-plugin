@@ -5,28 +5,28 @@
 
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.AbstractDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
 import org.sonar.api.utils.System2;
-import org.sonar.db.AbstractDao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
 
 import java.util.List;
 
 public class MyDataDao extends AbstractDao {
-    public MyDataDao(MyBatis mybatis, System2 system) {
+    public MyDataDao(Mybatis mybatis, System2 system) {
         super(mybatis, system);
     }
 
     public void insert(MyDataDto dto) {
-        DbSession session = this.myBatis().openSession(false);
+        DbSession session = this.getDbSession();
         try {
             this.insert(session, dto);
             session.commit();
         } finally {
             MyBatis.closeQuietly(session);
         }
-
     }
 
     public void insert(DbSession session, MyDataDto dto) {
@@ -37,8 +37,18 @@ public class MyDataDao extends AbstractDao {
         return session.getMapper(MyDataMapper.class).selectAll();
     }
 
+    public List<MyDataDto> selectAll() {
+
+        DbSession session = this.getDbSession();
+        try {
+            return session.getMapper(MyDataMapper.class).selectAll();
+        } finally {
+            MyBatis.closeQuietly(session);
+        }
+    }
+
     public void deleteAll() {
-        DbSession session = this.myBatis().openSession(false);
+        DbSession session = this.getDbSession();
         session.getMapper(MyDataMapper.class).deleteAll();
     }
 }
