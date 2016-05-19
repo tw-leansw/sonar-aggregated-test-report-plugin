@@ -5,6 +5,7 @@
 
     <sql id="stepColumns">
         step.id as id,
+        step.scenario_id as scenarioId,
         step.name as name,
         step.duration as duration,
         step.result as resultType
@@ -19,6 +20,15 @@
         </where>
     </select>
 
+    <select id="getByParentId" parameterType="java.lang.Long" resultType="TestStep">
+        SELECT
+        <include refid="stepColumns"/>
+        FROM lean_test_step step
+        <where>
+            AND step.scenario_id=#{parentId}
+        </where>
+    </select>
+
     <select id="selectAll" resultType="TestStep">
         select
         <include refid="stepColumns"/>
@@ -27,8 +37,8 @@
     </select>
 
     <insert id="insert" parameterType="TestStep" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO lean_test_step (name, result, duration)
-        VALUES (#{name,jdbcType=VARCHAR}, #{resultType.name,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER});
+        INSERT INTO lean_test_step (name, scenario_id, result, duration)
+        VALUES (#{name,jdbcType=VARCHAR}, #{scenarioId,jdbcType=INTEGER}, #{resultType.name,jdbcType=VARCHAR},#{duration,jdbcType=INTEGER});
     </insert>
 
     <delete id="delete" parameterType="java.lang.Long">
@@ -42,7 +52,7 @@
     <update id="update" parameterType="TestStep">
         UPDATE lean_test_step
         SET
-            id = #{id,jdbcType=INTEGER},
+            scenario_id = #{scenarioId,jdbcType=INTEGER},
             name = #{name,jdbcType=VARCHAR},
             duration = #{duration,jdbcType=INTEGER},
             result = #{resultType,jdbcType=VARCHAR}

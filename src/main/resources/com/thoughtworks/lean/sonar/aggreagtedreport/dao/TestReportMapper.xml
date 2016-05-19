@@ -21,6 +21,16 @@
         </where>
     </select>
 
+    <select id="getLatestByProjectId" parameterType="string" resultType="TestReport">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_report report
+        <where>
+            AND report.project_id=#{projectId}
+        </where>
+        ORDER BY report.create_time DESC LIMIT 1
+    </select>
+
     <select id="selectAll" resultType="TestReport">
         select
         <include refid="columns"/>
@@ -54,7 +64,6 @@
     <update id="update" parameterType="TestReport">
         UPDATE lean_test_report
         SET
-            id = #{id,jdbcType=INTEGER},
             project_id = #{projectId,jdbcType=VARCHAR},
             build_label = #{buildLabel,jdbcType=VARCHAR},
             duration = #{duration,jdbcType=INTEGER},

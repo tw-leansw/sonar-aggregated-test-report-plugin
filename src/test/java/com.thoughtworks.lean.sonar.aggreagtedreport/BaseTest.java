@@ -1,6 +1,7 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Maps;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import io.github.benas.randombeans.EnhancedRandomBuilder;
@@ -10,19 +11,20 @@ import org.junit.BeforeClass;
 import org.sonar.api.config.Settings;
 import org.sonar.db.DefaultDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by qmxie on 5/18/16.
  */
-public abstract class BaseDaoTest {
+public abstract class BaseTest {
     protected static MyDbClient dbClient;
     protected static EnhancedRandom enhancedRandom;
 
     @BeforeClass
     public static void setUp() {
         Map<String, String> props = Maps.newHashMap();
-
         enhancedRandom = EnhancedRandomBuilder.aNewEnhancedRandomBuilder().build();
 
         props.put("sonar.jdbc.url", "jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_DELAY=-1");
@@ -37,5 +39,13 @@ public abstract class BaseDaoTest {
         Flyway flyway = new Flyway();
         flyway.setDataSource(defaultDatabase.getDataSource());
         flyway.migrate();
+    }
+
+    static <T extends BaseDto> List<T> objects(Class<T> clazz, int size, String... strings) {
+        List<T> ret = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            ret.add(enhancedRandom.nextObject(clazz, strings));
+        }
+        return ret;
     }
 }

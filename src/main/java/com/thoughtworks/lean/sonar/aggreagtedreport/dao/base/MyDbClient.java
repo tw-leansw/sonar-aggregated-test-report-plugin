@@ -52,7 +52,7 @@ public class MyDbClient {
         MyBatis.closeQuietly(session);
     }
 
-    protected <K extends BaseDto,V extends AbstractDao> V getDao(Class<K> clazz) {
+    protected <K extends BaseDto, V extends AbstractDao> V getDao(Class<K> clazz) {
         return (V) this.daoMap.get(clazz);
     }
 
@@ -68,11 +68,17 @@ public class MyDbClient {
         return this.getDao(TestFeatureDto.class);
     }
 
-    public AbstractDao getTestScenarioDao() {
+    public TestScenarioDao getTestScenarioDao() {
         return this.getDao(TestScenarioDto.class);
+    }
+
+    public TestReportDao getTestReportDao() {
+        return this.getDao(TestReportDto.class);
     }
 
     public Map<Class, AbstractDao> getDaoMap() {
         return daoMap;
     }
+
+
 }

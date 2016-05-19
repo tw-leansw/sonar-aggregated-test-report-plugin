@@ -19,6 +19,7 @@ public class SonarAggregatedTestReportSensor implements Sensor {
     }
 
     public void analyse(Project project, SensorContext sensorContext) {
+        //
     }
 
     public boolean shouldExecuteOnProject(Project project) {

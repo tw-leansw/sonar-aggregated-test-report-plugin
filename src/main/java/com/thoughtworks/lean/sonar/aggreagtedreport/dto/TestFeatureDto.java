@@ -166,6 +166,16 @@ public class TestFeatureDto extends BaseDto {
         return this;
     }
 
+    @Override
+    public BaseDto setParentId(int id) {
+        return setReportId(id);
+    }
+
+    @Override
+    public List getChilds() {
+        return getTestScenarios();
+    }
+
     private void calculateDuration() {
         setDuration(
                 with(getTestScenarios())

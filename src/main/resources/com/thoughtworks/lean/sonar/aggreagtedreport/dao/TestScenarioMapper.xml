@@ -18,6 +18,15 @@
         </where>
     </select>
 
+    <select id="getByParentId" parameterType="java.lang.Long" resultType="TestScenario">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_scenario scenario
+        <where>
+            AND scenario.feature_id=#{parentId}
+        </where>
+    </select>
+
     <select id="selectAll" resultType="TestScenario">
         select
         <include refid="columns"/>

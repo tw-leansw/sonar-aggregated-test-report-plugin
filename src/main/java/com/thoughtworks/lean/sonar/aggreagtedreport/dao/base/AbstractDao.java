@@ -4,6 +4,7 @@ import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
         this.mapperClass = mapperClass;
     }
 
-    private CRUDMapper<D> getMapper(DbSession session) {
+    protected CRUDMapper<D> getMapper(DbSession session) {
         return (CRUDMapper<D>) session.getMapper(mapperClass);
     }
 
@@ -105,6 +106,28 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
             getMapper(session).insert(dto);
             session.commit();
             return dto;
+        } finally {
+            MyBatis.closeQuietly(session);
+        }
+    }
+
+    public Collection<D> insert(Collection<D> collection){
+        DbSession session = this.getDbSession();
+        try{
+            for (D dto: collection){
+                getMapper(session).insert(dto);
+            }
+            session.commit();
+        } finally {
+            Mybatis.closeQuietly(session);
+        }
+        return collection;
+    }
+
+    public List<D> getByParentId(int id){
+        DbSession session = this.getDbSession();
+        try {
+            return getMapper(session).getByParentId(id);
         } finally {
             MyBatis.closeQuietly(session);
         }

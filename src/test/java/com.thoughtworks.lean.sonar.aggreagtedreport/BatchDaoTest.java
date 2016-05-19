@@ -15,7 +15,7 @@ import static org.junit.Assert.assertNull;
 /**
  * Created by qmxie on 5/18/16.
  */
-public class BatchDaoTest extends BaseDaoTest {
+public class BatchDaoTest extends BaseTest {
     static Map<Class, AbstractDao> daoMap;
 
     @BeforeClass

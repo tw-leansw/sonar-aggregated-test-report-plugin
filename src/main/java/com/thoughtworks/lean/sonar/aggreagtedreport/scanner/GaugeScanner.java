@@ -3,11 +3,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 import ch.lambdaj.collection.LambdaList;
 import ch.lambdaj.function.convert.Converter;
 import com.google.common.collect.Sets;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.ScriptUtil;
 import org.apache.commons.io.IOUtils;
@@ -48,7 +44,7 @@ public class GaugeScanner {
         this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.gauge.functional.test.tags"));
     }
 
-    public void analyse(TestReport testReport) {
+    public void analyse(TestReportDto testReport) {
         try {
             logger.debug("start gauge test pyramid analyse");
             String reportString = IOUtils.toString(new FileInputStream(fileSystem.resolvePath(reportPath + "html-report/js/result.js")));
@@ -116,13 +112,13 @@ public class GaugeScanner {
                 scenarioDto.setResultType(scenarioFailed ? FAILED : PASSED);
             }
 
-            scenarioDto.setTestStepDtoList(stepDtos);
+            scenarioDto.setTestSteps(stepDtos);
             return scenarioDto;
         }
     };
 
 
-    public void analyse(JXPathMap jxPathMap, TestReport testReport) {
+    public void analyse(JXPathMap jxPathMap, TestReportDto testReport) {
         List<Map> specResults = jxPathMap.get("/gaugeExecutionResult/suiteResult/specResults");
         LambdaList<JXPathMap> wrappedSpecResults = with(specResults).convert(JXPathMap.toJxPathFunction);
         testReport.setTestFeatures(wrappedSpecResults.convert(analyseSpec));

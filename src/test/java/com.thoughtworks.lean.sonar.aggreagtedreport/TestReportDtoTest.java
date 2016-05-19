@@ -3,10 +3,8 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 import com.google.common.collect.Lists;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.model.FrameworkField;
 
 import java.util.Date;
 import java.util.List;
@@ -17,12 +15,12 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by qmxie on 5/16/16.
  */
-public class TestReportTest extends BaseDaoTest{
-    TestReport testReport;
+public class TestReportDtoTest extends BaseTest {
+    TestReportDto testReport;
 
     @Before
     public void setUpReport() {
-        testReport = new TestReport();
+        testReport = new TestReportDto();
 
         // scenario 1
         TestScenarioDto testScenario1 = new TestScenarioDto()
@@ -92,7 +90,6 @@ public class TestReportTest extends BaseDaoTest{
         featureDtoList.add(testFeatureDto2);
 
         testReport.setTestFeatures(featureDtoList);
-        System.out.println("");
 
     }
 
@@ -110,9 +107,5 @@ public class TestReportTest extends BaseDaoTest{
         assertEquals(6, testReport.getStepsByResultType(SKIPPED).size());
     }
 
-    @Test
-    public void should_test_report_save_method_work(){
-
-    }
 
 }

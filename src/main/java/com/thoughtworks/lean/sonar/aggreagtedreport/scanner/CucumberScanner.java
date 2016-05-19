@@ -6,12 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
@@ -52,7 +48,7 @@ public class CucumberScanner {
 
     }
 
-    public void analyse(TestReport testReport) {
+    public void analyse(TestReportDto testReport) {
         try {
             analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
         } catch (IOException e) {
@@ -60,7 +56,7 @@ public class CucumberScanner {
         }
     }
 
-    public void analyse(JXPathMap jxPathMap, TestReport testReport) {
+    public void analyse(JXPathMap jxPathMap, TestReportDto testReport) {
         List<Map> features = jxPathMap.get("/");
         LambdaList<JXPathMap> wrappedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
         testReport.setTestFeatures(wrappedFeatures.convert(analyseFeature));
@@ -128,7 +124,7 @@ public class CucumberScanner {
             } else {
                 scenarioDto.setResultType(stepPassed == 0 ? FAILED : PASSED);
             }
-            scenarioDto.setTestStepDtoList(stepDtos);
+            scenarioDto.setTestSteps(stepDtos);
             //testReport.addScenario(testType, scenarioDto);
             return scenarioDto;
 

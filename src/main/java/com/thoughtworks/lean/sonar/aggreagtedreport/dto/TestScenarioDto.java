@@ -23,7 +23,7 @@ public class TestScenarioDto extends BaseDto {
     private String name;
     private ResultType resultType;
     private int duration;
-    private List<TestStepDto> testStepDtoList;
+    private List<TestStepDto> testSteps;
 
     public TestScenarioDto() {
     }
@@ -66,34 +66,44 @@ public class TestScenarioDto extends BaseDto {
         return this;
     }
 
-    public List<TestStepDto> getTestStepDtoList() {
-        if (this.testStepDtoList == null) {
+    public List<TestStepDto> getTestSteps() {
+        if (this.testSteps == null) {
             return Collections.emptyList();
         }
-        return testStepDtoList;
+        return testSteps;
     }
 
-    public TestScenarioDto setTestStepDtoList(List<TestStepDto> testStepDtoList) {
-        this.testStepDtoList = testStepDtoList;
+    public TestScenarioDto setTestSteps(List<TestStepDto> testSteps) {
+        this.testSteps = testSteps;
         calculateDuration();
         return this;
     }
 
+    @Override
+    public BaseDto setParentId(int id) {
+        return setFeatureId(id);
+    }
+
+    @Override
+    public List getChilds() {
+        return getTestSteps();
+    }
+
     private void calculateDuration() {
         setDuration(
-                sum(with(getTestStepDtoList()).extract(on(TestStepDto.class).getDuration())).intValue());
+                sum(with(getTestSteps()).extract(on(TestStepDto.class).getDuration())).intValue());
     }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
-        return with(this.getTestStepDtoList()).clone()
+        return with(this.getTestSteps()).clone()
                 .retain(Matchers.hasProperty("resultType", Matchers.equalTo(type)));
     }
 
     public TestScenarioDto addStep(TestStepDto step) {
-        if (this.testStepDtoList == null) {
-            this.testStepDtoList = Lists.newArrayList();
+        if (this.testSteps == null) {
+            this.testSteps = Lists.newArrayList();
         }
-        this.testStepDtoList.add(step);
+        this.testSteps.add(step);
         return this;
     }
 

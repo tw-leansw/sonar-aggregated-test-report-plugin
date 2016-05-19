@@ -4,12 +4,15 @@ import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 
+import java.util.List;
+
 /**
  * Created by qmxie on 5/13/16.
  */
 public class TestStepDto extends BaseDto {
 
     private int id;
+    private int scenarioId;
     private String name;
     private ResultType resultType;
     private int duration;
@@ -25,6 +28,15 @@ public class TestStepDto extends BaseDto {
     @Override
     public TestStepDto setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public int getScenarioId() {
+        return scenarioId;
+    }
+
+    public TestStepDto setScenarioId(int scenarioId) {
+        this.scenarioId = scenarioId;
         return this;
     }
 
@@ -46,6 +58,15 @@ public class TestStepDto extends BaseDto {
         return this;
     }
 
+    @Override
+    public BaseDto setParentId(int id) {
+        return setScenarioId(id);
+    }
+
+    @Override
+    public List<BaseDto> getChilds() {
+        return null;
+    }
 
     public int getDuration() {
         return duration;

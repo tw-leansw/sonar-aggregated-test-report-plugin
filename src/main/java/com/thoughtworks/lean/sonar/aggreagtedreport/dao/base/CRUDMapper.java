@@ -1,5 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,4 +18,7 @@ public interface CRUDMapper<D extends BaseDto> {
     D get(long id);
 
     void update(D dto);
+
+    List<D> getByParentId(int parentId);
+
 }

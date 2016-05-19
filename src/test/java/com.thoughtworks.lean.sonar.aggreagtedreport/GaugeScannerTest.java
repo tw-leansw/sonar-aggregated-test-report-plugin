@@ -1,8 +1,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Sets;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.GaugeScanner;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.ScriptUtil;
@@ -24,7 +24,7 @@ public class GaugeScannerTest {
         // given
         String jsString = IOUtils.toString(getClass().getResourceAsStream("/gauge_report.js"));
         JXPathMap ctx = ScriptUtil.eval(jsString);
-        TestReport testReport = new TestReport();
+        TestReportDto testReport = new TestReportDto();
         GaugeScanner gaugeScanner = new GaugeScanner(Sets.newHashSet("api_test"), Sets.newHashSet("ui_test"));
 
         // when
@@ -36,7 +36,7 @@ public class GaugeScannerTest {
         assertEquals(0, testReport.getScenariosNumber(TestType.UNIT_TEST));
 
         //
-        assertTrue(testReport.getTestReportDto().getDuration() > 0);
+        assertTrue(testReport.getDuration() > 0);
 
     }
 
@@ -46,7 +46,7 @@ public class GaugeScannerTest {
         // given
         String jsString = IOUtils.toString(getClass().getResourceAsStream("/gauge_report_2.js"));
         JXPathMap ctx = ScriptUtil.eval(jsString);
-        TestReport testReport = new TestReport();
+        TestReportDto testReport = new TestReportDto();
         GaugeScanner gaugeScanner = new GaugeScanner(Sets.newHashSet("api_test"), Sets.newHashSet("ui_test"));
 
         // when
@@ -58,7 +58,7 @@ public class GaugeScannerTest {
         assertEquals(1, testReport.getScenariosNumber(TestType.UNIT_TEST));
 
         //
-        assertTrue(testReport.getTestReportDto().getDuration() > 0);
+        assertTrue(testReport.getDuration() > 0);
 
     }
 
