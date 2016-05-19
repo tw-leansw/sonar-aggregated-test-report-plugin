@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestReportMapper">
+
+    <sql id="columns">
+        report.id as id,
+        report.project_id as projectId,
+        report.build_label as buildLabel,
+        report.duration as duration,
+        report.create_time as createTime,
+        report.execution_time as executionTime
+    </sql>
+
+    <select id="get" parameterType="java.lang.Long" resultType="TestReport">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_report report
+        <where>
+            AND report.id=#{id}
+        </where>
+    </select>
+
+    <select id="selectAll" resultType="TestReport">
+        select
+        <include refid="columns"/>
+        from
+        `lean_test_report` as report;
+    </select>
+
+    <insert id="insert" parameterType="TestReport" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO lean_test_report (
+            project_id,
+            build_label,
+            duration,
+            create_time,
+            execution_time)
+        VALUES (
+            #{projectId,jdbcType=VARCHAR},
+            #{buildLabel,jdbcType=VARCHAR},
+            #{duration,jdbcType=INTEGER},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{executionTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM lean_test_report WHERE id=#{id}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM lean_test_report WHERE true
+    </delete>
+
+    <update id="update" parameterType="TestReport">
+        UPDATE lean_test_report
+        SET
+            id = #{id,jdbcType=INTEGER},
+            project_id = #{projectId,jdbcType=VARCHAR},
+            build_label = #{buildLabel,jdbcType=VARCHAR},
+            duration = #{duration,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            execution_time = #{executionTime,jdbcType=TIMESTAMP}
+        <where>
+            AND id = #{id,jdbcType=INTEGER}
+        </where>
+    </update>
+
+</mapper>

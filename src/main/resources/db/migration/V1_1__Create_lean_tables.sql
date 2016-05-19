@@ -35,4 +35,13 @@ CREATE TABLE `lean_test_scenario` (
   `duration` INT NULL,
   PRIMARY KEY (`id`));
 
+CREATE TABLE `lean_test_report` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `project_id` VARCHAR(45) NULL,
+  `build_label` VARCHAR(45) NULL,
+  `duration` INT NULL,
+  `create_time` DATETIME NULL,
+  `execution_time` DATETIME NULL,
+  PRIMARY KEY (`id`));
+
 

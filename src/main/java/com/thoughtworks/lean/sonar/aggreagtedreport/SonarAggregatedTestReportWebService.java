@@ -1,11 +1,9 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
@@ -47,9 +45,8 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
             public void handle(Request request, Response response) throws Exception {
                 DbSession dbSession = myDbClient.openSession(true);
                 BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
-                List<MyDataDto> list = dbSession.getMapper(MyDataMapper.class).selectAll();
 
-                jsonWriter.writeCollection(list);
+                //jsonWriter.writeCollection(list);
                 jsonWriter.close();
                 dbSession.close();
             }

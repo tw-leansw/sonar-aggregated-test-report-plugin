@@ -73,9 +73,9 @@
     </delete>
 
     <update id="update" parameterType="TestFeature">
-        UPDATE `lean_test_feature`
+        UPDATE lean_test_feature
         SET
-            report_id = #{reportId,jdbcType=INTEGER}
+            report_id = #{reportId,jdbcType=INTEGER},
             framework_type = #{frameworkType,jdbcType=VARCHAR},
             test_type = #{testType,jdbcType=VARCHAR},
             name = #{name,jdbcType=VARCHAR},
@@ -85,8 +85,8 @@
             failed_scenarios = #{failedScenarios,jdbcType=INTEGER},
             skipped_scenarios = #{skippedScenarios,jdbcType=INTEGER},
             build_label = #{buildLabel,jdbcType=VARCHAR},
-            create_time = #{createTime,jdbcType=DATE},
-            execution_time = #{executionTime,jdbcType=DATE}
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            execution_time = #{executionTime,jdbcType=TIMESTAMP}
         <where>
             AND id = #{id,jdbcType=INTEGER}
         </where>

@@ -1,7 +1,11 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
+import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.ibatis.type.Alias;
 
 import java.util.ArrayList;
@@ -11,7 +15,6 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
-@Alias("TestFeature")
 public class TestFeatureDto extends BaseDto {
     private int id;
     private int reportId;
@@ -29,10 +32,12 @@ public class TestFeatureDto extends BaseDto {
     private Date createTime;
     private Date executionTime;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public TestFeatureDto setId(int id) {
         this.id = id;
         return this;
@@ -163,5 +168,31 @@ public class TestFeatureDto extends BaseDto {
         setDuration(
                 with(getTestScenarios())
                         .sum(on(TestScenarioDto.class).getDuration()));
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestFeatureDto that = (TestFeatureDto) o;
+        return id == that.id &&
+                reportId == that.reportId &&
+                duration == that.duration &&
+                passedScenarios == that.passedScenarios &&
+                failedScenarios == that.failedScenarios &&
+                skippedScenarios == that.skippedScenarios &&
+                frameworkType == that.frameworkType &&
+                testType == that.testType &&
+                Objects.equal(name, that.name) &&
+                Objects.equal(description, that.description) &&
+                Objects.equal(buildLabel, that.buildLabel) &&
+                Objects.equal(createTime, that.createTime) &&
+                Objects.equal(executionTime, that.executionTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, reportId, frameworkType, testType, name, description, duration, passedScenarios, failedScenarios, skippedScenarios, buildLabel, createTime, executionTime);
     }
 }

@@ -1,5 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
+import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 
@@ -16,10 +17,12 @@ public class TestStepDto extends BaseDto {
     public TestStepDto() {
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public TestStepDto setId(int id) {
         this.id = id;
         return this;
@@ -56,5 +59,21 @@ public class TestStepDto extends BaseDto {
     public TestStepDto setDuration(Object duration) {
         this.setDuration(Integer.parseInt(duration.toString()));
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestStepDto that = (TestStepDto) o;
+        return id == that.id &&
+                duration == that.duration &&
+                Objects.equal(name, that.name) &&
+                resultType == that.resultType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name, resultType, duration);
     }
 }

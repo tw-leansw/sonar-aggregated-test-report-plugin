@@ -1,5 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
+import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 
 import java.util.Date;
@@ -19,6 +20,8 @@ public class TestReportDto extends BaseDto {
     private Date executionTime;
 
     List<TestFeatureDto> testFeatures = new LinkedList<>();
+
+
 
 
     public String getBuildLabel() {
@@ -48,10 +51,12 @@ public class TestReportDto extends BaseDto {
         return this;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public TestReportDto setId(int id) {
         this.id = id;
         return this;
@@ -90,5 +95,23 @@ public class TestReportDto extends BaseDto {
     public TestReportDto setDuration(int duration) {
         this.duration = duration;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestReportDto that = (TestReportDto) o;
+        return id == that.id &&
+                duration == that.duration &&
+                Objects.equal(projectId, that.projectId) &&
+                Objects.equal(buildLabel, that.buildLabel) &&
+                Objects.equal(createTime, that.createTime) &&
+                Objects.equal(executionTime, that.executionTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, projectId, buildLabel, duration, createTime, executionTime);
     }
 }

@@ -11,4 +11,6 @@ public abstract class BaseDto {
     }
 
     public abstract int getId();
+
+    public abstract BaseDto setId(int id);
 }

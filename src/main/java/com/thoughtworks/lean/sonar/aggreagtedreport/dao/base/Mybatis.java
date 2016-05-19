@@ -1,11 +1,10 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestFeatureMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestReportMapper;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestScenarioMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepMapper;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.MyDataDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -42,13 +41,15 @@ public class Mybatis {
     public Mybatis start() {
         LogFactory.useSlf4jLogging();
         MyBatisConfBuilder confBuilder = new MyBatisConfBuilder(this.database);
-        confBuilder.loadAlias("TestFeature", TestFeatureDto.class);
-        confBuilder.loadAlias("MyData", MyDataDto.class);
         confBuilder.loadAlias("TestStep", TestStepDto.class);
+        confBuilder.loadAlias("TestScenario", TestScenarioDto.class);
+        confBuilder.loadAlias("TestFeature", TestFeatureDto.class);
+        confBuilder.loadAlias("TestReport", TestReportDto.class);
         Class[] mappers = new Class[]{
-                MyDataMapper.class,
                 TestStepMapper.class,
-                TestFeatureMapper.class};
+                TestScenarioMapper.class,
+                TestFeatureMapper.class,
+                TestReportMapper.class};
         confBuilder.loadMappers(mappers);
         this.sessionFactory = (new SqlSessionFactoryBuilder()).build(confBuilder.build());
         return this;

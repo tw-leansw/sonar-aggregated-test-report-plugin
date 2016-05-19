@@ -1,5 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
@@ -27,10 +28,12 @@ public class TestScenarioDto extends BaseDto {
     public TestScenarioDto() {
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public TestScenarioDto setId(int id) {
         this.id = id;
         return this;
@@ -103,4 +106,20 @@ public class TestScenarioDto extends BaseDto {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestScenarioDto that = (TestScenarioDto) o;
+        return id == that.id &&
+                featureId == that.featureId &&
+                duration == that.duration &&
+                Objects.equal(name, that.name) &&
+                resultType == that.resultType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, featureId, name, resultType, duration);
+    }
 }

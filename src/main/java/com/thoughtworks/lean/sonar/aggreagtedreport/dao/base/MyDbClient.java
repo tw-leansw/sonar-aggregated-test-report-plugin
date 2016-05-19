@@ -7,9 +7,14 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
 
 import com.google.common.collect.Maps;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.MyDataDao;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestFeatureDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestReportDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestScenarioDao;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.TestStepDao;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
@@ -26,9 +31,10 @@ public class MyDbClient {
     public MyDbClient(Mybatis myBatis) {
         daoMap = Maps.newIdentityHashMap();
         this.myBatis = myBatis;
-        daoMap.put(MyDataDao.class, new MyDataDao());
-        daoMap.put(TestStepDao.class, new TestStepDao());
-        daoMap.put(TestFeatureDao.class, new TestFeatureDao());
+        daoMap.put(TestStepDto.class, new TestStepDao());
+        daoMap.put(TestFeatureDto.class, new TestFeatureDao());
+        daoMap.put(TestScenarioDto.class, new TestScenarioDao());
+        daoMap.put(TestReportDto.class, new TestReportDao());
 
         for (AbstractDao dao : daoMap.values()) {
             dao.setMybatis(this.myBatis);
@@ -46,12 +52,8 @@ public class MyDbClient {
         MyBatis.closeQuietly(session);
     }
 
-    protected <K extends Dao> K getDao(Map<Class, Dao> map, Class<K> clazz) {
-        return (K) map.get(clazz);
-    }
-
-    protected <K extends AbstractDao> K getDao(Class<K> clazz) {
-        return (K) this.daoMap.get(clazz);
+    protected <K extends BaseDto,V extends AbstractDao> V getDao(Class<K> clazz) {
+        return (V) this.daoMap.get(clazz);
     }
 
     public Mybatis getMyBatis() {
@@ -59,17 +61,18 @@ public class MyDbClient {
     }
 
     public TestStepDao getTestStepDao() {
-        return this.getDao(TestStepDao.class);
-    }
-
-
-    public MyDataDao getMyDataDao() {
-        return this.getDao(MyDataDao.class);
+        return this.getDao(TestStepDto.class);
     }
 
     public TestFeatureDao getTestFeatureDao() {
-        return this.getDao(TestFeatureDao.class);
+        return this.getDao(TestFeatureDto.class);
     }
 
+    public AbstractDao getTestScenarioDao() {
+        return this.getDao(TestScenarioDto.class);
+    }
 
+    public Map<Class, AbstractDao> getDaoMap() {
+        return daoMap;
+    }
 }
