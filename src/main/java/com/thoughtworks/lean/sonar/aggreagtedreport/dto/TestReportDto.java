@@ -3,7 +3,6 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 import java.util.Date;
@@ -23,6 +22,10 @@ public class TestReportDto extends BaseDto {
     private Date executionTime;
 
     List<TestFeatureDto> testFeatures = new LinkedList<>();
+
+    public TestReportDto() {
+        this.createTime = new Date();
+    }
 
     public String getBuildLabel() {
         return buildLabel;
@@ -136,7 +139,7 @@ public class TestReportDto extends BaseDto {
     public int getScenariosNumber(TestType type) {
         return sum(
                 with(this.testFeatures).clone()
-                        .retain(Matchers.hasProperty("testType",Matchers.equalTo(type)))
+                        .retain(Matchers.hasProperty("testType", Matchers.equalTo(type)))
                         .extract(on(TestFeatureDto.class).getScenariosNumber())).intValue();
     }
 

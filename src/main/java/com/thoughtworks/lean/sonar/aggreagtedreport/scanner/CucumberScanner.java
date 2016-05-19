@@ -3,12 +3,10 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 import ch.lambdaj.collection.LambdaList;
 import ch.lambdaj.function.convert.Converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ConcurrentHashMultiset;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 
-import javax.swing.plaf.multi.MultiScrollBarUI;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +21,6 @@ import java.util.Set;
 
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 
 /**
  * Created by qmxie on 5/13/16.
@@ -71,15 +67,19 @@ public class CucumberScanner {
             Set<String> tagNames = toTagNames(tags);
             TestType testType = getTestType(tagNames);
             String featureName = feature.getString("name");
+            String description = feature.getString("description");
             LOGGER.debug(String.format("find cucumber test feature:%s type:%s", featureName, testType.name()));
 
             List<Map> scenarios = feature.get("elements");
             LambdaList<JXPathMap> wrappedScenarios = with(scenarios)
                     .retain(Matchers.hasEntry("type", "scenario"))
                     .convert(JXPathMap.toJxPathFunction);
-            TestFeatureDto testFeatureDto = new TestFeatureDto();
-            testFeatureDto.setTestType(testType);
-            testFeatureDto.setTestScenarios(wrappedScenarios.convert(analyseScenario));
+            TestFeatureDto testFeatureDto = new TestFeatureDto()
+                    .setTestType(testType)
+                    .setFrameworkType(TestFrameworkType.CUCUMBER)
+                    .setName(featureName)
+                    .setDescription(description)
+                    .setTestScenarios(wrappedScenarios.convert(analyseScenario));
 
             return testFeatureDto;
         }
@@ -114,7 +114,6 @@ public class CucumberScanner {
                                     .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
                         }
                     });
-
             scenarioDto.setTestSteps(stepDtos);
             return scenarioDto;
 

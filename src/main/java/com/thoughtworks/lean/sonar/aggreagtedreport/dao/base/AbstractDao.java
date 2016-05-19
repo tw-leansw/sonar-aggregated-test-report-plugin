@@ -111,10 +111,10 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
         }
     }
 
-    public Collection<D> insert(Collection<D> collection){
+    public Collection<D> insert(Collection<D> collection) {
         DbSession session = this.getDbSession();
-        try{
-            for (D dto: collection){
+        try {
+            for (D dto : collection) {
                 getMapper(session).insert(dto);
             }
             session.commit();
@@ -124,7 +124,7 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
         return collection;
     }
 
-    public List<D> getByParentId(int id){
+    public List<D> getByParentId(int id) {
         DbSession session = this.getDbSession();
         try {
             return getMapper(session).getByParentId(id);

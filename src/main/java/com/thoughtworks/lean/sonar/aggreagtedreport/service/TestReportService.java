@@ -17,7 +17,7 @@ public class TestReportService {
 
     private MyDbClient dbClient;
 
-    public TestReportService(MyDbClient dbClient){
+    public TestReportService(MyDbClient dbClient) {
         this.dbClient = dbClient;
     }
 
@@ -34,10 +34,10 @@ public class TestReportService {
         dbClient.getTestReportDao().insert(testReport);
         testReport.setChildrenzParentId();
         dbClient.getTestFeatureDao().insert(testReport.getTestFeatures());
-        for (TestFeatureDto feature: testReport.getTestFeatures()){
+        for (TestFeatureDto feature : testReport.getTestFeatures()) {
             feature.setChildrenzParentId();
             dbClient.getTestScenarioDao().insert(feature.getTestScenarios());
-            for (TestScenarioDto scenario: feature.getTestScenarios()){
+            for (TestScenarioDto scenario : feature.getTestScenarios()) {
                 scenario.setChildrenzParentId();
                 dbClient.getTestStepDao().insert(scenario.getTestSteps());
             }
@@ -45,13 +45,13 @@ public class TestReportService {
     }
 
 
-    public TestReportDto getReport(String projectId){
+    public TestReportDto getReport(String projectId) {
         TestReportDto report = dbClient.getTestReportDao().getLatestByProjectId(projectId);
         List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentId(report.getId());
         report.setTestFeatures(features);
-        for (TestFeatureDto feature: features){
+        for (TestFeatureDto feature : features) {
             feature.setTestScenarios(dbClient.getTestScenarioDao().getByParentId(feature.getId()));
-            for(TestScenarioDto scenraio: feature.getTestScenarios()){
+            for (TestScenarioDto scenraio : feature.getTestScenarios()) {
                 scenraio.setTestSteps(dbClient.getTestStepDao().getByParentId(scenraio.getId()));
             }
 

@@ -2,27 +2,22 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.CucumberScanner;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.junit.Test;
-import org.sonar.api.utils.text.JsonWriter;
 
 import java.io.IOException;
-import java.io.StringWriter;
 
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by qmxie on 5/16/16.
  */
-public class CucumberScannerTest extends BaseTest{
+public class CucumberScannerTest extends BaseTest {
 
     @Test
     public void should_return_correct_cucumber_test_report() throws IOException {
@@ -74,8 +69,8 @@ public class CucumberScannerTest extends BaseTest{
     }
 
     @Test
-    public void should_get_same_test_report_after_save_and_get() throws IOException{
-        JXPathMap ctx = new JXPathMap(new ObjectMapper().readValue(getClass().getResourceAsStream("/cucumber_report.json"), Object.class));
+    public void should_get_same_test_report_after_save_and_get() throws IOException {
+        JXPathMap ctx = new JXPathMap(new ObjectMapper().readValue(getClass().getResourceAsStream("/cucumber_report_2.json"), Object.class));
         TestReportDto testReport = new TestReportDto().setProjectId("test-pipeline-3").setBuildLabel("203");
         CucumberScanner cucumberAnalyzer = new CucumberScanner(Sets.newHashSet("@api_test"), Sets.newHashSet("@ui_test"));
 
@@ -89,6 +84,6 @@ public class CucumberScannerTest extends BaseTest{
         assertEquals(testReport, ret);
         assertNotSame(testReport, ret);
         assertEquals(testReport.toJson(), ret.toJson());
-        System.out.println(ret.toJson());
+        System.out.println(testReport.toJson());
     }
 }

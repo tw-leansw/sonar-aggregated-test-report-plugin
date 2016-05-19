@@ -1,7 +1,5 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
-import com.sun.xml.internal.rngom.parse.host.Base;
-
 import java.io.StringWriter;
 import java.util.List;
 
@@ -18,9 +16,9 @@ public abstract class BaseDto {
 
     public abstract <T extends BaseDto> List<T> getChilds();
 
-    public void setChildrenzParentId(){
-        for(Object dto:getChilds()){
-            ((BaseDto)dto).setParentId(getId());
+    public void setChildrenzParentId() {
+        for (Object dto : getChilds()) {
+            ((BaseDto) dto).setParentId(getId());
         }
     }
 
@@ -29,7 +27,7 @@ public abstract class BaseDto {
         return this;
     }
 
-    public String toJson(){
+    public String toJson() {
         StringWriter stringWriter = new StringWriter();
         BaseJsonWriter jsonWriter = BaseJsonWriter.of(stringWriter);
         this.writeJson(jsonWriter);

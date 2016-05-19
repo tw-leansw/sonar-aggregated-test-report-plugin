@@ -12,7 +12,6 @@ import org.sonar.db.DbSession;
 import org.sonar.db.DefaultDatabase;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class SonarAggregatedTestReportWebService implements org.sonar.api.server.ws.WebService {
 

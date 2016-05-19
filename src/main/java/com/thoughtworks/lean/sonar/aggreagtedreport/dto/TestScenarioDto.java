@@ -14,9 +14,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.SKIPPED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 
 /**
  * Created by qmxie on 5/13/16.
@@ -88,7 +86,7 @@ public class TestScenarioDto extends BaseDto {
         calculateDuration();
         Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
                 with(this.getTestSteps())
-                .extract(on(TestStepDto.class).getResultType()));
+                        .extract(on(TestStepDto.class).getResultType()));
 
         int stepPassed = multiset.count(PASSED);
         int stepFailed = multiset.count(FAILED);

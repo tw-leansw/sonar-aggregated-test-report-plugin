@@ -18,7 +18,7 @@ public class TestFeatureDao extends AbstractDao<TestFeatureDto> {
     public List<TestFeatureDto> getByReportId(int id) {
         DbSession session = this.getDbSession();
         try {
-            return ((TestFeatureMapper)getMapper(session)).getByReportId(id);
+            return ((TestFeatureMapper) getMapper(session)).getByReportId(id);
         } finally {
             MyBatis.closeQuietly(session);
         }

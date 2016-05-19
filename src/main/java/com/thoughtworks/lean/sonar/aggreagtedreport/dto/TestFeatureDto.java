@@ -6,10 +6,6 @@ import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.ibatis.type.Alias;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,9 +14,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.flatten;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.SKIPPED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 
 public class TestFeatureDto extends BaseDto {
     private int id;
@@ -38,6 +32,10 @@ public class TestFeatureDto extends BaseDto {
     private String buildLabel;
     private Date createTime;
     private Date executionTime;
+
+    public TestFeatureDto() {
+        this.createTime = new Date();
+    }
 
     @Override
     public int getId() {
@@ -228,7 +226,7 @@ public class TestFeatureDto extends BaseDto {
         return this;
     }
 
-    public List<TestScenarioDto> getScenarios(ResultType type){
+    public List<TestScenarioDto> getScenarios(ResultType type) {
         return null;
     }
 
@@ -238,6 +236,6 @@ public class TestFeatureDto extends BaseDto {
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
         return flatten(with(this.testScenarios)
-                        .extract(on(TestScenarioDto.class).getStepsByResultType(type)));
+                .extract(on(TestScenarioDto.class).getStepsByResultType(type)));
     }
 }
