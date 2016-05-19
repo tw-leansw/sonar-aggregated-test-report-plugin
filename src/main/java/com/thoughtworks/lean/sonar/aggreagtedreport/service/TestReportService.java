@@ -32,13 +32,13 @@ public class TestReportService {
 
     public void save(TestReportDto testReport) {
         dbClient.getTestReportDao().insert(testReport);
-        testReport.setParentIds();
+        testReport.setChildrenzParentId();
         dbClient.getTestFeatureDao().insert(testReport.getTestFeatures());
         for (TestFeatureDto feature: testReport.getTestFeatures()){
-            feature.setParentIds();
+            feature.setChildrenzParentId();
             dbClient.getTestScenarioDao().insert(feature.getTestScenarios());
             for (TestScenarioDto scenario: feature.getTestScenarios()){
-                scenario.setParentIds();
+                scenario.setChildrenzParentId();
                 dbClient.getTestStepDao().insert(scenario.getTestSteps());
             }
         }

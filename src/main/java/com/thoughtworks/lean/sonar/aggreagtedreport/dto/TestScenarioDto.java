@@ -1,7 +1,9 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import org.hamcrest.Matchers;
@@ -12,6 +14,9 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.SKIPPED;
 
 /**
  * Created by qmxie on 5/13/16.
@@ -75,8 +80,23 @@ public class TestScenarioDto extends BaseDto {
 
     public TestScenarioDto setTestSteps(List<TestStepDto> testSteps) {
         this.testSteps = testSteps;
-        calculateDuration();
+        calculatingOtherProps();
         return this;
+    }
+
+    private void calculatingOtherProps() {
+        calculateDuration();
+        Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
+                with(this.getTestSteps())
+                .extract(on(TestStepDto.class).getResultType()));
+
+        int stepPassed = multiset.count(PASSED);
+        int stepFailed = multiset.count(FAILED);
+        if (stepFailed + stepPassed == 0) {
+            this.setResultType(SKIPPED);
+        } else {
+            this.setResultType(stepPassed == 0 ? FAILED : PASSED);
+        }
     }
 
     @Override

@@ -78,8 +78,12 @@ public class TestReportDto extends BaseDto {
 
     public TestReportDto setTestFeatures(List<TestFeatureDto> testFeatures) {
         this.testFeatures = testFeatures;
-        calculateDuration();
+        calculatingOtherProps();
         return this;
+    }
+
+    private void calculatingOtherProps() {
+        calculateDuration();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
@@ -16,6 +18,9 @@ import java.util.List;
 import static ch.lambdaj.Lambda.flatten;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.FAILED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.PASSED;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.SKIPPED;
 
 public class TestFeatureDto extends BaseDto {
     private int id;
@@ -162,8 +167,18 @@ public class TestFeatureDto extends BaseDto {
 
     public TestFeatureDto setTestScenarios(List<TestScenarioDto> testScenarios) {
         this.testScenarios = testScenarios;
-        calculateDuration();
+        calculatingOtherProps();
         return this;
+    }
+
+    private void calculatingOtherProps() {
+        calculateDuration();
+        Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
+                with(this.getTestScenarios())
+                        .extract(on(TestScenarioDto.class).getResultType()));
+        this.setPassedScenarios(multiset.count(PASSED));
+        this.setFailedScenarios(multiset.count(FAILED));
+        this.setSkippedScenarios(multiset.count(SKIPPED));
     }
 
     @Override

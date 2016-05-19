@@ -4,6 +4,7 @@ import ch.lambdaj.collection.LambdaList;
 import ch.lambdaj.function.convert.Converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 
+import javax.swing.plaf.multi.MultiScrollBarUI;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +81,6 @@ public class CucumberScanner {
             testFeatureDto.setTestType(testType);
             testFeatureDto.setTestScenarios(wrappedScenarios.convert(analyseScenario));
 
-
             return testFeatureDto;
         }
     };
@@ -114,18 +115,7 @@ public class CucumberScanner {
                         }
                     });
 
-            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(stepDtos
-                    .extract(on(TestStepDto.class).getResultType()));
-
-            int stepPassed = multiset.count(PASSED);
-            int stepFailed = multiset.count(FAILED);
-            if (stepFailed + stepPassed == 0) {
-                scenarioDto.setResultType(SKIPPED);
-            } else {
-                scenarioDto.setResultType(stepPassed == 0 ? FAILED : PASSED);
-            }
             scenarioDto.setTestSteps(stepDtos);
-            //testReport.addScenario(testType, scenarioDto);
             return scenarioDto;
 
         }

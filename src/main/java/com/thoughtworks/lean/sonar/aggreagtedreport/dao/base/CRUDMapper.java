@@ -1,6 +1,5 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
