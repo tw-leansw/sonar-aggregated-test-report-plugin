@@ -112,7 +112,6 @@ public class TestReportTest extends BaseDaoTest{
 
     @Test
     public void should_test_report_save_method_work(){
-        TestReport report = new TestReport("test-pipeline-1","build-102");
 
     }
 
