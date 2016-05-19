@@ -21,10 +21,8 @@ public class TestReport {
     private TestReportDto testReportDto;
     private String projectId;
     private String buildLabel;
-    private Map<TestType, List<TestScenarioDto>> details;
 
     public TestReport() {
-        this.details = Maps.newHashMap();
         this.testReportDto = new TestReportDto()
                 .setProjectId(this.projectId)
                 .setBuildLabel(this.buildLabel)
@@ -35,7 +33,6 @@ public class TestReport {
 
 
         this.projectId = projectId;
-        this.details = Maps.newHashMap();
         this.buildLabel = buildLabel;
         this.testReportDto = new TestReportDto()
                 .setProjectId(this.projectId)
@@ -52,56 +49,28 @@ public class TestReport {
         return this;
     }
 
-
-    public Map<TestType, List<TestScenarioDto>> getDetails() {
-        return details;
-    }
-
-    public void addScenario(TestType testType, TestScenarioDto scenarioDto) {
-        if (this.details.get(testType) == null) {
-            this.details.put(testType, Lists.<TestScenarioDto>newArrayList());
-        }
-        this.details.get(testType).add(scenarioDto);
-    }
-
     public void addTestFeature(TestFeatureDto testFeatureDto) {
-        for (TestScenarioDto testScenarioDto : testFeatureDto.getTestScenarios()) {
-            addScenario(testFeatureDto.getTestType(), testScenarioDto);
-        }
+        this.testReportDto.addTestFeature(testFeatureDto);
     }
 
-    public void setTestFeatures(List<TestFeatureDto> testFeatureDtos) {
-        for (TestFeatureDto testFeatureDto : testFeatureDtos) {
-            addTestFeature(testFeatureDto);
-        }
-        testReportDto.setTestFeatures(testFeatureDtos);
-    }
 
-    private List<TestScenarioDto> getOrDefault(TestType testType, List<TestScenarioDto> defaultValue) {
-        List<TestScenarioDto> retValue = this.details.get(testType);
-        return retValue == null ? defaultValue : retValue;
 
-    }
 
-    public List<TestScenarioDto> getScenarios(TestType type) {
-        return getOrDefault(type, Collections.<TestScenarioDto>emptyList());
-    }
-
-    public int getScenariosNumber(TestType type) {
-        return this.getScenarios(type).size();
-    }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
-        List<TestStepDto> res = Lists.newArrayList();
-        for (List<TestScenarioDto> scenarioDtos : this.details.values()) {
-            res.addAll(Lambda.<TestStepDto>flatten(
-                    with(scenarioDtos)
-                            .extract(on(TestScenarioDto.class).getStepsByResultType(type))));
-        }
-        return res;
+        return this.testReportDto.getStepsByResultType(type);
     }
 
     public TestReportDto getTestReportDto() {
         return testReportDto;
+    }
+
+    public TestReport setTestFeatures(List<TestFeatureDto> testFeatures) {
+        this.testReportDto.setTestFeatures(testFeatures);
+        return this;
+    }
+
+    public int getScenariosNumber(TestType type) {
+        return this.testReportDto.getScenariosNumber(type);
     }
 }

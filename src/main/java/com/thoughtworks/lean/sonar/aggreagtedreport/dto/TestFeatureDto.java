@@ -2,6 +2,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static ch.lambdaj.Lambda.flatten;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
@@ -194,5 +196,23 @@ public class TestFeatureDto extends BaseDto {
     @Override
     public int hashCode() {
         return Objects.hashCode(id, reportId, frameworkType, testType, name, description, duration, passedScenarios, failedScenarios, skippedScenarios, buildLabel, createTime, executionTime);
+    }
+
+    public TestFeatureDto addScenario(TestScenarioDto scenario) {
+        this.testScenarios.add(scenario);
+        return this;
+    }
+
+    public List<TestScenarioDto> getScenarios(ResultType type){
+        return null;
+    }
+
+    public int getScenariosNumber() {
+        return this.testScenarios.size();
+    }
+
+    public List<TestStepDto> getStepsByResultType(ResultType type) {
+        return flatten(with(this.testScenarios)
+                        .extract(on(TestScenarioDto.class).getStepsByResultType(type)));
     }
 }

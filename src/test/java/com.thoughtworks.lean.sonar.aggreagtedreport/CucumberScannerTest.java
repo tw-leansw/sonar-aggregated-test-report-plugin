@@ -65,7 +65,7 @@ public class CucumberScannerTest {
         assertEquals(5, testReport.getStepsByResultType(PASSED).size());
         assertEquals(1, testReport.getStepsByResultType(FAILED).size());
         assertEquals(2, testReport.getStepsByResultType(SKIPPED).size());
-        //
+
         assertTrue(testReport.getTestReportDto().getDuration() > 0);
     }
 }

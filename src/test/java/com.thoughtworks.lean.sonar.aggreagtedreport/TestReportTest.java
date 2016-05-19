@@ -1,11 +1,15 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.google.common.collect.Lists;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestReport;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runners.model.FrameworkField;
+
+import java.util.Date;
+import java.util.List;
 
 import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
 import static org.junit.Assert.assertEquals;
@@ -13,11 +17,11 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by qmxie on 5/16/16.
  */
-public class TestReportTest {
+public class TestReportTest extends BaseDaoTest{
     TestReport testReport;
 
     @Before
-    public void setUp() {
+    public void setUpReport() {
         testReport = new TestReport();
 
         // scenario 1
@@ -61,13 +65,34 @@ public class TestReportTest {
 
         // s1 belongs to unit_test
         // so we have 3 passed , 1 failed and 2 skipped steps in unit_test
-        testReport.addScenario(TestType.UNIT_TEST, testScenario1);
+
+        TestFeatureDto testFeatureDto1 =
+                new TestFeatureDto()
+                        .setTestType(TestType.UNIT_TEST)
+                        .setBuildLabel("build101")
+                        .setFrameworkType(TestFrameworkType.CUCUMBER)
+                        .setCreateTime(new Date())
+                        .addScenario(testScenario1);
 
         // s2, s3, s4 belongs to component_test
         // so we have 3 passed and 4 skipped steps
-        testReport.addScenario(TestType.COMPONENT_TEST, testScenario2);
-        testReport.addScenario(TestType.COMPONENT_TEST, testScenario3);
-        testReport.addScenario(TestType.COMPONENT_TEST, testScenario4);
+
+        TestFeatureDto testFeatureDto2 =
+                new TestFeatureDto()
+                        .setTestType(TestType.COMPONENT_TEST)
+                        .setBuildLabel("build101")
+                        .setFrameworkType(TestFrameworkType.JUNIT)
+                        .setCreateTime(new Date())
+                        .addScenario(testScenario2)
+                        .addScenario(testScenario3)
+                        .addScenario(testScenario4);
+
+        List<TestFeatureDto> featureDtoList = Lists.newArrayList();
+        featureDtoList.add(testFeatureDto1);
+        featureDtoList.add(testFeatureDto2);
+
+        testReport.setTestFeatures(featureDtoList);
+        System.out.println("");
 
     }
 
@@ -79,21 +104,16 @@ public class TestReportTest {
     }
 
     @Test
-    public void should_get_correct_step_number_from_scenario() {
-        assertEquals(3, testReport.getScenarios(TestType.UNIT_TEST).get(0).getStepsByResultType(PASSED).size());
-        assertEquals(1, testReport.getScenarios(TestType.UNIT_TEST).get(0).getStepsByResultType(FAILED).size());
-        assertEquals(2, testReport.getScenarios(TestType.UNIT_TEST).get(0).getStepsByResultType(SKIPPED).size());
-
-        assertEquals(0, testReport.getScenarios(TestType.COMPONENT_TEST).get(0).getStepsByResultType(FAILED).size());
-        assertEquals(0, testReport.getScenarios(TestType.COMPONENT_TEST).get(0).getStepsByResultType(SKIPPED).size());
-    }
-
-    @Test
     public void should_get_correct_step_number_from_test_report() {
-        System.out.println("");
         assertEquals(6, testReport.getStepsByResultType(PASSED).size());
         assertEquals(1, testReport.getStepsByResultType(FAILED).size());
         assertEquals(6, testReport.getStepsByResultType(SKIPPED).size());
+    }
+
+    @Test
+    public void should_test_report_save_method_work(){
+        TestReport report = new TestReport("test-pipeline-1","build-102");
+
     }
 
 }

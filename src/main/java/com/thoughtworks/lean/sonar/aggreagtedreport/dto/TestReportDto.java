@@ -2,12 +2,15 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.*;
 import static ch.lambdaj.collection.LambdaCollections.with;
 
 public class TestReportDto extends BaseDto {
@@ -20,9 +23,6 @@ public class TestReportDto extends BaseDto {
     private Date executionTime;
 
     List<TestFeatureDto> testFeatures = new LinkedList<>();
-
-
-
 
     public String getBuildLabel() {
         return buildLabel;
@@ -113,5 +113,21 @@ public class TestReportDto extends BaseDto {
     @Override
     public int hashCode() {
         return Objects.hashCode(id, projectId, buildLabel, duration, createTime, executionTime);
+    }
+
+    public void addTestFeature(TestFeatureDto testFeatureDto) {
+        this.testFeatures.add(testFeatureDto);
+    }
+
+    public int getScenariosNumber(TestType type) {
+        return sum(
+                with(this.testFeatures).clone()
+                        .retain(Matchers.hasProperty("testType",Matchers.equalTo(type)))
+                        .extract(on(TestFeatureDto.class).getScenariosNumber())).intValue();
+    }
+
+    public List<TestStepDto> getStepsByResultType(ResultType type) {
+        return flatten(with(this.testFeatures)
+                .extract(on(TestFeatureDto.class).getStepsByResultType(type)));
     }
 }
