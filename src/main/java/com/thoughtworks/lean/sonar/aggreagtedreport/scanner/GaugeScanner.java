@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
 /**
  * Created by qmxie on 5/16/16.
