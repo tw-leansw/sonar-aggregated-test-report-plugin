@@ -17,8 +17,6 @@ import java.util.Arrays;
 
 public class SonarAggregatedTestReportWebService implements org.sonar.api.server.ws.WebService {
 
-    private MyDbClient myDbClient;
-
     private TestReportService reportService;
 
 
@@ -38,15 +36,13 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
                         json.close();
                     }
                 });
-        controller.createAction("report/latest").setHandler(new RequestHandler() {
+        controller.createAction("testreport/latest").setHandler(new RequestHandler() {
             @Override
             public void handle(Request request, Response response) throws Exception {
-                DbSession dbSession = myDbClient.openSession(true);
                 BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
                 TestReportDto report = reportService.getReport(request.param("project"));
                 jsonWriter.writeObject(report);
                 jsonWriter.close();
-                dbSession.close();
             }
         }).createParam("project").setRequired(true);
         controller.done();
