@@ -38,6 +38,7 @@ public class GaugeScannerTest {
         //
         assertTrue(testReport.getDuration() > 0);
 
+
     }
 
     @Test

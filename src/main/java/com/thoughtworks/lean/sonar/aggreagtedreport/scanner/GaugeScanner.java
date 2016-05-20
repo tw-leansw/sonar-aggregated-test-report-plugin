@@ -70,8 +70,10 @@ public class GaugeScanner {
 
             List<Map> specItems = spec.selectNodes("/protoSpec/items[@itemType='4']/scenario");
             LambdaList<JXPathMap> scenarios = with(specItems).convert(JXPathMap.toJxPathFunction);
-            testFeatureDto.setTestScenarios(scenarios.convert(analyseScenario));
-            testFeatureDto.setTestType(testType);
+            testFeatureDto.setTestType(testType)
+                    .setFrameworkType(TestFrameworkType.GAUGE)
+                    .setName(specName)
+                    .setTestScenarios(scenarios.convert(analyseScenario));
             return testFeatureDto;
         }
     };
@@ -102,16 +104,6 @@ public class GaugeScanner {
                             return testStepDto;
                         }
                     });
-
-
-            Boolean scenarioSkipped = scenario.get("skipped");
-            Boolean scenarioFailed = scenario.get("failed");
-            if (scenarioSkipped) {
-                scenarioDto.setResultType(SKIPPED);
-            } else {
-                scenarioDto.setResultType(scenarioFailed ? FAILED : PASSED);
-            }
-
             scenarioDto.setTestSteps(stepDtos);
             return scenarioDto;
         }
