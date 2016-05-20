@@ -4,8 +4,6 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +12,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.flatten;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
 public class TestFeatureDto extends BaseDto {
     private int id;

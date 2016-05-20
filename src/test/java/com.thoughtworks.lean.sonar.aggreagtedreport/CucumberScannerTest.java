@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 import static org.junit.Assert.*;
 
 /**

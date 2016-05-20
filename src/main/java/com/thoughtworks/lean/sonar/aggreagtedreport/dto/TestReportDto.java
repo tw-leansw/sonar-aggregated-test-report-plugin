@@ -2,7 +2,6 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dto;
 
 import com.google.common.base.Objects;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import org.hamcrest.Matchers;
 
 import java.util.Date;

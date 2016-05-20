@@ -2,14 +2,14 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.TestFrameworkType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFrameworkType;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
 import java.util.List;
 
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 import static org.junit.Assert.assertEquals;
 
 /**

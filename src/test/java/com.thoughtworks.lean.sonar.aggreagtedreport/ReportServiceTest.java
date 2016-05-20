@@ -5,7 +5,7 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Test;
 
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 

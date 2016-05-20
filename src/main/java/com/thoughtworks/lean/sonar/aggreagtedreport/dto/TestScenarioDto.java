@@ -5,7 +5,6 @@ import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
-import com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType;
 import org.hamcrest.Matchers;
 
 import java.util.Collections;
@@ -14,7 +13,7 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.Lambda.sum;
 import static ch.lambdaj.collection.LambdaCollections.with;
-import static com.thoughtworks.lean.sonar.aggreagtedreport.model.ResultType.*;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
 /**
  * Created by qmxie on 5/13/16.
