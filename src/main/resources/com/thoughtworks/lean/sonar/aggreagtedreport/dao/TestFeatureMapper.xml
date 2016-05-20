@@ -14,7 +14,6 @@
         feature.passed_scenarios as passedScenarios,
         feature.failed_scenarios as failedScenarios,
         feature.skipped_scenarios as skippedScenarios,
-        feature.build_label as buildLabel,
         feature.create_time as createTime,
         feature.execution_time as executionTime
     </sql>
@@ -55,7 +54,6 @@
             ,passed_scenarios
             ,failed_scenarios
             ,skipped_scenarios
-            ,build_label
             ,create_time
             ,execution_time)
         VALUES (
@@ -68,7 +66,6 @@
             #{passedScenarios,jdbcType=INTEGER},
             #{failedScenarios,jdbcType=INTEGER},
             #{skippedScenarios,jdbcType=INTEGER},
-            #{buildLabel,jdbcType=VARCHAR},
             #{createTime,jdbcType=TIMESTAMP},
             #{executionTime,jdbcType=TIMESTAMP});
     </insert>
@@ -93,7 +90,6 @@
             passed_scenarios = #{passedScenarios,jdbcType=INTEGER},
             failed_scenarios = #{failedScenarios,jdbcType=INTEGER},
             skipped_scenarios = #{skippedScenarios,jdbcType=INTEGER},
-            build_label = #{buildLabel,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},
             execution_time = #{executionTime,jdbcType=TIMESTAMP}
         <where>

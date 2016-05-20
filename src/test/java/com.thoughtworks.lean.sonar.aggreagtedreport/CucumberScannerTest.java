@@ -70,7 +70,7 @@ public class CucumberScannerTest extends BaseTest {
 
     @Test
     public void should_get_same_test_report_after_save_and_get() throws IOException {
-        JXPathMap ctx = new JXPathMap(new ObjectMapper().readValue(getClass().getResourceAsStream("/cucumber_report_2.json"), Object.class));
+        JXPathMap ctx = new JXPathMap(new ObjectMapper().readValue(getClass().getResourceAsStream("/cucumber_report_3.json"), Object.class));
         TestReportDto testReport = new TestReportDto().setProjectId("test-pipeline-3").setBuildLabel("203");
         CucumberScanner cucumberAnalyzer = new CucumberScanner(Sets.newHashSet("@api_test"), Sets.newHashSet("@ui_test"));
 

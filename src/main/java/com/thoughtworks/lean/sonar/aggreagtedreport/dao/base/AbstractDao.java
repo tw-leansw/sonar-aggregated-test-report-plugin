@@ -133,5 +133,4 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
         }
     }
 
-
 }

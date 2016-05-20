@@ -23,7 +23,6 @@ CREATE TABLE `lean_test_feature` (
   `passed_scenarios` INT NULL,
   `failed_scenarios` INT NULL,
   `skipped_scenarios` INT NULL,
-  `build_label` VARCHAR(45) NULL,
   `create_time` DATETIME NULL,
   `execution_time` DATETIME NULL,
   PRIMARY KEY (`id`));

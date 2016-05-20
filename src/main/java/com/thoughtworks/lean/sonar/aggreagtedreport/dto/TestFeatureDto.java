@@ -29,7 +29,6 @@ public class TestFeatureDto extends BaseDto {
     private int failedScenarios;
     private int skippedScenarios;
 
-    private String buildLabel;
     private Date createTime;
     private Date executionTime;
 
@@ -102,16 +101,6 @@ public class TestFeatureDto extends BaseDto {
         this.name = name;
         return this;
     }
-
-    public String getBuildLabel() {
-        return buildLabel;
-    }
-
-    public TestFeatureDto setBuildLabel(String buildLabel) {
-        this.buildLabel = buildLabel;
-        return this;
-    }
-
 
     public Date getExecutionTime() {
         return executionTime;
@@ -211,14 +200,13 @@ public class TestFeatureDto extends BaseDto {
                 testType == that.testType &&
                 Objects.equal(name, that.name) &&
                 Objects.equal(description, that.description) &&
-                Objects.equal(buildLabel, that.buildLabel) &&
                 Objects.equal(createTime, that.createTime) &&
                 Objects.equal(executionTime, that.executionTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, reportId, frameworkType, testType, name, description, duration, passedScenarios, failedScenarios, skippedScenarios, buildLabel, createTime, executionTime);
+        return Objects.hashCode(id, reportId, frameworkType, testType, name, description, duration, passedScenarios, failedScenarios, skippedScenarios, createTime, executionTime);
     }
 
     public TestFeatureDto addScenario(TestScenarioDto scenario) {

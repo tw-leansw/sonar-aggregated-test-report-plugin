@@ -5,6 +5,7 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.exception.LeanPluginException;
 import org.sonar.api.config.Settings;
 import org.sonar.db.DefaultDatabase;
 
@@ -47,6 +48,9 @@ public class TestReportService {
 
     public TestReportDto getReport(String projectId) {
         TestReportDto report = dbClient.getTestReportDao().getLatestByProjectId(projectId);
+        if (report == null){
+            throw new LeanPluginException("No report found for project ID: " + projectId);
+        }
         List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentId(report.getId());
         report.setTestFeatures(features);
         for (TestFeatureDto feature : features) {
