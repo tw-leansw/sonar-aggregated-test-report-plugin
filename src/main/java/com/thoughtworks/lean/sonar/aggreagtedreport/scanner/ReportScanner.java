@@ -15,15 +15,18 @@ public class ReportScanner {
     //JunitScanner junitScanner;
     private TestReportDto report = new TestReportDto();
     private TestReportService reportService;
+    private String buildLabel;
 
     public ReportScanner(Settings settings, FileSystem projectFileSystem) {
         cucumberScanner = new CucumberScanner(settings, projectFileSystem);
         gaugeScanner = new GaugeScanner(settings, projectFileSystem);
         reportService = new TestReportService(settings);
+        buildLabel = settings.getString("lean.aggregated.test.project.build");
     }
 
     public void scanReport(Project project){
         this.report.setProjectId(project.getKey());
+        this.report.setBuildLabel(this.buildLabel);
         cucumberScanner.analyse(report);
         //gaugeScanner.analyse(report);
         reportService.save(this.report);

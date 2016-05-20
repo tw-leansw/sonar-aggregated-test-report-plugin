@@ -4,6 +4,8 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
@@ -17,20 +19,17 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
 
     private MyDbClient myDbClient;
 
+    private TestReportService reportService;
+
 
     public SonarAggregatedTestReportWebService(Settings settings) {
-        DefaultDatabase defaultDatabase = new DefaultDatabase(settings);
-        defaultDatabase.start();
-        Mybatis mybatis = new Mybatis(defaultDatabase);
-        myDbClient = new MyDbClient(mybatis);
-        mybatis.start();
-
+        reportService = new TestReportService(settings);
     }
 
     @Override
     public void define(final Context context) {
 
-        NewController controller = context.createController("api/leansw");
+        NewController controller = context.createController("api/lean");
         controller.createAction("hello")
                 .setHandler(new RequestHandler() {
                     public void handle(Request request, Response response) throws Exception {
@@ -39,17 +38,17 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
                         json.close();
                     }
                 });
-        controller.createAction("mydata").setHandler(new RequestHandler() {
+        controller.createAction("report/latest").setHandler(new RequestHandler() {
             @Override
             public void handle(Request request, Response response) throws Exception {
                 DbSession dbSession = myDbClient.openSession(true);
                 BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
-
-                //jsonWriter.writeCollection(list);
+                TestReportDto report = reportService.getReport(request.param("project"));
+                jsonWriter.writeObject(report);
                 jsonWriter.close();
                 dbSession.close();
             }
-        });
+        }).createParam("project").setRequired(true);
         controller.done();
     }
 }
