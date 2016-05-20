@@ -38,9 +38,9 @@ public class CucumberScanner {
 
     public CucumberScanner(Settings settings, FileSystem fs) {
         this.fileSystem = fs;
-        this.reportPath = settings.getString("llean.aggregated.test.cucumber.report.path");
-        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.integration.test.tags"));
-        this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.functional.test.tags"));
+        this.reportPath = settings.getString("lean.aggregated.test.cucumber.report.path");
+        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.cucumber.integration.test.tags"));
+        this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.cucumber.functional.test.tags"));
 
     }
 

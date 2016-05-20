@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JUnitUtil;
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.Matchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class JUnitScanner {
     String reportPath;
     private Set<String> componentPatterns;
     private Set<String> functionalPatterns;
+    private Set<String> excludePatterns;
     FileSystem fileSystem;
 
     public JUnitScanner(Set<String> componentTestTags, Set<String> functionalTestTags) {
@@ -42,6 +44,7 @@ public class JUnitScanner {
     public JUnitScanner(Settings settings, FileSystem fs) {
         this.fileSystem = fs;
         this.reportPath = settings.getString("lean.aggregated.test.junit.report.path");
+        this.excludePatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.exclude.test.patterns"));
         this.componentPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.integration.test.tags"));
         this.functionalPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.functional.test.tags"));
     }
@@ -50,7 +53,7 @@ public class JUnitScanner {
         File dir = FileUtils.getFile(getClass().getResource(this.reportPath).getFile());
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
-            testreport.addTestFeatures(with(files).convert(analyseFile));
+            testreport.addTestFeatures(with(files).convert(analyseFile).retain(Matchers.notNullValue()));
         } else {
             logger.warn("junit report directory is not exsits!");
         }
@@ -60,6 +63,9 @@ public class JUnitScanner {
         @Override
         public TestFeatureDto convert(File file) {
             String testFeature = JUnitUtil.getTestFeatureName(file.getName());
+            if (isExcluded(testFeature)) {
+                return null;
+            }
             TestFeatureDto testFeatureDto = new TestFeatureDto()
                     .setName(testFeature)
                     .setFrameworkType(TestFrameworkType.JUNIT);
@@ -71,7 +77,6 @@ public class JUnitScanner {
             } catch (IOException e) {
                 logger.warn("read junit report file error!");
             }
-
 
             if (isFunctionalTest(testFeature)) {
                 testFeatureDto.setTestType(TestType.FUNCTIONAL_TEST);
@@ -114,6 +119,9 @@ public class JUnitScanner {
     }
 
     public boolean checkPatterns(final String str, Set<String> patterns) {
+        if (patterns == null){
+            return false;
+        }
         List<String> pattenList = Lists.newArrayList(patterns.iterator());
         List<Boolean> bools = with(pattenList).convert(new Converter<String, Boolean>() {
             @Override
@@ -137,6 +145,10 @@ public class JUnitScanner {
 
     public boolean isFunctionalTest(String testCase) {
         return checkPatterns(testCase, this.functionalPatterns);
+    }
+
+    public boolean isExcluded(String testCase){
+        return checkPatterns(testCase, this.excludePatterns);
     }
 
     public JUnitScanner setReportPath(String reportPath) {
