@@ -1,5 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.ReportScanner;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -19,7 +20,8 @@ public class SonarAggregatedTestReportSensor implements Sensor {
     }
 
     public void analyse(Project project, SensorContext sensorContext) {
-        //
+        ReportScanner scanner = new ReportScanner(this.settings,this.fileSystem);
+        scanner.scanReport(project);
     }
 
     public boolean shouldExecuteOnProject(Project project) {
