@@ -67,7 +67,6 @@ public class TestReportDtoTest extends BaseTest {
         TestFeatureDto testFeatureDto1 =
                 new TestFeatureDto()
                         .setTestType(TestType.UNIT_TEST)
-                        .setBuildLabel("build101")
                         .setFrameworkType(TestFrameworkType.CUCUMBER)
                         .setCreateTime(new Date())
                         .addScenario(testScenario1);
@@ -78,7 +77,6 @@ public class TestReportDtoTest extends BaseTest {
         TestFeatureDto testFeatureDto2 =
                 new TestFeatureDto()
                         .setTestType(TestType.COMPONENT_TEST)
-                        .setBuildLabel("build101")
                         .setFrameworkType(TestFrameworkType.JUNIT)
                         .setCreateTime(new Date())
                         .addScenario(testScenario2)

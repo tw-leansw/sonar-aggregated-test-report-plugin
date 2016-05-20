@@ -84,6 +84,5 @@ public class CucumberScannerTest extends BaseTest {
         assertEquals(testReport, ret);
         assertNotSame(testReport, ret);
         assertEquals(testReport.toJson(), ret.toJson());
-        System.out.println(testReport.toJson());
     }
 }
