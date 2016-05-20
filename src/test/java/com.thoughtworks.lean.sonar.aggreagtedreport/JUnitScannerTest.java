@@ -6,6 +6,8 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.JUnitScanner;
 import org.junit.Test;
 
+import java.io.File;
+
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -20,7 +22,7 @@ public class JUnitScannerTest {
                 Sets.newHashSet("^FT.*$", "^UI_*$"))
                 .setReportPath("/surefire-reports");
         TestReportDto testsReport = new TestReportDto();
-        jUnitScanner.analyse(testsReport);
+        jUnitScanner.analyse(testsReport, new File(getClass().getResource("/surefire-reports").getFile()));
 
         // then
         assertEquals(18, testsReport.getScenariosNumber(TestType.UNIT_TEST));

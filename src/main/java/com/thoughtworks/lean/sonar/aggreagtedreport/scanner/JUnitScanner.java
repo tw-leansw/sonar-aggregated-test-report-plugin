@@ -50,8 +50,11 @@ public class JUnitScanner {
     }
 
     public void analyse(TestReportDto testreport) {
-
         File dir = fileSystem.resolvePath(reportPath);
+        analyse(testreport, dir);
+    }
+
+    public void analyse(TestReportDto testreport, File dir){
         LOGGER.debug("report path: " + this.reportPath);
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
