@@ -16,7 +16,7 @@ import org.sonar.api.resources.Project;
 public class ReportScanner {
     private CucumberScanner cucumberScanner;
     private GaugeScanner gaugeScanner;
-    //JunitScanner junitScanner;
+    private JUnitScanner junitScanner;
     private TestReportDto report = new TestReportDto();
     private TestReportService reportService;
     private String buildLabel;
@@ -29,6 +29,7 @@ public class ReportScanner {
         }
         cucumberScanner = new CucumberScanner(settings, projectFileSystem);
         gaugeScanner = new GaugeScanner(settings, projectFileSystem);
+        junitScanner = new JUnitScanner(settings, projectFileSystem);
         reportService = new TestReportService(settings);
     }
 
@@ -36,8 +37,11 @@ public class ReportScanner {
         this.report.setProjectId(project.getKey());
         this.report.setBuildLabel(this.buildLabel);
         LOGGER.debug("scan Report for project: " + project.getKey() + " ,build: " + this.buildLabel);
+
         cucumberScanner.analyse(report);
-        //gaugeScanner.analyse(report);
+        gaugeScanner.analyse(report);
+        junitScanner.analyse(report);
+
         reportService.save(this.report);
     }
 

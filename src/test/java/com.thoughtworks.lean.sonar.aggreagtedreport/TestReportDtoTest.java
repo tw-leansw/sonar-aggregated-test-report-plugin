@@ -2,7 +2,6 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFrameworkType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -87,7 +86,7 @@ public class TestReportDtoTest extends BaseTest {
         featureDtoList.add(testFeatureDto1);
         featureDtoList.add(testFeatureDto2);
 
-        testReport.setTestFeatures(featureDtoList);
+        testReport.addTestFeatures(featureDtoList);
 
     }
 

@@ -48,11 +48,11 @@ public class TestReportService {
 
     public TestReportDto getReport(String projectId) {
         TestReportDto report = dbClient.getTestReportDao().getLatestByProjectId(projectId);
-        if (report == null){
+        if (report == null) {
             throw new LeanPluginException("No report found for project ID: " + projectId);
         }
         List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentId(report.getId());
-        report.setTestFeatures(features);
+        report.addTestFeatures(features);
         for (TestFeatureDto feature : features) {
             feature.setTestScenarios(dbClient.getTestScenarioDao().getByParentId(feature.getId()));
             for (TestScenarioDto scenraio : feature.getTestScenarios()) {

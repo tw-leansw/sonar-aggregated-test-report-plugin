@@ -5,8 +5,6 @@ import ch.lambdaj.function.convert.Converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFrameworkType;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.hamcrest.Matchers;
 import org.slf4j.Logger;
@@ -40,7 +38,7 @@ public class CucumberScanner {
 
     public CucumberScanner(Settings settings, FileSystem fs) {
         this.fileSystem = fs;
-        this.reportPath = settings.getString("lean.testpyramid.cucumber.report.path");
+        this.reportPath = settings.getString("llean.aggregated.test.cucumber.report.path");
         this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.integration.test.tags"));
         this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.cucumber.functional.test.tags"));
 
@@ -57,7 +55,7 @@ public class CucumberScanner {
     public void analyse(JXPathMap jxPathMap, TestReportDto testReport) {
         List<Map> features = jxPathMap.get("/");
         LambdaList<JXPathMap> wrappedFeatures = with(features).convert(JXPathMap.toJxPathFunction);
-        testReport.setTestFeatures(wrappedFeatures.convert(analyseFeature));
+        testReport.addTestFeatures(wrappedFeatures.convert(analyseFeature));
     }
 
     private Converter<JXPathMap, TestFeatureDto> analyseFeature = new Converter<JXPathMap, TestFeatureDto>() {

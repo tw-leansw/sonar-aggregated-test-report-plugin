@@ -27,7 +27,7 @@ public class SonarAggregatedTestReportSensor implements Sensor {
         try {
             ReportScanner scanner = new ReportScanner(this.settings, this.fileSystem);
             scanner.scanReport(project);
-        }catch (LeanPluginException e){
+        } catch (LeanPluginException e) {
             LOGGER.warn("Make sure add -Dlean.aggregated.test.project.build is set.");
             return;
         }

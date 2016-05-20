@@ -78,6 +78,12 @@ public class TestReportDto extends BaseDto {
         return testFeatures;
     }
 
+    public TestReportDto addTestFeatures(List<TestFeatureDto> testFeatures) {
+        this.testFeatures.addAll(testFeatures);
+        calculatingOtherProps();
+        return this;
+    }
+
     public TestReportDto setTestFeatures(List<TestFeatureDto> testFeatures) {
         this.testFeatures = testFeatures;
         calculatingOtherProps();

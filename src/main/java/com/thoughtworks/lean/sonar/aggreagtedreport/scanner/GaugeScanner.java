@@ -39,9 +39,9 @@ public class GaugeScanner {
 
     public GaugeScanner(Settings settings, FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        this.reportPath = settings.getString("lean.testpyramid.gauge.report.path");
-        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.gauge.integration.test.tags"));
-        this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.testpyramid.gauge.functional.test.tags"));
+        this.reportPath = settings.getString("lean.aggregated.test.gauge.report.path");
+        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.gauge.integration.test.tags"));
+        this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.gauge.functional.test.tags"));
     }
 
     public void analyse(TestReportDto testReport) {
@@ -113,7 +113,7 @@ public class GaugeScanner {
     public void analyse(JXPathMap jxPathMap, TestReportDto testReport) {
         List<Map> specResults = jxPathMap.get("/gaugeExecutionResult/suiteResult/specResults");
         LambdaList<JXPathMap> wrappedSpecResults = with(specResults).convert(JXPathMap.toJxPathFunction);
-        testReport.setTestFeatures(wrappedSpecResults.convert(analyseSpec));
+        testReport.addTestFeatures(wrappedSpecResults.convert(analyseSpec));
     }
 
     private TestType getTestType(Set<String> tags) {

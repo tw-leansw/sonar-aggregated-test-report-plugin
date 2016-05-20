@@ -52,7 +52,7 @@ public class ReportServiceTest extends BaseTest {
     private TestReportDto getTestReportDto(int featureNumber, int scenarioNumber, int stepNumber) {
         TestReportDto testReportDto = enhancedRandom.nextObject(TestReportDto.class, "testFeatures");
 
-        testReportDto.setTestFeatures(objects(TestFeatureDto.class, featureNumber, "testScenarios"));
+        testReportDto.addTestFeatures(objects(TestFeatureDto.class, featureNumber, "testScenarios"));
         for (TestFeatureDto testFeatureDto : testReportDto.getTestFeatures()) {
             testFeatureDto.setTestScenarios(objects(TestScenarioDto.class, scenarioNumber, "testSteps"));
             for (TestScenarioDto testScenarioDto : testFeatureDto.getTestScenarios()) {
