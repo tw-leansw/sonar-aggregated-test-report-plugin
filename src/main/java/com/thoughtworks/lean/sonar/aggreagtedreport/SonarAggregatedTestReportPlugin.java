@@ -22,8 +22,7 @@ import java.util.List;
         @Property(key = "lean.aggregated.test.gauge.integration.test.tags", name = "Gauge Integration test tags", defaultValue = "api_test,integration_test"),
         @Property(key = "lean.aggregated.test.gauge.functional.test.tags", name = "Gauge Functional/UI test tags", defaultValue = "functional_test,ui_test")
 
-}
-)
+})
 public class SonarAggregatedTestReportPlugin extends SonarPlugin {
 
     public List getExtensions() {

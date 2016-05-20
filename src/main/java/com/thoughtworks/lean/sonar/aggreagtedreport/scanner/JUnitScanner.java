@@ -29,7 +29,7 @@ import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
  * Created by qmxie on 5/20/16.
  */
 public class JUnitScanner {
-    Logger logger = LoggerFactory.getLogger(getClass());
+    private final static Logger  LOGGER = LoggerFactory.getLogger(JUnitScanner.class);
     String reportPath;
     private Set<String> componentPatterns;
     private Set<String> functionalPatterns;
@@ -50,12 +50,14 @@ public class JUnitScanner {
     }
 
     public void analyse(TestReportDto testreport) {
-        File dir = FileUtils.getFile(getClass().getResource(this.reportPath).getFile());
+
+        File dir = fileSystem.resolvePath(reportPath);
+        LOGGER.debug("report path: " + this.reportPath);
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
             testreport.addTestFeatures(with(files).convert(analyseFile).retain(Matchers.notNullValue()));
         } else {
-            logger.warn("junit report directory is not exsits!");
+            LOGGER.warn("junit report directory is not exsits!");
         }
     }
 
@@ -75,7 +77,7 @@ public class JUnitScanner {
                         with(Jsoup.parse(file, "UTF-8").select("testcase"))
                                 .convert(analyseScenario));
             } catch (IOException e) {
-                logger.warn("read junit report file error!");
+                LOGGER.warn("read junit report file error!");
             }
 
             if (isFunctionalTest(testFeature)) {

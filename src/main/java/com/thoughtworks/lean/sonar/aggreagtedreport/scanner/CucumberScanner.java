@@ -24,7 +24,7 @@ import static ch.lambdaj.collection.LambdaCollections.with;
  * Created by qmxie on 5/13/16.
  */
 public class CucumberScanner {
-    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private final static Logger  LOGGER = LoggerFactory.getLogger(CucumberScanner.class);
     private String reportPath;
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
@@ -46,6 +46,7 @@ public class CucumberScanner {
 
     public void analyse(TestReportDto testReport) {
         try {
+            LOGGER.debug("report path: " + this.reportPath);
             analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
         } catch (IOException e) {
             LOGGER.warn("cant read cucumber report! reportPath:" + reportPath);

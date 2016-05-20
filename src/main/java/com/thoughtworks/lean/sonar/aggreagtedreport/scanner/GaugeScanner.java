@@ -26,7 +26,8 @@ import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
  */
 public class GaugeScanner {
 
-    Logger logger = LoggerFactory.getLogger(getClass());
+    private final static Logger  LOGGER = LoggerFactory.getLogger(GaugeScanner.class);
+
     String reportPath;
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
@@ -46,11 +47,12 @@ public class GaugeScanner {
 
     public void analyse(TestReportDto testReport) {
         try {
-            logger.debug("start gauge test pyramid analyse");
+            LOGGER.debug("start gauge test pyramid analyse");
+            LOGGER.debug("report path: " + this.reportPath);
             String reportString = IOUtils.toString(new FileInputStream(fileSystem.resolvePath(reportPath + "html-report/js/result.js")));
             analyse(ScriptUtil.eval(reportString), testReport);
         } catch (IOException e) {
-            logger.warn("cant read gauge report!");
+            LOGGER.warn("cant read gauge report!");
         }
     }
 
@@ -66,7 +68,7 @@ public class GaugeScanner {
             TestType testType = getTestType(tags);
             String specName = spec.get("/protoSpec/specHeading");
             //testCounter.incrementTestsFor(testType, scenarioCount);
-            logger.debug(String.format("find gauge test spec:%s scenarioCount:%.0f type:%s", specName, scenarioCount, testType.name()));
+            LOGGER.debug(String.format("find gauge test spec:%s scenarioCount:%.0f type:%s", specName, scenarioCount, testType.name()));
 
             List<Map> specItems = spec.selectNodes("/protoSpec/items[@itemType='4']/scenario");
             LambdaList<JXPathMap> scenarios = with(specItems).convert(JXPathMap.toJxPathFunction);
