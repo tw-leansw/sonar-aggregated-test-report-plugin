@@ -2,16 +2,12 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
-import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
 import org.sonar.api.server.ws.Response;
-import org.sonar.db.DbSession;
-import org.sonar.db.DefaultDatabase;
 
 import java.util.Arrays;
 

@@ -1,6 +1,8 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.scanner;
 
+import com.google.common.base.Strings;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.exception.LeanPluginException;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
@@ -18,10 +20,13 @@ public class ReportScanner {
     private String buildLabel;
 
     public ReportScanner(Settings settings, FileSystem projectFileSystem) {
+        buildLabel = settings.getString("lean.aggregated.test.project.build");
+        if (Strings.isNullOrEmpty(buildLabel)){
+            throw new LeanPluginException("Make sure add -Dlean.aggregated.test.project.build is set.");
+        }
         cucumberScanner = new CucumberScanner(settings, projectFileSystem);
         gaugeScanner = new GaugeScanner(settings, projectFileSystem);
         reportService = new TestReportService(settings);
-        buildLabel = settings.getString("lean.aggregated.test.project.build");
     }
 
     public void scanReport(Project project){
