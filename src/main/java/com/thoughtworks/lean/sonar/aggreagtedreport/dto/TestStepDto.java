@@ -76,11 +76,6 @@ public class TestStepDto extends BaseDto {
         return this;
     }
 
-    public TestStepDto setDuration(Object duration) {
-        this.setDuration(Integer.parseInt(duration.toString()));
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -94,7 +94,7 @@ public class GaugeScanner {
                         public TestStepDto convert(JXPathMap step) {
                             TestStepDto testStepDto = new TestStepDto()
                                     .setName(step.getString("/parsedText"))
-                                    .setDuration(step.get("/stepExecutionResult/executionResult/executionTime", 0L));
+                                    .setDuration((int)step.getDouble("/stepExecutionResult/executionResult/executionTime", 0.0));
                             Boolean isSkipped = step.get("/stepExecutionResult/skipped");
 
                             if (isSkipped) {

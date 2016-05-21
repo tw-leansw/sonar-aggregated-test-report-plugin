@@ -37,6 +37,16 @@ public class JXPathMap {
         return retValue == null ? defaultValue : Long.parseLong(retValue.toString());
     }
 
+    public int getInt(String key, int defaultValue){
+        Object retValue = jxPathContext.getValue(key);
+        return retValue == null ? defaultValue : Integer.parseInt(retValue.toString());
+    }
+
+    public double getDouble(String key, double defaultValue){
+        Object retValue = jxPathContext.getValue(key);
+        return retValue == null ? defaultValue : Double.parseDouble(retValue.toString());
+    }
+
 
     public Set<String> getStringSet(String key) {
         List<String> strings = get(key);

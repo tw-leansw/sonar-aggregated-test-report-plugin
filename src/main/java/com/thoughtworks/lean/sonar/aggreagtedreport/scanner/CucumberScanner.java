@@ -109,7 +109,7 @@ public class CucumberScanner {
                         public TestStepDto convert(JXPathMap step) {
                             return new TestStepDto()
                                     .setName(step.getString("name"))
-                                    .setDuration(step.getLong("/result/duration", 0L) / 1000000L)
+                                    .setDuration(((int)step.getDouble("/result/duration", 0L)) / 1000000)
                                     .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
                         }
                     });
