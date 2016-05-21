@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
+import org.hamcrest.Matchers;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -223,5 +224,11 @@ public class TestFeatureDto extends BaseDto {
     public List<TestStepDto> getStepsByResultType(ResultType type) {
         return flatten(with(this.testScenarios)
                 .extract(on(TestScenarioDto.class).getStepsByResultType(type)));
+    }
+
+    public List<TestScenarioDto> getScenariosByResultType(ResultType type) {
+        return with(this.getTestScenarios())
+                .clone()
+                .retain(Matchers.hasProperty("resultType",Matchers.equalTo(type)));
     }
 }

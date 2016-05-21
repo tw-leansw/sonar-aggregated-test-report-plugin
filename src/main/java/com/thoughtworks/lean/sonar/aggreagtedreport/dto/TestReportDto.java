@@ -152,4 +152,9 @@ public class TestReportDto extends BaseDto {
         return flatten(with(this.testFeatures)
                 .extract(on(TestFeatureDto.class).getStepsByResultType(type)));
     }
+
+    public List<TestScenarioDto> getScenariosByResultType(ResultType type){
+        return flatten(with(this.testFeatures)
+                .extract(on(TestFeatureDto.class).getScenariosByResultType(type)));
+    }
 }
