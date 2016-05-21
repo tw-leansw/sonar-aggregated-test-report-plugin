@@ -91,6 +91,9 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
     }
 
     public void update(D dto) {
+        if (dto == null){
+            return;
+        }
         DbSession session = this.getDbSession();
         try {
             getMapper(session).update(dto);
@@ -101,6 +104,9 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
     }
 
     public D insert(D dto) {
+        if (dto == null){
+            return null;
+        }
         DbSession session = this.getDbSession();
         try {
             getMapper(session).insert(dto);
@@ -112,6 +118,9 @@ public abstract class AbstractDao<D extends BaseDto> implements Dao {
     }
 
     public Collection<D> insert(Collection<D> collection) {
+        if (collection == null){
+            return null;
+        }
         DbSession session = this.getDbSession();
         try {
             for (D dto : collection) {
