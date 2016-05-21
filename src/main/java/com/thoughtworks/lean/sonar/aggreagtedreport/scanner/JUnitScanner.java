@@ -45,8 +45,8 @@ public class JUnitScanner {
         this.fileSystem = fs;
         this.reportPath = settings.getString("lean.aggregated.test.junit.report.path");
         this.excludePatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.exclude.test.patterns"));
-        this.componentPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.integration.test.tags"));
-        this.functionalPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.functional.test.tags"));
+        this.componentPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.integration.test.patterns"));
+        this.functionalPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.functional.test.patterns"));
     }
 
     public void analyse(TestReportDto testreport) {

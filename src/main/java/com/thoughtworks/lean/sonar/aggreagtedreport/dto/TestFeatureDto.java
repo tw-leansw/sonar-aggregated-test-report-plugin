@@ -158,13 +158,15 @@ public class TestFeatureDto extends BaseDto {
     }
 
     private void calculatingOtherProps() {
-        calculateDuration();
-        Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
-                with(this.getTestScenarios())
-                        .extract(on(TestScenarioDto.class).getResultType()));
-        this.setPassedScenarios(multiset.count(PASSED));
-        this.setFailedScenarios(multiset.count(FAILED));
-        this.setSkippedScenarios(multiset.count(SKIPPED));
+        if (this.getTestScenarios().size() > 0) {
+            calculateDuration();
+            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
+                    with(this.getTestScenarios())
+                            .extract(on(TestScenarioDto.class).getResultType()));
+            this.setPassedScenarios(multiset.count(PASSED));
+            this.setFailedScenarios(multiset.count(FAILED));
+            this.setSkippedScenarios(multiset.count(SKIPPED));
+        }
     }
 
     @Override
@@ -230,5 +232,10 @@ public class TestFeatureDto extends BaseDto {
         return with(this.getTestScenarios())
                 .clone()
                 .retain(Matchers.hasProperty("resultType",Matchers.equalTo(type)));
+    }
+
+    public TestScenarioDto getScenarioByName(String name){
+        return with(this.getTestScenarios())
+                .first(Matchers.hasProperty("name",Matchers.equalTo(name)));
     }
 }

@@ -82,17 +82,19 @@ public class TestScenarioDto extends BaseDto {
     }
 
     private void calculatingOtherProps() {
-        calculateDuration();
-        Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
-                with(this.getTestSteps())
-                        .extract(on(TestStepDto.class).getResultType()));
+        if (this.getTestSteps().size() > 0) {
+            calculateDuration();
+            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
+                    with(this.getTestSteps())
+                            .extract(on(TestStepDto.class).getResultType()));
 
-        int stepPassed = multiset.count(PASSED);
-        int stepFailed = multiset.count(FAILED);
-        if (stepFailed + stepPassed == 0) {
-            this.setResultType(SKIPPED);
-        } else {
-            this.setResultType(stepPassed == 0 ? FAILED : PASSED);
+            int stepPassed = multiset.count(PASSED);
+            int stepFailed = multiset.count(FAILED);
+            if (stepFailed + stepPassed == 0) {
+                this.setResultType(SKIPPED);
+            } else {
+                this.setResultType(stepPassed == 0 ? FAILED : PASSED);
+            }
         }
     }
 
@@ -107,8 +109,12 @@ public class TestScenarioDto extends BaseDto {
     }
 
     private void calculateDuration() {
-        setDuration(
-                sum(with(getTestSteps()).extract(on(TestStepDto.class).getDuration())).intValue());
+        if (this.getTestSteps().size() > 0){
+            this.setDuration(
+                    sum(with(getTestSteps()).
+                            extract(on(TestStepDto.class)
+                                    .getDuration())).intValue());
+        }
     }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {

@@ -91,7 +91,9 @@ public class TestReportDto extends BaseDto {
     }
 
     private void calculatingOtherProps() {
-        calculateDuration();
+        if (this.getTestFeatures().size() > 0){
+            calculateDuration();
+        }
     }
 
     @Override
@@ -146,6 +148,12 @@ public class TestReportDto extends BaseDto {
                 with(this.testFeatures).clone()
                         .retain(Matchers.hasProperty("testType", Matchers.equalTo(type)))
                         .extract(on(TestFeatureDto.class).getScenariosNumber())).intValue();
+    }
+
+    public List<TestFeatureDto> getFeaturesByTestType(TestType type){
+        return with(this.getTestFeatures())
+                .clone()
+                .retain(Matchers.hasProperty("testType",Matchers.equalTo(type)));
     }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
