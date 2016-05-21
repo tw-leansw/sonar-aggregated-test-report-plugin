@@ -19,11 +19,49 @@ public class TestReportDto extends BaseDto {
 
     private Date createTime;
     private Date executionTime;
-
     List<TestFeatureDto> testFeatures = new LinkedList<>();
 
     public TestReportDto() {
         this.createTime = new Date();
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public TestReportDto setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    @Override
+    public BaseDto setParentId(int id) {
+        return this;
+    }
+
+    @Override
+    public List getChildren() {
+        return getTestFeatures();
+    }
+
+    @Override
+    public void calculatingPropsFromChildren() {
+        if (this.getTestFeatures().size() > 0) {
+            this.setDuration(
+                    with(getTestFeatures())
+                            .sum(on(TestFeatureDto.class).getDuration()));
+        }
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public TestReportDto setProjectId(String projectId) {
+        this.projectId = projectId;
+        return this;
     }
 
     public String getBuildLabel() {
@@ -53,63 +91,20 @@ public class TestReportDto extends BaseDto {
         return this;
     }
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public TestReportDto setId(int id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getProjectId() {
-        return projectId;
-    }
-
-    public TestReportDto setProjectId(String projectId) {
-        this.projectId = projectId;
-        return this;
-    }
-
-
     public List<TestFeatureDto> getTestFeatures() {
         return testFeatures;
     }
 
     public TestReportDto addTestFeatures(List<TestFeatureDto> testFeatures) {
         this.testFeatures.addAll(testFeatures);
-        calculatingOtherProps();
+        this.calculatingPropsFromChildren();
         return this;
     }
 
     public TestReportDto setTestFeatures(List<TestFeatureDto> testFeatures) {
         this.testFeatures = testFeatures;
-        calculatingOtherProps();
+        this.calculatingPropsFromChildren();
         return this;
-    }
-
-    private void calculatingOtherProps() {
-        if (this.getTestFeatures().size() > 0){
-            calculateDuration();
-        }
-    }
-
-    @Override
-    public BaseDto setParentId(int id) {
-        return this;
-    }
-
-    @Override
-    public List getChilds() {
-        return getTestFeatures();
-    }
-
-    private void calculateDuration() {
-        setDuration(
-                with(getTestFeatures())
-                        .sum(on(TestFeatureDto.class).getDuration()));
     }
 
     public int getDuration() {
@@ -119,6 +114,29 @@ public class TestReportDto extends BaseDto {
     public TestReportDto setDuration(int duration) {
         this.duration = duration;
         return this;
+    }
+
+    public int getScenariosNumber(TestType type) {
+        return sum(
+                with(this.testFeatures).clone()
+                        .retain(Matchers.hasProperty("testType", Matchers.equalTo(type)))
+                        .extract(on(TestFeatureDto.class).getScenariosNumber())).intValue();
+    }
+
+    public List<TestFeatureDto> getFeaturesByTestType(TestType type) {
+        return with(this.getTestFeatures())
+                .clone()
+                .retain(Matchers.hasProperty("testType", Matchers.equalTo(type)));
+    }
+
+    public List<TestStepDto> getStepsByResultType(ResultType type) {
+        return flatten(with(this.testFeatures)
+                .extract(on(TestFeatureDto.class).getStepsByResultType(type)));
+    }
+
+    public List<TestScenarioDto> getScenariosByResultType(ResultType type) {
+        return flatten(with(this.testFeatures)
+                .extract(on(TestFeatureDto.class).getScenariosByResultType(type)));
     }
 
     @Override
@@ -137,32 +155,5 @@ public class TestReportDto extends BaseDto {
     @Override
     public int hashCode() {
         return Objects.hashCode(id, projectId, buildLabel, duration, createTime, executionTime);
-    }
-
-    public void addTestFeature(TestFeatureDto testFeatureDto) {
-        this.testFeatures.add(testFeatureDto);
-    }
-
-    public int getScenariosNumber(TestType type) {
-        return sum(
-                with(this.testFeatures).clone()
-                        .retain(Matchers.hasProperty("testType", Matchers.equalTo(type)))
-                        .extract(on(TestFeatureDto.class).getScenariosNumber())).intValue();
-    }
-
-    public List<TestFeatureDto> getFeaturesByTestType(TestType type){
-        return with(this.getTestFeatures())
-                .clone()
-                .retain(Matchers.hasProperty("testType",Matchers.equalTo(type)));
-    }
-
-    public List<TestStepDto> getStepsByResultType(ResultType type) {
-        return flatten(with(this.testFeatures)
-                .extract(on(TestFeatureDto.class).getStepsByResultType(type)));
-    }
-
-    public List<TestScenarioDto> getScenariosByResultType(ResultType type){
-        return flatten(with(this.testFeatures)
-                .extract(on(TestFeatureDto.class).getScenariosByResultType(type)));
     }
 }

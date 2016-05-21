@@ -46,6 +46,32 @@ public class TestFeatureDto extends BaseDto {
         return this;
     }
 
+    @Override
+    public BaseDto setParentId(int id) {
+        return setReportId(id);
+    }
+
+    @Override
+    public List getChildren() {
+        return getTestScenarios();
+    }
+
+    @Override
+    public void calculatingPropsFromChildren() {
+        if (this.getTestScenarios().size() > 0) {
+            this.setDuration(
+                    with(getTestScenarios())
+                            .sum(on(TestScenarioDto.class).getDuration()));
+
+            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
+                    with(this.getTestScenarios())
+                            .extract(on(TestScenarioDto.class).getResultType()));
+            this.setPassedScenarios(multiset.count(PASSED));
+            this.setFailedScenarios(multiset.count(FAILED));
+            this.setSkippedScenarios(multiset.count(SKIPPED));
+        }
+    }
+
     public int getReportId() {
         return reportId;
     }
@@ -153,38 +179,29 @@ public class TestFeatureDto extends BaseDto {
 
     public TestFeatureDto setTestScenarios(List<TestScenarioDto> testScenarios) {
         this.testScenarios = testScenarios;
-        calculatingOtherProps();
+        this.calculatingPropsFromChildren();
         return this;
     }
 
-    private void calculatingOtherProps() {
-        if (this.getTestScenarios().size() > 0) {
-            calculateDuration();
-            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
-                    with(this.getTestScenarios())
-                            .extract(on(TestScenarioDto.class).getResultType()));
-            this.setPassedScenarios(multiset.count(PASSED));
-            this.setFailedScenarios(multiset.count(FAILED));
-            this.setSkippedScenarios(multiset.count(SKIPPED));
-        }
+    public int getScenariosNumber() {
+        return this.testScenarios.size();
     }
 
-    @Override
-    public BaseDto setParentId(int id) {
-        return setReportId(id);
+    public List<TestStepDto> getStepsByResultType(ResultType type) {
+        return flatten(with(this.testScenarios)
+                .extract(on(TestScenarioDto.class).getStepsByResultType(type)));
     }
 
-    @Override
-    public List getChilds() {
-        return getTestScenarios();
+    public List<TestScenarioDto> getScenariosByResultType(ResultType type) {
+        return with(this.getTestScenarios())
+                .clone()
+                .retain(Matchers.hasProperty("resultType", Matchers.equalTo(type)));
     }
 
-    private void calculateDuration() {
-        setDuration(
-                with(getTestScenarios())
-                        .sum(on(TestScenarioDto.class).getDuration()));
+    public TestScenarioDto getScenarioByName(String name) {
+        return with(this.getTestScenarios())
+                .first(Matchers.hasProperty("name", Matchers.equalTo(name)));
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -208,34 +225,5 @@ public class TestFeatureDto extends BaseDto {
     @Override
     public int hashCode() {
         return Objects.hashCode(id, reportId, frameworkType, testType, name, description, duration, passedScenarios, failedScenarios, skippedScenarios, createTime, executionTime);
-    }
-
-    public TestFeatureDto addScenario(TestScenarioDto scenario) {
-        this.testScenarios.add(scenario);
-        return this;
-    }
-
-    public List<TestScenarioDto> getScenarios(ResultType type) {
-        return null;
-    }
-
-    public int getScenariosNumber() {
-        return this.testScenarios.size();
-    }
-
-    public List<TestStepDto> getStepsByResultType(ResultType type) {
-        return flatten(with(this.testScenarios)
-                .extract(on(TestScenarioDto.class).getStepsByResultType(type)));
-    }
-
-    public List<TestScenarioDto> getScenariosByResultType(ResultType type) {
-        return with(this.getTestScenarios())
-                .clone()
-                .retain(Matchers.hasProperty("resultType",Matchers.equalTo(type)));
-    }
-
-    public TestScenarioDto getScenarioByName(String name){
-        return with(this.getTestScenarios())
-                .first(Matchers.hasProperty("name",Matchers.equalTo(name)));
     }
 }

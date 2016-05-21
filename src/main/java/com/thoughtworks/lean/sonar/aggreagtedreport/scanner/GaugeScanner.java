@@ -26,7 +26,7 @@ import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
  */
 public class GaugeScanner {
 
-    private final static Logger  LOGGER = LoggerFactory.getLogger(GaugeScanner.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(GaugeScanner.class);
 
     String reportPath;
     private Set<String> componentTestTags;
@@ -94,7 +94,7 @@ public class GaugeScanner {
                         public TestStepDto convert(JXPathMap step) {
                             TestStepDto testStepDto = new TestStepDto()
                                     .setName(step.getString("/parsedText"))
-                                    .setDuration((int)step.getDouble("/stepExecutionResult/executionResult/executionTime", 0.0));
+                                    .setDuration((int) step.getDouble("/stepExecutionResult/executionResult/executionTime", 0.0));
                             Boolean isSkipped = step.get("/stepExecutionResult/skipped");
 
                             if (isSkipped) {

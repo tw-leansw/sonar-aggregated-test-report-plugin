@@ -41,6 +41,38 @@ public class TestScenarioDto extends BaseDto {
         return this;
     }
 
+    @Override
+    public BaseDto setParentId(int id) {
+        return setFeatureId(id);
+    }
+
+    @Override
+    public List getChildren() {
+        return getTestSteps();
+    }
+
+    @Override
+    public void calculatingPropsFromChildren() {
+        if (this.getTestSteps().size() > 0) {
+            this.setDuration(
+                    sum(with(getTestSteps())
+                            .extract(on(TestStepDto.class)
+                                    .getDuration())).intValue());
+
+            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
+                    with(this.getTestSteps())
+                            .extract(on(TestStepDto.class).getResultType()));
+
+            int stepPassed = multiset.count(PASSED);
+            int stepFailed = multiset.count(FAILED);
+            if (stepFailed + stepPassed == 0) {
+                this.setResultType(SKIPPED);
+            } else {
+                this.setResultType(stepPassed == 0 ? FAILED : PASSED);
+            }
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -69,65 +101,18 @@ public class TestScenarioDto extends BaseDto {
     }
 
     public List<TestStepDto> getTestSteps() {
-        if (this.testSteps == null) {
-            return Collections.emptyList();
-        }
         return testSteps;
     }
 
     public TestScenarioDto setTestSteps(List<TestStepDto> testSteps) {
         this.testSteps = testSteps;
-        calculatingOtherProps();
+        this.calculatingPropsFromChildren();
         return this;
-    }
-
-    private void calculatingOtherProps() {
-        if (this.getTestSteps().size() > 0) {
-            calculateDuration();
-            Multiset<ResultType> multiset = ConcurrentHashMultiset.create(
-                    with(this.getTestSteps())
-                            .extract(on(TestStepDto.class).getResultType()));
-
-            int stepPassed = multiset.count(PASSED);
-            int stepFailed = multiset.count(FAILED);
-            if (stepFailed + stepPassed == 0) {
-                this.setResultType(SKIPPED);
-            } else {
-                this.setResultType(stepPassed == 0 ? FAILED : PASSED);
-            }
-        }
-    }
-
-    @Override
-    public BaseDto setParentId(int id) {
-        return setFeatureId(id);
-    }
-
-    @Override
-    public List getChilds() {
-        return getTestSteps();
-    }
-
-    private void calculateDuration() {
-        if (this.getTestSteps().size() > 0){
-            this.setDuration(
-                    sum(with(getTestSteps()).
-                            extract(on(TestStepDto.class)
-                                    .getDuration())).intValue());
-        }
     }
 
     public List<TestStepDto> getStepsByResultType(ResultType type) {
         return with(this.getTestSteps()).clone()
                 .retain(Matchers.hasProperty("resultType", Matchers.equalTo(type)));
-    }
-
-    public TestScenarioDto addStep(TestStepDto step) {
-        if (this.testSteps == null) {
-            this.testSteps = Lists.newArrayList();
-        }
-        this.testSteps.add(step);
-        return this;
     }
 
     public int getFeatureId() {

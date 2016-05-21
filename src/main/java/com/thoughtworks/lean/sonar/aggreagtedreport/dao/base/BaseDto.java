@@ -14,10 +14,12 @@ public abstract class BaseDto {
 
     public abstract BaseDto setParentId(int id);
 
-    public abstract <T extends BaseDto> List<T> getChilds();
+    public abstract <T extends BaseDto> List<T> getChildren();
+
+    public abstract void calculatingPropsFromChildren();
 
     public void setChildrenzParentId() {
-        for (Object dto : getChilds()) {
+        for (Object dto : getChildren()) {
             ((BaseDto) dto).setParentId(getId());
         }
     }

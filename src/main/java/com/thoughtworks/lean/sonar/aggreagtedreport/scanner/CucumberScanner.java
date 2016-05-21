@@ -24,7 +24,7 @@ import static ch.lambdaj.collection.LambdaCollections.with;
  * Created by qmxie on 5/13/16.
  */
 public class CucumberScanner {
-    private final static Logger  LOGGER = LoggerFactory.getLogger(CucumberScanner.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(CucumberScanner.class);
     private String reportPath;
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
@@ -109,7 +109,7 @@ public class CucumberScanner {
                         public TestStepDto convert(JXPathMap step) {
                             return new TestStepDto()
                                     .setName(step.getString("name"))
-                                    .setDuration(((int)step.getDouble("/result/duration", 0L)) / 1000000)
+                                    .setDuration(((int) step.getDouble("/result/duration", 0L)) / 1000000)
                                     .setResultType(ResultType.valueOf(step.getString("/result/status").toUpperCase()));
                         }
                     });

@@ -4,6 +4,10 @@ import com.google.common.collect.Maps;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import io.github.benas.randombeans.EnhancedRandomBuilder;
 import io.github.benas.randombeans.api.EnhancedRandom;
 import org.flywaydb.core.Flyway;
@@ -11,6 +15,7 @@ import org.junit.BeforeClass;
 import org.sonar.api.config.Settings;
 import org.sonar.db.DefaultDatabase;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,4 +53,30 @@ public abstract class BaseTest {
         }
         return ret;
     }
+
+    static <T extends BaseDto> List<T> setField(List<T> list, String field, Object value) throws NoSuchFieldException, IllegalAccessException {
+        for (T dto : list) {
+            Field fd = dto.getClass().getDeclaredField(field);
+            fd.setAccessible(true);
+            fd.set(dto, value);
+        }
+        return list;
+    }
+
+    static List<TestStepDto> objectsOfTestStep(int size) {
+        return objects(TestStepDto.class, size);
+    }
+
+    static List<TestScenarioDto> objectsOfTestScenario(int size) {
+        return objects(TestScenarioDto.class, size, "testSteps");
+    }
+
+    static List<TestFeatureDto> objectsOfTestFeature(int size) {
+        return objects(TestFeatureDto.class, size, "testScenarios");
+    }
+
+    static List<TestReportDto> objectsOfTestReport(int size) {
+        return objects(TestReportDto.class, size, "testFeatures");
+    }
 }
+

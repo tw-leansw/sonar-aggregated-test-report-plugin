@@ -30,6 +30,20 @@ public class TestStepDto extends BaseDto {
         return this;
     }
 
+    @Override
+    public void calculatingPropsFromChildren() {
+    }
+
+    @Override
+    public BaseDto setParentId(int id) {
+        return setScenarioId(id);
+    }
+
+    @Override
+    public List<BaseDto> getChildren() {
+        return null;
+    }
+
     public int getScenarioId() {
         return scenarioId;
     }
@@ -55,16 +69,6 @@ public class TestStepDto extends BaseDto {
     public TestStepDto setResultType(ResultType resultType) {
         this.resultType = resultType;
         return this;
-    }
-
-    @Override
-    public BaseDto setParentId(int id) {
-        return setScenarioId(id);
-    }
-
-    @Override
-    public List<BaseDto> getChilds() {
-        return null;
     }
 
     public int getDuration() {

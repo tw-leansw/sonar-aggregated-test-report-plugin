@@ -25,7 +25,6 @@ public class JUnitScannerTest {
         TestReportDto testsReport = new TestReportDto();
         jUnitScanner.analyse(testsReport, new File(getClass().getResource("/surefire-reports").getFile()));
 
-        System.out.println("");
         // then
         assertEquals(18, testsReport.getScenariosNumber(TestType.UNIT_TEST));
         assertEquals(4, testsReport.getScenariosNumber(TestType.COMPONENT_TEST));

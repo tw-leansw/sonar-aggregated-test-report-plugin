@@ -29,7 +29,7 @@ import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
  * Created by qmxie on 5/20/16.
  */
 public class JUnitScanner {
-    private final static Logger  LOGGER = LoggerFactory.getLogger(JUnitScanner.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(JUnitScanner.class);
     String reportPath;
     private Set<String> componentPatterns;
     private Set<String> functionalPatterns;
@@ -54,7 +54,7 @@ public class JUnitScanner {
         analyse(testreport, dir);
     }
 
-    public void analyse(TestReportDto testreport, File dir){
+    public void analyse(TestReportDto testreport, File dir) {
         LOGGER.debug("report path: " + this.reportPath);
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
@@ -124,7 +124,7 @@ public class JUnitScanner {
     }
 
     public boolean checkPatterns(final String str, Set<String> patterns) {
-        if (patterns == null){
+        if (patterns == null) {
             return false;
         }
         List<String> pattenList = Lists.newArrayList(patterns.iterator());
@@ -152,7 +152,7 @@ public class JUnitScanner {
         return checkPatterns(testCase, this.functionalPatterns);
     }
 
-    public boolean isExcluded(String testCase){
+    public boolean isExcluded(String testCase) {
         return checkPatterns(testCase, this.excludePatterns);
     }
 
