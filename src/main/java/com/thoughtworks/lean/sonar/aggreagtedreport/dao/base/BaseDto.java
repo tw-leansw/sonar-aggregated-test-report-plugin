@@ -19,8 +19,10 @@ public abstract class BaseDto {
     public abstract void calculatingPropsFromChildren();
 
     public void setChildrenzParentId() {
-        for (Object dto : getChildren()) {
-            ((BaseDto) dto).setParentId(getId());
+        if (this.getChildren() != null) {
+            for (Object dto : getChildren()) {
+                ((BaseDto) dto).setParentId(getId());
+            }
         }
     }
 

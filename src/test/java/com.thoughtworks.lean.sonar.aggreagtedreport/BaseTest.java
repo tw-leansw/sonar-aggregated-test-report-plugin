@@ -8,6 +8,7 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.exception.LeanPluginException;
 import io.github.benas.randombeans.EnhancedRandomBuilder;
 import io.github.benas.randombeans.api.EnhancedRandom;
 import org.flywaydb.core.Flyway;
@@ -64,7 +65,11 @@ public abstract class BaseTest {
     }
 
     static List<TestStepDto> objectsOfTestStep(int size) {
-        return objects(TestStepDto.class, size);
+        try {
+            return setField(objects(TestStepDto.class, size),"duration",enhancedRandom.nextInt(500));
+        } catch (Exception e) {
+            throw new LeanPluginException("Generating random TestStep Error");
+        }
     }
 
     static List<TestScenarioDto> objectsOfTestScenario(int size) {

@@ -125,7 +125,7 @@ public class TestReportDtoTest extends BaseTest {
 
     @Test
     public void should_generate_wanted_dtos() throws NoSuchFieldException, IllegalAccessException {
-        List<TestStepDto> objs = objects(TestStepDto.class, 3);
+        List<TestStepDto> objs = objectsOfTestStep(3);
         setField(objs, "name", "hehe");
         setField(objs, "duration", 24);
         setField(objs, "resultType", ResultType.SKIPPED);

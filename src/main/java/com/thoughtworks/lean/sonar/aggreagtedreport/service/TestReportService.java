@@ -63,7 +63,6 @@ public class TestReportService {
             for (TestScenarioDto scenraio : feature.getTestScenarios()) {
                 scenraio.setTestSteps(dbClient.getTestStepDao().getByParentId(scenraio.getId()));
             }
-
         }
         return report;
     }

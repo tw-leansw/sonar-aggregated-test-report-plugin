@@ -5,6 +5,8 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
@@ -18,9 +20,9 @@ public class ReportServiceTest extends BaseTest {
     public void should_report_service_work() {
         TestReportService service = new TestReportService(dbClient);
 
-        TestReportDto testReportDto = getTestReportDto(3, 5, 10);
+        TestReportDto testReportDto = getRandomTestReportDto(3, 5, 10);
 
-        TestReportDto reportDto2 = getTestReportDto(2, 3, 5);
+        TestReportDto reportDto2 = getRandomTestReportDto(2, 3, 5);
 
         service.save(testReportDto);
         service.save(reportDto2);
@@ -43,22 +45,29 @@ public class ReportServiceTest extends BaseTest {
     @Test
     public void should_many_insert_work() {
         TestReportService service = new TestReportService(dbClient);
-        for (int i = 0; i < 100; i++) {
-            TestReportDto testReportDto = getTestReportDto(RandomUtils.nextInt(5), RandomUtils.nextInt(5), RandomUtils.nextInt(5));
+        for (int i = 0; i < 30; i++) {
+            TestReportDto testReportDto = getRandomTestReportDto(RandomUtils.nextInt(3), RandomUtils.nextInt(3), RandomUtils.nextInt(3));
+            String randomString = enhancedRandom.nextObject(String.class);
+            testReportDto.setProjectId(randomString);
             service.save(testReportDto);
+            TestReportDto ret = service.getReport(randomString);
+            assertEquals(testReportDto.toJson(), ret.toJson());
         }
     }
 
-    private TestReportDto getTestReportDto(int featureNumber, int scenarioNumber, int stepNumber) {
+    private TestReportDto getRandomTestReportDto(int featureNumber, int scenarioNumber, int stepNumber) {
         TestReportDto testReportDto = enhancedRandom.nextObject(TestReportDto.class, "testFeatures");
-
-        testReportDto.addTestFeatures(objects(TestFeatureDto.class, featureNumber, "testScenarios"));
-        for (TestFeatureDto testFeatureDto : testReportDto.getTestFeatures()) {
-            testFeatureDto.setTestScenarios(objects(TestScenarioDto.class, scenarioNumber, "testSteps"));
-            for (TestScenarioDto testScenarioDto : testFeatureDto.getTestScenarios()) {
-                testScenarioDto.setTestSteps(objects(TestStepDto.class, stepNumber));
+        List<TestFeatureDto> features = objectsOfTestFeature(featureNumber);
+        for (TestFeatureDto testFeatureDto : features) {
+            List<TestScenarioDto> scenarios = objectsOfTestScenario(scenarioNumber);
+            for (TestScenarioDto testScenarioDto : scenarios) {
+                // note: due to calculatingPropsFromChildren() is called in setXXXs()
+                // these set methods should be called at tail position
+                testScenarioDto.setTestSteps(objectsOfTestStep(stepNumber));
             }
+            testFeatureDto.setTestScenarios(scenarios);
         }
+        testReportDto.addTestFeatures(features);
         return testReportDto;
     }
 
