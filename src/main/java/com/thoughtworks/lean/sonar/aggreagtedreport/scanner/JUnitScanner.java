@@ -60,7 +60,7 @@ public class JUnitScanner {
     }
 
     public void analyse(TestReportDto testReport, File dir) {
-        LOGGER.debug("report path: " + this.reportPath);
+        LOGGER.debug("junit report path: " + this.reportPath);
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
             testReport.addTestFeatures(with(files).convert(analyseFile).retain(Matchers.notNullValue()));

@@ -52,7 +52,7 @@ public class GaugeScanner {
         }
         try {
             LOGGER.debug("start gauge test pyramid analyse");
-            LOGGER.debug("report path: " + this.reportPath);
+            LOGGER.debug("gauge report path: " + this.reportPath);
             String reportString = IOUtils.toString(new FileInputStream(fileSystem.resolvePath(reportPath + "html-report/js/result.js")));
             analyse(ScriptUtil.eval(reportString), testReport);
         } catch (IOException e) {

@@ -49,7 +49,7 @@ public class CucumberScanner {
             return;
         }
         try {
-            LOGGER.debug("report path: " + this.reportPath);
+            LOGGER.debug("cucumber report path: " + this.reportPath);
             analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
         } catch (IOException e) {
             LOGGER.warn("cant read cucumber report! reportPath:" + reportPath);
