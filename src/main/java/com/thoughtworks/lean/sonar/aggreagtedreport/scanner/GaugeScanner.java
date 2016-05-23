@@ -26,10 +26,10 @@ public class GaugeScanner {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GaugeScanner.class);
 
-    String reportPath;
+    private String reportPath;
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
-    FileSystem fileSystem;
+    private FileSystem fileSystem;
 
     public GaugeScanner(Set<String> integrationTestTags, Set<String> functionalTestTags) {
         this.componentTestTags = integrationTestTags;

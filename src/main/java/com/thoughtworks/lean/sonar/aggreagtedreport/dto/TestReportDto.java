@@ -19,7 +19,7 @@ public class TestReportDto extends BaseDto {
 
     private Date createTime;
     private Date executionTime;
-    List<TestFeatureDto> testFeatures = new LinkedList<>();
+    private List<TestFeatureDto> testFeatures = new LinkedList<>();
 
     public TestReportDto() {
         this.createTime = new Date();
