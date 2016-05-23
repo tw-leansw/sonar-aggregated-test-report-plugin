@@ -12,19 +12,19 @@ import java.util.List;
  */
 public abstract class AbstractDao<D extends BaseDto> implements Dao {
     private Mybatis mybatis;
-    private Class mapperClass;
+    private Class<? extends CRUDMapper<D>> mapperClass;
 
     public AbstractDao setMybatis(Mybatis mybatis) {
         this.mybatis = mybatis;
         return this;
     }
 
-    public <T extends CRUDMapper<D>> AbstractDao(Class<T> mapperClass) {
+    public AbstractDao(Class<? extends CRUDMapper<D>> mapperClass) {
         this.mapperClass = mapperClass;
     }
 
     protected CRUDMapper<D> getMapper(DbSession session) {
-        return (CRUDMapper<D>) session.getMapper(mapperClass);
+        return session.getMapper(mapperClass);
     }
 
     protected Mybatis mybatis() {
