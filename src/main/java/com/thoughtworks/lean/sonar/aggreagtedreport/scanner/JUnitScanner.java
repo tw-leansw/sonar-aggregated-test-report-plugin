@@ -23,18 +23,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ch.lambdaj.collection.LambdaCollections.with;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.Constants.*;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
-/**
- * Created by qmxie on 5/20/16.
- */
+
 public class JUnitScanner {
     private final static Logger LOGGER = LoggerFactory.getLogger(JUnitScanner.class);
-    String reportPath;
+    private String reportPath;
     private Set<String> componentPatterns;
     private Set<String> functionalPatterns;
     private Set<String> excludePatterns;
-    FileSystem fileSystem;
+    private FileSystem fileSystem;
 
     public JUnitScanner(Set<String> componentTestTags, Set<String> functionalTestTags) {
         this.componentPatterns = componentTestTags;
@@ -43,10 +42,10 @@ public class JUnitScanner {
 
     public JUnitScanner(Settings settings, FileSystem fs) {
         this.fileSystem = fs;
-        this.reportPath = settings.getString("lean.aggregated.test.junit.report.path");
-        this.excludePatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.exclude.test.patterns"));
-        this.componentPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.integration.test.patterns"));
-        this.functionalPatterns = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.junit.functional.test.patterns"));
+        this.reportPath = settings.getString(LEAN_AGGREGATED_TEST_JUNIT_REPORT_PATH);
+        this.excludePatterns = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_JUNIT_EXCLUDE_TEST_PATTERNS));
+        this.componentPatterns = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_JUNIT_COMPONENT_TEST_PATTERNS));
+        this.functionalPatterns = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_FUNCTIONAL_TEST_TAGS));
     }
 
     public void analyse(TestReportDto testreport) {
@@ -54,11 +53,11 @@ public class JUnitScanner {
         analyse(testreport, dir);
     }
 
-    public void analyse(TestReportDto testreport, File dir) {
+    public void analyse(TestReportDto testReport, File dir) {
         LOGGER.debug("report path: " + this.reportPath);
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
-            testreport.addTestFeatures(with(files).convert(analyseFile).retain(Matchers.notNullValue()));
+            testReport.addTestFeatures(with(files).convert(analyseFile).retain(Matchers.notNullValue()));
         } else {
             LOGGER.warn("junit report directory is not exsits!");
         }
@@ -128,7 +127,7 @@ public class JUnitScanner {
             return false;
         }
         List<String> pattenList = Lists.newArrayList(patterns.iterator());
-        List<Boolean> bools = with(pattenList).convert(new Converter<String, Boolean>() {
+        List<Boolean> booleans = with(pattenList).convert(new Converter<String, Boolean>() {
             @Override
             public Boolean convert(String pattern) {
                 Pattern regPattern = Pattern.compile(pattern);
@@ -136,7 +135,7 @@ public class JUnitScanner {
                 return matcher.matches();
             }
         });
-        for (Boolean bool : bools) {
+        for (Boolean bool : booleans) {
             if (bool) {
                 return true;
             }

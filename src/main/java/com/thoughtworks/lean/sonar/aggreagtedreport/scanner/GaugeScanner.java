@@ -22,10 +22,6 @@ import static ch.lambdaj.collection.LambdaCollections.with;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.Constants.*;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
-
-/**
- * Created by qmxie on 5/16/16.
- */
 public class GaugeScanner {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GaugeScanner.class);
@@ -43,7 +39,7 @@ public class GaugeScanner {
     public GaugeScanner(Settings settings, FileSystem fileSystem) {
         this.fileSystem = fileSystem;
         this.reportPath = settings.getString(LEAN_AGGREGATED_TEST_GAUGE_REPORT_PATH);
-        this.componentTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_INTEGRATION_TEST_TAGS));
+        this.componentTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_COMPONENT_TEST_TAGS));
         this.functionalTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_FUNCTIONAL_TEST_TAGS));
     }
 
