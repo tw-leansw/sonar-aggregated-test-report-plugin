@@ -30,6 +30,7 @@ public class GaugeScanner {
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
     private FileSystem fileSystem;
+    private boolean skip = false;
 
     public GaugeScanner(Set<String> integrationTestTags, Set<String> functionalTestTags) {
         this.componentTestTags = integrationTestTags;
@@ -37,6 +38,7 @@ public class GaugeScanner {
     }
 
     public GaugeScanner(Settings settings, FileSystem fileSystem) {
+        this.skip = settings.getBoolean(LEAN_AGGREGATED_TEST_GAUGE_SKIP);
         this.fileSystem = fileSystem;
         this.reportPath = settings.getString(LEAN_AGGREGATED_TEST_GAUGE_REPORT_PATH);
         this.componentTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_COMPONENT_TEST_TAGS));
@@ -44,6 +46,10 @@ public class GaugeScanner {
     }
 
     public void analyse(TestReportDto testReport) {
+        if(skip){
+            LOGGER.info("gauge report analyse skipped ");
+            return;
+        }
         try {
             LOGGER.debug("start gauge test pyramid analyse");
             LOGGER.debug("report path: " + this.reportPath);

@@ -34,6 +34,7 @@ public class JUnitScanner {
     private Set<String> functionalPatterns;
     private Set<String> excludePatterns;
     private FileSystem fileSystem;
+    private boolean skip = false;
 
     public JUnitScanner(Set<String> componentTestTags, Set<String> functionalTestTags) {
         this.componentPatterns = componentTestTags;
@@ -46,9 +47,14 @@ public class JUnitScanner {
         this.excludePatterns = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_JUNIT_EXCLUDE_TEST_PATTERNS));
         this.componentPatterns = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_JUNIT_COMPONENT_TEST_PATTERNS));
         this.functionalPatterns = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_FUNCTIONAL_TEST_TAGS));
+        this.skip = settings.getBoolean(LEAN_AGGREGATED_TEST_JUNIT_SKIP);
     }
 
     public void analyse(TestReportDto testreport) {
+        if (skip) {
+            LOGGER.info("junit report analyse skipped");
+            return;
+        }
         File dir = fileSystem.resolvePath(reportPath);
         analyse(testreport, dir);
     }

@@ -27,6 +27,7 @@ public class CucumberScanner {
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;
     private FileSystem fileSystem;
+    private boolean skip = false;
 
 
     public CucumberScanner(Set<String> componentTestTags, Set<String> functionalTestTags) {
@@ -39,9 +40,14 @@ public class CucumberScanner {
         this.reportPath = settings.getString(LEAN_AGGREGATED_TEST_CUCUMBER_REPORT_PATH);
         this.componentTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_CUCUMBER_COMPONENT_TEST_TAGS));
         this.functionalTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_CUCUMBER_FUNCTIONAL_TEST_TAGS));
+        this.skip = settings.getBoolean(LEAN_AGGREGATED_TEST_CUCUMBER_SKIP);
     }
 
     public void analyse(TestReportDto testReport) {
+        if (skip) {
+            LOGGER.info("cucumber report analyse skipped");
+            return;
+        }
         try {
             LOGGER.debug("report path: " + this.reportPath);
             analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
