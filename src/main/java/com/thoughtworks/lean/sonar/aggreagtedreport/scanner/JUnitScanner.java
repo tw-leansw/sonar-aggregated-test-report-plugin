@@ -74,6 +74,7 @@ public class JUnitScanner {
         public TestFeatureDto convert(File file) {
             String testFeature = JUnitUtil.getTestFeatureName(file.getName());
             if (isExcluded(testFeature)) {
+                LOGGER.debug("junit test file " + testFeature + " skipped/");
                 return null;
             }
             TestFeatureDto testFeatureDto = new TestFeatureDto()
