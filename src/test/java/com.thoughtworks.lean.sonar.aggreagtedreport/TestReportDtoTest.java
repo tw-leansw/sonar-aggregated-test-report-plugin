@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
  * Created by qmxie on 5/16/16.
  */
 public class TestReportDtoTest extends BaseTest {
+    public static final String RESULT_TYPE = "resultType";
+    public static final String DURATION = "duration";
     TestReportDto testReport;
 
     @Ignore
@@ -31,16 +33,17 @@ public class TestReportDtoTest extends BaseTest {
                 .setId(1).setName("s1");
         // 3 passed steps
         List<TestStepDto> passedSteps = objectsOfTestStep(3);
-        setField(passedSteps, "resultType", PASSED);
-        setField(passedSteps, "duration", 1000);
+        setField(passedSteps, RESULT_TYPE, PASSED);
+        setField(passedSteps, DURATION, 1000);
+
 
         // 1 failed step
         TestStepDto step4 = new TestStepDto().setDuration(100).setResultType(FAILED);
 
         // 2 skipped step
         List<TestStepDto> skippedSteps = objectsOfTestStep(2);
-        setField(skippedSteps, "resultType", SKIPPED);
-        setField(skippedSteps, "duration", 500);
+        setField(skippedSteps, RESULT_TYPE, SKIPPED);
+        setField(skippedSteps, DURATION, 500);
 
         List<TestStepDto> testSteps = Lists.newArrayList();
         testSteps.addAll(passedSteps);
@@ -54,14 +57,14 @@ public class TestReportDtoTest extends BaseTest {
                 .setId(2).setName("s2");
 
         // also 3 passed steps, but no failed or skipped steps
-        testScenario2.setTestSteps(setField(objectsOfTestStep(3), "resultType", PASSED));
+        testScenario2.setTestSteps(setField(objectsOfTestStep(3), RESULT_TYPE, PASSED));
 
         // scenario 3
         TestScenarioDto testScenario3 = new TestScenarioDto()
                 .setId(3).setName("s3");
 
         // 4 steps are all skipped
-        testScenario3.setTestSteps(setField(objectsOfTestStep(3), "resultType", SKIPPED));
+        testScenario3.setTestSteps(setField(objectsOfTestStep(3), RESULT_TYPE, SKIPPED));
 
         // s1 belongs to unit_test
         // so we have 3 passed , 1 failed and 2 skipped steps in unit_test
@@ -127,8 +130,8 @@ public class TestReportDtoTest extends BaseTest {
     public void should_generate_wanted_dtos() throws NoSuchFieldException, IllegalAccessException {
         List<TestStepDto> objs = objectsOfTestStep(3);
         setField(objs, "name", "hehe");
-        setField(objs, "duration", 24);
-        setField(objs, "resultType", ResultType.SKIPPED);
+        setField(objs, DURATION, 24);
+        setField(objs, RESULT_TYPE, ResultType.SKIPPED);
         for (TestStepDto step : objs) {
             assertEquals("hehe", step.getName());
             assertEquals(24, step.getDuration());

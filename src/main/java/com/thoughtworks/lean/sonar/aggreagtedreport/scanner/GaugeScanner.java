@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.Set;
 
 import static ch.lambdaj.collection.LambdaCollections.with;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.Constants.*;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
+
 
 /**
  * Created by qmxie on 5/16/16.
@@ -40,9 +42,9 @@ public class GaugeScanner {
 
     public GaugeScanner(Settings settings, FileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        this.reportPath = settings.getString("lean.aggregated.test.gauge.report.path");
-        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.gauge.integration.test.tags"));
-        this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.gauge.functional.test.tags"));
+        this.reportPath = settings.getString(LEAN_AGGREGATED_TEST_GAUGE_REPORT_PATH);
+        this.componentTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_INTEGRATION_TEST_TAGS));
+        this.functionalTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_GAUGE_FUNCTIONAL_TEST_TAGS));
     }
 
     public void analyse(TestReportDto testReport) {

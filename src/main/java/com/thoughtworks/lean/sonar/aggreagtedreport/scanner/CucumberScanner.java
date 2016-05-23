@@ -19,10 +19,12 @@ import java.util.Set;
 
 import static ch.lambdaj.Lambda.on;
 import static ch.lambdaj.collection.LambdaCollections.with;
+import static com.thoughtworks.lean.sonar.aggreagtedreport.Constants.*;
 
 /**
  * Created by qmxie on 5/13/16.
  */
+
 public class CucumberScanner {
     private final static Logger LOGGER = LoggerFactory.getLogger(CucumberScanner.class);
     private String reportPath;
@@ -38,10 +40,9 @@ public class CucumberScanner {
 
     public CucumberScanner(Settings settings, FileSystem fs) {
         this.fileSystem = fs;
-        this.reportPath = settings.getString("lean.aggregated.test.cucumber.report.path");
-        this.componentTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.cucumber.integration.test.tags"));
-        this.functionalTestTags = Sets.newHashSet(settings.getStringArray("lean.aggregated.test.cucumber.functional.test.tags"));
-
+        this.reportPath = settings.getString(LEAN_AGGREGATED_TEST_CUCUMBER_REPORT_PATH);
+        this.componentTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_CUCUMBER_INTEGRATION_TEST_TAGS));
+        this.functionalTestTags = Sets.newHashSet(settings.getStringArray(LEAN_AGGREGATED_TEST_CUCUMBER_FUNCTIONAL_TEST_TAGS));
     }
 
     public void analyse(TestReportDto testReport) {
