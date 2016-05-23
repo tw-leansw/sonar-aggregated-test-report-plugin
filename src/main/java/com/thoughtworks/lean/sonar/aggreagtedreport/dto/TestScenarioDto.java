@@ -7,7 +7,6 @@ import com.google.common.collect.Multiset;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import org.hamcrest.Matchers;
 
-import java.util.Collections;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -25,7 +24,7 @@ public class TestScenarioDto extends BaseDto {
     private String name;
     private ResultType resultType;
     private int duration;
-    private List<TestStepDto> testSteps;
+    private List<TestStepDto> testSteps = Lists.newArrayList();
 
     public TestScenarioDto() {
     }
