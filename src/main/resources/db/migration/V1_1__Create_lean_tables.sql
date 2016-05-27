@@ -1,7 +1,7 @@
 CREATE TABLE `lean_test_step` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `scenario_id` int(11) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `duration` double DEFAULT NULL,
   `result` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -12,7 +12,7 @@ CREATE TABLE `lean_test_feature` (
   `report_id` INT NULL,
   `framework_type` VARCHAR(45) NULL,
   `test_type` VARCHAR(45) NULL,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(255) NULL,
   `description` VARCHAR(255) NULL,
   `duration` INT NULL,
   `passed_scenarios` INT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `lean_test_feature` (
 CREATE TABLE `lean_test_scenario` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `feature_id` INT NULL,
-  `name` VARCHAR(100) NULL,
+  `name` VARCHAR(255) NULL,
   `result_type` VARCHAR(45) NULL,
   `duration` INT NULL,
   PRIMARY KEY (`id`));
