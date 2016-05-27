@@ -49,6 +49,7 @@ public class CucumberScanner {
             return;
         }
         try {
+            LOGGER.debug("start aggregated report cucumber analysis");
             LOGGER.debug("cucumber report path: " + this.reportPath);
             analyse(new JXPathMap(new ObjectMapper().readValue(fileSystem.resolvePath(reportPath), Object.class)), testReport);
         } catch (IOException e) {

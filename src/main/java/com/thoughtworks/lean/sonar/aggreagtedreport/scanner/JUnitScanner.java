@@ -50,16 +50,17 @@ public class JUnitScanner {
         this.skip = settings.getBoolean(LEAN_AGGREGATED_TEST_JUNIT_SKIP);
     }
 
-    public void analyse(TestReportDto testreport) {
+    public void analyse(TestReportDto testReportDto) {
         if (skip) {
             LOGGER.info("junit report analyse skipped");
             return;
         }
         File dir = fileSystem.resolvePath(reportPath);
-        analyse(testreport, dir);
+        analyse(testReportDto, dir);
     }
 
     public void analyse(TestReportDto testReport, File dir) {
+        LOGGER.debug("start aggregated test report junit analysis ");
         LOGGER.debug("junit report path: " + this.reportPath);
         if (dir.exists() && dir.isDirectory()) {
             List<File> files = new ArrayList<>(FileUtils.listFiles(dir, new String[]{"xml"}, false));
