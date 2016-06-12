@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface TestReportMapper extends CRUDMapper<TestReportDto> {
     TestReportDto getLatestByProjectId(String projectID);
-    TestReportDto getTestReport(@Param("projectID") String projectID, @Param("buildNo") String buildNo);
+    TestReportDto getTestReport(@Param("projectId") String projectID, @Param("buildNo") String buildNo);
 }
