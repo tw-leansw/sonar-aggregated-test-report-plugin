@@ -42,11 +42,11 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
                 jsonWriter.close();
             }
         }).createParam("project").setRequired(true);
-        WebService.NewAction getReportAction = controller.createAction("testreport").setHandler(new RequestHandler() {
+        WebService.NewAction getReportAction = controller.createAction("testreport/").setHandler(new RequestHandler() {
             @Override
             public void handle(Request request, Response response) throws Exception {
                 BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
-                TestReportDto report = reportService.getReport(request.param("project"), request.param("build"));
+                TestReportDto report = reportService.getReportByBuild(request.param("project"), request.param("build"));
                 jsonWriter.writeObject(report);
                 jsonWriter.close();
             }

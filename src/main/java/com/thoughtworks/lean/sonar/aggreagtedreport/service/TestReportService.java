@@ -67,7 +67,7 @@ public class TestReportService {
         return report;
     }
 
-    public TestReportDto getReport(String projectId, String buildNo) {
+    public TestReportDto getReportByBuild(String projectId, String buildNo) {
         TestReportDto report = dbClient.getTestReportDao().getTestReport(projectId, buildNo);
         if (report == null) {
             LOGGER.debug("No report found for project ID: " + projectId + " buildNo: " + buildNo);
