@@ -1,5 +1,6 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.dao.base;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import org.sonar.db.Dao;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;

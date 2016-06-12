@@ -31,6 +31,17 @@
         ORDER BY report.create_time DESC LIMIT 1
     </select>
 
+    <select id="getTestReport" parameterType="map" resultType="TestReport">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_report report
+        <where>
+            AND report.project_id=#{projectId}
+            AND report.build_label=#{buildNo}
+        </where>
+        ORDER BY report.create_time DESC LIMIT 1
+    </select>
+
     <select id="selectAll" resultType="TestReport">
         select
         <include refid="columns"/>

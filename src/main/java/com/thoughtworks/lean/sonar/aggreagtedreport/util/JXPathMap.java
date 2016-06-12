@@ -18,7 +18,7 @@ public class JXPathMap {
     public <T> T get(String key) {
         return (T) jxPathContext.getValue(key);
     }
-
+    @SuppressWarnings("unchecked")
     public <T> List<T> selectNodes(String key) {
         return (List<T>) jxPathContext.selectNodes(key);
     }

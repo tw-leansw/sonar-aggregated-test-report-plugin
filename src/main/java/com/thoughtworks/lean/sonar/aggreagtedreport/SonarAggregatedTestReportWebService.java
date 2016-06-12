@@ -8,6 +8,7 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
 import org.sonar.api.server.ws.Response;
+import org.sonar.api.server.ws.WebService;
 
 import java.util.Arrays;
 
@@ -41,6 +42,17 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
                 jsonWriter.close();
             }
         }).createParam("project").setRequired(true);
+        WebService.NewAction getReportAction = controller.createAction("testreport").setHandler(new RequestHandler() {
+            @Override
+            public void handle(Request request, Response response) throws Exception {
+                BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
+                TestReportDto report = reportService.getReport(request.param("project"), request.param("build"));
+                jsonWriter.writeObject(report);
+                jsonWriter.close();
+            }
+        });
+        getReportAction.createParam("project").setRequired(true);
+        getReportAction.createParam("build").setRequired(true);
         controller.done();
     }
 }

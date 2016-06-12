@@ -21,4 +21,13 @@ public class TestReportDao extends AbstractDao<TestReportDto> {
             MyBatis.closeQuietly(session);
         }
     }
+
+    public TestReportDto getTestReport(String projectId, String buildNo) {
+        DbSession session = this.getDbSession();
+        try {
+            return ((TestReportMapper) getMapper(session)).getTestReport(projectId, buildNo);
+        } finally {
+            MyBatis.closeQuietly(session);
+        }
+    }
 }

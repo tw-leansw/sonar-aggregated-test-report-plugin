@@ -66,4 +66,23 @@ public class TestReportService {
         }
         return report;
     }
+
+    public TestReportDto getReport(String projectId, String buildNo) {
+        TestReportDto report = dbClient.getTestReportDao().getTestReport(projectId, buildNo);
+        if (report == null) {
+            LOGGER.debug("No report found for project ID: " + projectId + " buildNo: " + buildNo);
+            throw new LeanPluginException("No report found for project ID: " + projectId + " buildNo: " + buildNo);
+        }
+        List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentId(report.getId());
+        report.addTestFeatures(features);
+        for (TestFeatureDto feature : features) {
+            feature.setTestScenarios(dbClient.getTestScenarioDao().getByParentId(feature.getId()));
+            for (TestScenarioDto scenraio : feature.getTestScenarios()) {
+                scenraio.setTestSteps(dbClient.getTestStepDao().getByParentId(scenraio.getId()));
+            }
+        }
+        return report;
+    }
+
+
 }
