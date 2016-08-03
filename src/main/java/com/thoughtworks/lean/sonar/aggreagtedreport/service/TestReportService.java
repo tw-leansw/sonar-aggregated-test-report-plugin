@@ -90,9 +90,9 @@ public class TestReportService {
 
     public List<TestReportDto> getReports(List<String> projects) {
         List<TestReportDto> reports = dbClient.getTestReportDao().getTestReports(projects);
-        List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentIds(extractIds(reports));
-        List<TestScenarioDto> scenarios = dbClient.getTestScenarioDao().getByParentIds(extractIds(features));
-        List<TestStepDto> steps = dbClient.getTestStepDao().getByParentIds(extractIds(scenarios));
+        List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByReportIds(extractIds(reports));
+        List<TestScenarioDto> scenarios = dbClient.getTestScenarioDao().getByFeatureIds(extractIds(features));
+        List<TestStepDto> steps = dbClient.getTestStepDao().getByScenarioIds(extractIds(scenarios));
 
         for (TestScenarioDto scenario: scenarios){
             scenario.setTestSteps((List<TestStepDto>)extractByParentId(steps,scenario.getId()));

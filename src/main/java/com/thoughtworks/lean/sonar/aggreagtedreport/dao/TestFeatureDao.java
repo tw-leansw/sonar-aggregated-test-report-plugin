@@ -23,4 +23,13 @@ public class TestFeatureDao extends AbstractDao<TestFeatureDto> {
             MyBatis.closeQuietly(session);
         }
     }
+
+    public List<TestFeatureDto> getByReportIds(List<Integer> integers) {
+        DbSession session = this.getDbSession();
+        try {
+            return ((TestFeatureMapper) getMapper(session)).selectByReportIDs(integers);
+        } finally {
+            MyBatis.closeQuietly(session);
+        }
+    }
 }

@@ -11,4 +11,5 @@ import java.util.List;
 public interface TestFeatureMapper extends CRUDMapper<TestFeatureDto> {
 
     List<TestFeatureDto> getByReportId(int id);
+    List<TestFeatureDto> selectByReportIDs(List<Integer> reportIDs);
 }

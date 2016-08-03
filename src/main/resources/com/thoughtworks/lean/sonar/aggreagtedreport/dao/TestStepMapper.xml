@@ -29,6 +29,15 @@
         </where>
     </select>
 
+    <select id="selectByScenarioIDs" parameterType="java.util.List" resultType="TestStep">
+        SELECT
+        <include refid="stepColumns"/>
+        FROM lean_test_step step
+        <where>
+            AND step.scenario_id IN #{scenarioIDs}
+        </where>
+    </select>
+
     <select id="selectAll" resultType="TestStep">
         select
         <include refid="stepColumns"/>

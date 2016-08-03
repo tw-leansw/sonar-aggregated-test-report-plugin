@@ -27,6 +27,15 @@
         </where>
     </select>
 
+    <select id="selectByFeatureIDs" parameterType="java.util.List" resultType="TestScenario">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_scenario scenario
+        <where>
+            AND scenario.feature_id IN #{featureIDs}
+        </where>
+    </select>
+
     <select id="selectAll" resultType="TestScenario">
         select
         <include refid="columns"/>

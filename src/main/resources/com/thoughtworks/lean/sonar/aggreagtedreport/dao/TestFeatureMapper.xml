@@ -36,6 +36,15 @@
         </where>
     </select>
 
+    <select id="selectByReportIDs" parameterType="java.util.List" resultType="TestFeature">
+        SELECT
+        <include refid="columns"/>
+        FROM lean_test_feature feature
+        <where>
+            AND feature.report_id IN #{reportIDs}
+        </where>
+    </select>
+
     <select id="selectAll" resultType="TestFeature">
         select
         <include refid="columns"/>
