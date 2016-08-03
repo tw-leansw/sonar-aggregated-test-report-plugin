@@ -31,12 +31,15 @@ CREATE TABLE `lean_test_scenario` (
   PRIMARY KEY (`id`));
 
 CREATE TABLE `lean_test_report` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `project_id` VARCHAR(45) NULL,
-  `build_label` VARCHAR(45) NULL,
-  `duration` INT NULL,
-  `create_time` DATETIME NULL,
-  `execution_time` DATETIME NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `project_id` varchar(45) DEFAULT NULL,
+  `build_label` varchar(45) DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `execution_time` datetime DEFAULT NULL,
+  `feature_num` int(11) DEFAULT '0',
+  `scenario_num` int(11) DEFAULT '0',
+  `step_num` int(11) DEFAULT '0',
   PRIMARY KEY (`id`));
 
 

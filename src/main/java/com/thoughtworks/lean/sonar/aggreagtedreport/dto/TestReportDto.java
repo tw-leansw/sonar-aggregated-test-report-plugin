@@ -21,6 +21,11 @@ public class TestReportDto extends BaseDto {
     private Date executionTime;
     private List<TestFeatureDto> testFeatures = new LinkedList<>();
 
+    //stat
+    private int featureNum;
+    private int scenarioNum;
+    private int stepNum;
+
     public TestReportDto() {
         this.createTime = new Date();
     }
@@ -58,6 +63,21 @@ public class TestReportDto extends BaseDto {
                     with(getTestFeatures())
                             .sum(on(TestFeatureDto.class).getDuration()));
         }
+        this.setFeatureNum(this.getTestFeatures().size());
+        this.setScenarioNum(this.getScenariosNumber());
+        this.setStepNum(this.getStepsByResultType());
+    }
+
+    private int getStepsByResultType() {
+        return this.getStepsByResultType(ResultType.FAILED).size()
+                + this.getStepsByResultType(ResultType.SKIPPED).size()
+                + this.getStepsByResultType(ResultType.PASSED).size();
+    }
+
+    private int getScenariosNumber() {
+        return this.getScenariosNumber(TestType.COMPONENT_TEST)
+                + this.getScenariosNumber(TestType.UNIT_TEST)
+                + this.getScenariosNumber(TestType.FUNCTIONAL_TEST);
     }
 
     public String getProjectId() {
@@ -118,6 +138,33 @@ public class TestReportDto extends BaseDto {
 
     public TestReportDto setDuration(int duration) {
         this.duration = duration;
+        return this;
+    }
+
+    public int getFeatureNum() {
+        return featureNum;
+    }
+
+    public TestReportDto setFeatureNum(int featureNum) {
+        this.featureNum = featureNum;
+        return this;
+    }
+
+    public int getScenarioNum() {
+        return scenarioNum;
+    }
+
+    public TestReportDto setScenarioNum(int scenarioNum) {
+        this.scenarioNum = scenarioNum;
+        return this;
+    }
+
+    public int getStepNum() {
+        return stepNum;
+    }
+
+    public TestReportDto setStepNum(int stepNum) {
+        this.stepNum = stepNum;
         return this;
     }
 

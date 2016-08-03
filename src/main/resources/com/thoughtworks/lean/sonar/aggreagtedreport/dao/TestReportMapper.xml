@@ -9,7 +9,10 @@
         report.build_label as buildLabel,
         report.duration as duration,
         report.create_time as createTime,
-        report.execution_time as executionTime
+        report.execution_time as executionTime,
+        report.feature_num as featureNum,
+        report.scenario_num as scenarioNum,
+        report.step_num as stepNum
     </sql>
 
     <select id="get" parameterType="java.lang.Long" resultType="TestReport">
@@ -55,7 +58,7 @@
         from lean_test_report as report
         inner join (SELECT project_id as pid,max(create_time) as ct FROM sonarqube.lean_test_report as report group by project_id )
         as gp on gp.pid = report.project_id and gp.ct = report.create_time and gp.pid in #{projectIDs}
-    </select>>
+    </select>
 
     <insert id="insert" parameterType="TestReport" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO lean_test_report (
@@ -63,13 +66,19 @@
             build_label,
             duration,
             create_time,
-            execution_time)
+            execution_time,
+            feature_num,
+            scenario_num,
+            step_num)
         VALUES (
             #{projectId,jdbcType=VARCHAR},
             #{buildLabel,jdbcType=VARCHAR},
             #{duration,jdbcType=INTEGER},
             #{createTime,jdbcType=TIMESTAMP},
-            #{executionTime,jdbcType=TIMESTAMP})
+            #{executionTime,jdbcType=TIMESTAMP},
+            #{featureNum,jdbcType=INTEGER},
+            #{scenarioNum,jdbcType=INTEGER},
+            #{stepNum,jdbcType=INTEGER})
     </insert>
 
     <delete id="delete" parameterType="java.lang.Long">

@@ -67,6 +67,7 @@ public class TestReportService {
                 scenraio.setTestSteps(dbClient.getTestStepDao().getByParentId(scenraio.getId()));
             }
         }
+        report.calculatingPropsFromChildren();
         return report;
     }
 
