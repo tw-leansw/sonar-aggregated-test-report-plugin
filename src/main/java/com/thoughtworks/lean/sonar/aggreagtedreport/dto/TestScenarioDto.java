@@ -51,6 +51,11 @@ public class TestScenarioDto extends BaseDto {
     }
 
     @Override
+    public int getParentId() {
+        return this.featureId;
+    }
+
+    @Override
     public void calculatingPropsFromChildren() {
         if (this.getTestSteps().size() > 0) {
             this.setDuration(

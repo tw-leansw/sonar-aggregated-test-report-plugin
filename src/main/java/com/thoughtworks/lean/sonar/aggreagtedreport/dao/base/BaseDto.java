@@ -16,6 +16,8 @@ public abstract class BaseDto {
 
     public abstract <T extends BaseDto> List<T> getChildren();
 
+    public abstract int getParentId();
+
     public abstract void calculatingPropsFromChildren();
 
     public void setChildrenzParentId() {

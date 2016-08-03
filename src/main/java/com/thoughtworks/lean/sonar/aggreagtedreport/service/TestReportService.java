@@ -1,16 +1,19 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport.service;
 
+import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.MyDbClient;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.Mybatis;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestStepDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.exception.LeanPluginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
 import org.sonar.db.DefaultDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,5 +87,41 @@ public class TestReportService {
         return report;
     }
 
+
+    public List<TestReportDto> getReports(List<String> projects) {
+        List<TestReportDto> reports = dbClient.getTestReportDao().getTestReports(projects);
+        List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentIds(extractIds(reports));
+        List<TestScenarioDto> scenarios = dbClient.getTestScenarioDao().getByParentIds(extractIds(features));
+        List<TestStepDto> steps = dbClient.getTestStepDao().getByParentIds(extractIds(scenarios));
+
+        for (TestScenarioDto scenario: scenarios){
+            scenario.setTestSteps((List<TestStepDto>)extractByParentId(steps,scenario.getId()));
+        }
+        for (TestFeatureDto feature: features) {
+            feature.setTestScenarios((List<TestScenarioDto>)extractByParentId(scenarios,feature.getId()));
+        }
+        for (TestReportDto report: reports) {
+            report.setTestFeatures((List<TestFeatureDto>)extractByParentId(features,report.getId()));
+        }
+        return reports;
+    }
+
+    private List<Integer> extractIds(List<? extends BaseDto> dtos) {
+        List<Integer> ids = new ArrayList<>();
+        for (BaseDto dto:dtos) {
+            ids.add(dto.getId());
+        }
+        return ids;
+    }
+
+    private List<? extends BaseDto> extractByParentId(List<? extends BaseDto> dtos, int id){
+        List<BaseDto> result = new ArrayList<>();
+        for (BaseDto dto: dtos){
+            if (dto.getParentId() == id){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
 
 }

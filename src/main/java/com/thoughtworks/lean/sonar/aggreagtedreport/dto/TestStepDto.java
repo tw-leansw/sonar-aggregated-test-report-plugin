@@ -81,6 +81,11 @@ public class TestStepDto extends BaseDto {
     }
 
     @Override
+    public int getParentId() {
+        return this.scenarioId;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

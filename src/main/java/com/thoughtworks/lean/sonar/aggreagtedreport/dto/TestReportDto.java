@@ -47,6 +47,11 @@ public class TestReportDto extends BaseDto {
     }
 
     @Override
+    public int getParentId() {
+        return -1;
+    }
+
+    @Override
     public void calculatingPropsFromChildren() {
         if (this.getTestFeatures().size() > 0) {
             this.setDuration(

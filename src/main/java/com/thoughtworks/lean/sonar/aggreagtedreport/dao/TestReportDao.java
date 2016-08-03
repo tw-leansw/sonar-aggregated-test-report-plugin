@@ -5,6 +5,8 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import org.sonar.db.DbSession;
 import org.sonar.db.MyBatis;
 
+import java.util.List;
+
 /**
  * Created by qmxie on 5/18/16.
  */
@@ -30,4 +32,14 @@ public class TestReportDao extends AbstractDao<TestReportDto> {
             MyBatis.closeQuietly(session);
         }
     }
+
+    public List<TestReportDto> getTestReports(List<String> projectIDs) {
+        DbSession session = this.getDbSession();
+        try {
+            return ((TestReportMapper) getMapper(session)).selectByProjectIDs(projectIDs);
+        } finally {
+            MyBatis.closeQuietly(session);
+        }
+    }
+
 }
