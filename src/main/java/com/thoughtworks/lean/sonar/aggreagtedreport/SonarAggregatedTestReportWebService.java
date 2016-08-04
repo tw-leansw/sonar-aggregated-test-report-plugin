@@ -60,7 +60,7 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
             public void handle(Request request, Response response) throws Exception {
                 BaseJsonWriter jsonWriter = new BaseJsonWriter(response.newJsonWriter());
                 List<TestReportDto> reports = reportService.getReports(request.paramAsStrings("projects"));
-                jsonWriter.writeObject(reports);
+                jsonWriter.writeCollection(reports);
                 jsonWriter.close();
             }
         }).createParam("projects").setRequired(true);
