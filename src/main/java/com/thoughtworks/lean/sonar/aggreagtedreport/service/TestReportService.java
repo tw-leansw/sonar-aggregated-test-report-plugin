@@ -59,16 +59,7 @@ public class TestReportService {
             LOGGER.debug("No report found for project ID: " + projectId);
             throw new LeanPluginException("No report found for project ID: " + projectId);
         }
-        List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentId(report.getId());
-        report.addTestFeatures(features);
-        for (TestFeatureDto feature : features) {
-            feature.setTestScenarios(dbClient.getTestScenarioDao().getByParentId(feature.getId()));
-            for (TestScenarioDto scenraio : feature.getTestScenarios()) {
-                scenraio.setTestSteps(dbClient.getTestStepDao().getByParentId(scenraio.getId()));
-            }
-        }
-        report.calculatingPropsFromChildren();
-        return report;
+        return getCompletedReportDto(report);
     }
 
     public TestReportDto getReportByBuild(String projectId, String buildNo) {
@@ -77,14 +68,20 @@ public class TestReportService {
             LOGGER.debug("No report found for project ID: " + projectId + " buildNo: " + buildNo);
             throw new LeanPluginException("No report found for project ID: " + projectId + " buildNo: " + buildNo);
         }
+        return getCompletedReportDto(report);
+    }
+
+    private TestReportDto getCompletedReportDto(TestReportDto report) {
         List<TestFeatureDto> features = dbClient.getTestFeatureDao().getByParentId(report.getId());
-        report.addTestFeatures(features);
-        for (TestFeatureDto feature : features) {
-            feature.setTestScenarios(dbClient.getTestScenarioDao().getByParentId(feature.getId()));
-            for (TestScenarioDto scenraio : feature.getTestScenarios()) {
-                scenraio.setTestSteps(dbClient.getTestStepDao().getByParentId(scenraio.getId()));
-            }
+        List<TestScenarioDto> scenarios = dbClient.getTestScenarioDao().getByFeatureIds(extractIds(features));
+        List<TestStepDto> steps = dbClient.getTestStepDao().getByScenarioIds(extractIds(scenarios));
+        for (TestScenarioDto scenario: scenarios){
+            scenario.setTestSteps((List<TestStepDto>)extractByParentId(steps,scenario.getId()));
         }
+        for (TestFeatureDto feature: features) {
+            feature.setTestScenarios((List<TestScenarioDto>)extractByParentId(scenarios,feature.getId()));
+        }
+        report.setTestFeatures(features);
         return report;
     }
 
