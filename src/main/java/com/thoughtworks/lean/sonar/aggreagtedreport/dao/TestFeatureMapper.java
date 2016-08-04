@@ -2,6 +2,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport.dao;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.CRUDMapper;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ import java.util.List;
 public interface TestFeatureMapper extends CRUDMapper<TestFeatureDto> {
 
     List<TestFeatureDto> getByReportId(int id);
-    List<TestFeatureDto> selectByReportIDs(List<Integer> reportIDs);
+    List<TestFeatureDto> selectByReportIDs(@Param("reportIDs") List<Integer> reportIDs);
 }

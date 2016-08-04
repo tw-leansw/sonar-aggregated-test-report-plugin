@@ -34,7 +34,10 @@
         <include refid="stepColumns"/>
         FROM lean_test_step step
         <where>
-            AND step.scenario_id IN #{scenarioIDs}
+            AND step.scenario_id IN
+            <foreach item="scenarioID" collection="scenarioIDs" open="(" close=")" separator=",">
+                #{scenarioID}
+            </foreach>
         </where>
     </select>
 

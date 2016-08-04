@@ -32,7 +32,10 @@
         <include refid="columns"/>
         FROM lean_test_scenario scenario
         <where>
-            AND scenario.feature_id IN #{featureIDs}
+            AND scenario.feature_id IN
+            <foreach item="featureID" collection="featureIDs" open="(" close=")" separator=",">
+                #{featureID}
+            </foreach>
         </where>
     </select>
 

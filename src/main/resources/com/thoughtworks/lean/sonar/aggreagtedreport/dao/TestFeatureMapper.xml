@@ -41,7 +41,10 @@
         <include refid="columns"/>
         FROM lean_test_feature feature
         <where>
-            AND feature.report_id IN #{reportIDs}
+            AND feature.report_id IN
+            <foreach item="reportID" collection="reportIDs" open="(" close=")" separator=",">
+                #{reportID}
+            </foreach>
         </where>
     </select>
 

@@ -1,15 +1,26 @@
 package com.thoughtworks.lean.sonar.aggreagtedreport;
 
-import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestFeatureDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestScenarioDto;
+import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestType;
+import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.CucumberScanner;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
+import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.apache.commons.lang.math.RandomUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
 /**
  * Created by qmxie on 5/19/16.
@@ -69,6 +80,24 @@ public class ReportServiceTest extends BaseTest {
         }
         testReportDto.addTestFeatures(features);
         return testReportDto;
+    }
+
+    @Test
+    public void should_get_testreports_work() throws IOException {
+        JXPathMap ctx = new JXPathMap(new ObjectMapper().readValue(getClass().getResourceAsStream("/cucumber_report_3.json"), Object.class));
+        TestReportDto testReport = new TestReportDto().setProjectId("test-pipeline-3").setBuildLabel("203");
+        CucumberScanner cucumberAnalyzer = new CucumberScanner(Sets.newHashSet("@api_test"), Sets.newHashSet("@ui_test"));
+
+        cucumberAnalyzer.analyse(ctx, testReport);
+
+        TestReportService service = new TestReportService(dbClient);
+        service.save(testReport);
+
+        List<TestReportDto> ret = service.getReports(Lists.newArrayList("test-pipeline-3","test","whatever"));
+
+        Assert.assertEquals(1,ret.size());
+        assertNotSame(testReport, ret.get(0));
+        Assert.assertEquals(testReport.toJson(), ret.get(0).toJson());
     }
 
 }

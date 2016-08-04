@@ -12,5 +12,5 @@ import java.util.List;
 public interface TestReportMapper extends CRUDMapper<TestReportDto> {
     TestReportDto getLatestByProjectId(String projectID);
     TestReportDto getTestReport(@Param("projectId") String projectID, @Param("buildNo") String buildNo);
-    List<TestReportDto> selectByProjectIDs(@Param("projectIds") List<String> projectIDs);
+    List<TestReportDto> selectByProjectIDs(@Param("projectIDs") List<String> projectIDs);
 }

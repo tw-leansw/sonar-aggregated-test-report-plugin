@@ -56,8 +56,11 @@
         select
         <include refid="columns"/>
         from lean_test_report as report
-        inner join (SELECT project_id as pid,max(create_time) as ct FROM sonarqube.lean_test_report as report group by project_id )
-        as gp on gp.pid = report.project_id and gp.ct = report.create_time and gp.pid in #{projectIDs}
+        inner join (SELECT project_id as pid,max(create_time) as ct FROM lean_test_report as report group by project_id)
+        as gp on gp.pid = report.project_id and gp.ct = report.create_time and gp.pid in 
+        <foreach item="projectID" collection="projectIDs" open="(" close=")" separator=",">
+            #{projectID}
+        </foreach>
     </select>
 
     <insert id="insert" parameterType="TestReport" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
