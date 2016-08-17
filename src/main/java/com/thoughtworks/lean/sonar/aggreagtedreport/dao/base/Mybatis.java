@@ -100,4 +100,8 @@ public class Mybatis {
             throw new IllegalStateException("Fail to create SQL statement: " + sql, var4);
         }
     }
+
+    public Database getDataBase() {
+        return this.database;
+    }
 }

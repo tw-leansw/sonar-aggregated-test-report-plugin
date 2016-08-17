@@ -110,7 +110,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>4.0.1</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -214,6 +213,7 @@
                 <configuration>
                     <pluginClass>com.thoughtworks.lean.sonar.aggreagtedreport.SonarAggregatedTestReportPlugin
                     </pluginClass>
+                    <useChildFirstClassLoader>true</useChildFirstClassLoader>
                 </configuration>
             </plugin>
 

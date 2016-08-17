@@ -4,4 +4,6 @@ target/
 *.ipr
 *.iml
 .target
+.DS_Store
+
 

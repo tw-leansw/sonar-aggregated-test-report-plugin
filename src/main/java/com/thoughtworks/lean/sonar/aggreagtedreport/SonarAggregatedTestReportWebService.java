@@ -4,6 +4,9 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
+import org.flywaydb.core.Flyway;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
@@ -17,6 +20,7 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
 
     private TestReportService reportService;
 
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     public SonarAggregatedTestReportWebService(Settings settings) {
         reportService = new TestReportService(settings);
@@ -24,6 +28,8 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
 
     @Override
     public void define(final Context context) {
+
+        this.initDB();
 
         NewController controller = context.createController("api/lean");
         controller.createAction("hello")
@@ -65,5 +71,16 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
             }
         }).createParam("projects").setRequired(true);
         controller.done();
+    }
+
+    private void initDB() {
+        Flyway flyway = new Flyway();
+        flyway.setClassLoader(this.getClass().getClassLoader());
+        // set ClassLoader so flyway can find db/migration
+        LOGGER.info(" Set ClassLoader to : " + this.getClass().getClassLoader().toString());
+        flyway.setDataSource(reportService.getDataSource());
+        flyway.setBaselineOnMigrate(true);
+        int ret = flyway.migrate();
+        LOGGER.warn(" Init Lean Database finished. Result code: " + ret);
     }
 }

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
 import org.sonar.db.DefaultDatabase;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,6 +121,10 @@ public class TestReportService {
             }
         }
         return result;
+    }
+
+    public DataSource getDataSource() {
+        return dbClient.getMyBatis().getDataBase().getDataSource();
     }
 
 }
