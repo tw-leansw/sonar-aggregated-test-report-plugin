@@ -2,8 +2,7 @@ package com.thoughtworks.lean.sonar.aggreagtedreport;
 
 import com.thoughtworks.lean.sonar.aggreagtedreport.exception.LeanPluginException;
 import com.thoughtworks.lean.sonar.aggreagtedreport.scanner.ReportScanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sonar.api.utils.log.*;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
@@ -15,7 +14,7 @@ public class SonarAggregatedTestReportSensor implements Sensor {
 
     private Settings settings;
     private FileSystem fileSystem;
-    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private Logger LOGGER = Loggers.get(getClass());
 
 
     public SonarAggregatedTestReportSensor(FileSystem fileSystem, Settings settings) {

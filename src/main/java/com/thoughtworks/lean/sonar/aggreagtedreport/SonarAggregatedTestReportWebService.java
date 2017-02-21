@@ -5,8 +5,7 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dao.base.BaseJsonWriter;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
 import org.flywaydb.core.Flyway;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sonar.api.utils.log.*;
 import org.sonar.api.config.Settings;
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
@@ -20,7 +19,7 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
 
     private TestReportService reportService;
 
-    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private Logger LOGGER = Loggers.get(getClass());
 
     public SonarAggregatedTestReportWebService(Settings settings) {
         reportService = new TestReportService(settings);
@@ -29,7 +28,9 @@ public class SonarAggregatedTestReportWebService implements org.sonar.api.server
     @Override
     public void define(final Context context) {
 
+        LOGGER.info("Deliflow Aggregated Test Report Web Service Init.");
         this.initDB();
+        LOGGER.info("Deliflow Aggregated Test Report Web Service Database Migrated.");
 
         NewController controller = context.createController("api/lean");
         controller.createAction("hello")

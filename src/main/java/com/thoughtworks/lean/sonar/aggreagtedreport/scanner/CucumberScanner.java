@@ -7,10 +7,10 @@ import com.google.common.collect.Sets;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import org.hamcrest.Matchers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,7 @@ import static ch.lambdaj.collection.LambdaCollections.with;
 import static com.thoughtworks.lean.sonar.aggreagtedreport.Constants.*;
 
 public class CucumberScanner {
-    private final static Logger LOGGER = LoggerFactory.getLogger(CucumberScanner.class);
+    private Logger LOGGER = Loggers.get(getClass());
     private String reportPath;
     private Set<String> componentTestTags;
     private Set<String> functionalTestTags;

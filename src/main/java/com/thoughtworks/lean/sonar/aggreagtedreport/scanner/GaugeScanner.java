@@ -7,10 +7,10 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.dto.*;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.JXPathMap;
 import com.thoughtworks.lean.sonar.aggreagtedreport.util.ScriptUtil;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
 public class GaugeScanner {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(GaugeScanner.class);
+    private Logger LOGGER = Loggers.get(getClass());
 
     private String reportPath;
     private Set<String> componentTestTags;

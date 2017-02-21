@@ -9,10 +9,10 @@ import org.apache.commons.io.FileUtils;
 import org.hamcrest.Matchers;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import static com.thoughtworks.lean.sonar.aggreagtedreport.dto.ResultType.*;
 
 
 public class JUnitScanner {
-    private final static Logger LOGGER = LoggerFactory.getLogger(JUnitScanner.class);
+    private Logger LOGGER = Loggers.get(getClass());
     private String reportPath;
     private Set<String> componentPatterns;
     private Set<String> functionalPatterns;

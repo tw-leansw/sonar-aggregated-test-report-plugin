@@ -5,11 +5,11 @@ import com.thoughtworks.lean.sonar.aggreagtedreport.Constants;
 import com.thoughtworks.lean.sonar.aggreagtedreport.dto.TestReportDto;
 import com.thoughtworks.lean.sonar.aggreagtedreport.exception.LeanPluginException;
 import com.thoughtworks.lean.sonar.aggreagtedreport.service.TestReportService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 public class ReportScanner {
     private CucumberScanner cucumberScanner;
@@ -18,7 +18,7 @@ public class ReportScanner {
     private TestReportDto report = new TestReportDto();
     private TestReportService reportService;
     private String buildLabel;
-    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+    private Logger LOGGER = Loggers.get(getClass());
 
     public ReportScanner(Settings settings, FileSystem projectFileSystem) {
         buildLabel = settings.getString(Constants.LEAN_AGGREGATED_TEST_PROJECT_BUILD);
