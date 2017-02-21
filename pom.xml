@@ -5,7 +5,7 @@
     <groupId>com.thoughtworks.lean</groupId>
     <!-- it's recommended to follow the pattern "lean-{key}-plugin", for example "lean-php-plugin" -->
     <artifactId>sonar-lean-aggregated-test-report-plugin</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
 
     <!-- this is important for lean-packaging-maven-plugin -->
     <packaging>sonar-plugin</packaging>
